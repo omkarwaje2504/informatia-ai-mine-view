@@ -1,26 +1,220 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* --- Light editorial ground --- */
+  --color-paper: #f3f2ef;
+  --color-paper-bright: #fbfaf8;
+  --color-ink: #10131c;
+  --color-ink-soft: #545966;
+  --color-ink-muted: #7b8089;
+  --color-ink-faint: #a6a9b1;
+
+  /* --- Immersive dark --- */
+  --color-night: #0a0e1a;
+  --color-night-2: #121829;
+  --color-night-card: #161d30;
+  --color-mist: #eef1f7;
+  --color-mist-soft: #9aa6bd;
+  --color-mist-faint: #5d6a83;
+
+  /* --- Brand accents --- */
+  --color-purple: #6c2a8e;
+  --color-purple-light: #a45cc4;
+  --color-teal: #0e9c93;
+  --color-teal-light: #1cc3b6;
+  --color-gold: #e0a13a;
+
+  --color-line: rgba(16, 19, 28, 0.12);
+  --color-line-soft: rgba(16, 19, 28, 0.06);
+  --color-line-night: rgba(255, 255, 255, 0.1);
+
+  --font-display: var(--font-display-src), "Cocogoose Pro", ui-sans-serif, system-ui, sans-serif;
+  --font-text: var(--font-text-src), "Biko", ui-sans-serif, system-ui, sans-serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --shadow-float: 0 1px 1px rgba(16, 19, 28, 0.04), 0 18px 50px -18px rgba(16, 19, 28, 0.22);
+  --shadow-card: 0 10px 30px -12px rgba(10, 14, 26, 0.35);
+  --shadow-glow: 0 0 0 1px rgba(28, 195, 182, 0.4), 0 12px 40px -8px rgba(28, 195, 182, 0.35);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  border-color: var(--color-line);
+  min-width: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  background: var(--color-paper);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-text);
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-teal) 24%, transparent);
+}
+
+/* Display face is used deliberately per element — keep it light + calm. */
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 300; /* Cocogoose Light — the design wants refined, not heavy */
+  letter-spacing: -0.01em;
+  line-height: 1.16;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+@utility container-x {
+  width: 100%;
+  max-width: 84rem;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 4vw, 3.5rem);
+}
+
+@utility eyebrow {
+  font-family: var(--font-text);
+  font-weight: 400;
+  font-size: 0.75rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-ink-muted);
+}
+
+/* --- entrance keyframes (CSS so they survive paused rAF) --- */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@utility rise-in {
+  opacity: 0;
+  animation: rise 0.9s var(--ease-out-expo) both;
+  /* held until the intro/preloader is done */
+  animation-play-state: paused;
+}
+@utility fade-in {
+  opacity: 0;
+  animation: fade 1s ease both;
+  animation-play-state: paused;
+}
+
+html.app-ready .rise-in,
+html.app-ready .fade-in {
+  animation-play-state: running;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise-in, .fade-in { opacity: 1 !important; animation: none !important; }
+}
+
+/* --- custom circle cursor + trailing purple glow --- */
+.cursor-hidden,
+.cursor-hidden * {
+  cursor: none;
+}
+.cursor-hidden input,
+.cursor-hidden textarea {
+  cursor: text;
+}
+
+.cursor-ring {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 9999;
+  height: 26px;
+  width: 26px;
+  border-radius: 9999px;
+  border: 1.5px solid var(--color-purple);
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform;
+  transition:
+    width 0.28s var(--ease-out-expo),
+    height 0.28s var(--ease-out-expo),
+    background-color 0.28s ease,
+    border-color 0.28s ease,
+    opacity 0.3s ease;
+}
+.cursor-ring.is-active {
+  height: 48px;
+  width: 48px;
+  background: color-mix(in srgb, var(--color-purple) 22%, transparent);
+  border-color: color-mix(in srgb, var(--color-purple) 60%, transparent);
+}
+.cursor-ring.is-down {
+  height: 18px;
+  width: 18px;
+}
+
+.cursor-glow {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 45;
+  height: 460px;
+  width: 460px;
+  border-radius: 9999px;
+  pointer-events: none;
+  filter: blur(46px);
+  will-change: transform;
+}
+/* glows on the dark sections; near-invisible over light */
+.cursor-glow {
+  background: radial-gradient(circle, rgba(150, 60, 200, 0.5), transparent 64%);
+  mix-blend-mode: screen;
+}
+/* a whisper of purple over the light sections; invisible over dark */
+.cursor-glow--soft {
+  background: radial-gradient(circle, rgba(120, 55, 150, 0.1), transparent 60%);
+  mix-blend-mode: multiply;
+}
+
+@media (prefers-reduced-motion: reduce), (pointer: coarse) {
+  .cursor-ring,
+  .cursor-glow {
+    display: none;
+  }
+}
+
+/* --- Lenis smooth scroll --- */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* --- preloader: keep the page from flashing before it mounts --- */
+@keyframes preloader-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
 }
