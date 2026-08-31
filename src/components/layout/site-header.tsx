@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
-import { Logo } from "@/components/brand/logo";
+import { HeaderLogo } from "@/components/brand/header-logo";
 import { nav, activeNav } from "@/lib/site";
 import { useAppReady } from "@/hooks/use-app-ready";
 import { cn } from "@/lib/utils";
@@ -15,14 +15,15 @@ export function SiteHeader() {
       initial={reduce ? false : { y: -20, opacity: 0 }}
       animate={go ? { y: 0, opacity: 1 } : undefined}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-      className="sticky top-0 z-50 border-b border-line bg-paper/85 backdrop-blur-md py-1"
+      className="sticky top-0 z-50 border-b border-line bg-orange-50 backdrop-blur-md py-1"
     >
       <div className="container-x flex h-16 items-center justify-between gap-6 sm:h-[4.25rem]">
-        <Link href="/" aria-label="Informatia — home" className="group inline-flex shrink-0">
-          <Logo
-            href={null}
-            className="h-7 transition-transform duration-300 ease-out-expo group-hover:scale-[1.03] sm:h-8"
-          />
+        <Link
+          href="/"
+          aria-label="Informatia AI — home"
+          className="group inline-flex shrink-0 items-center"
+        >
+          <HeaderLogo className="transition-transform duration-300 ease-out-expo group-hover:scale-[1.03]" />
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex">

@@ -162,12 +162,12 @@ function CapabilityRow() {
             <article
               key={c.n}
               data-cap-card
-              className="pointer-events-auto rounded-2xl border border-line bg-paper-bright/95 p-5 opacity-0 shadow-float backdrop-blur-md"
+              className="pointer-events-auto rounded-2xl border border-gold bg-paper-bright/95 p-5 opacity-0 shadow-float backdrop-blur-md"
             >
-              <span className="font-display text-[0.8rem] font-semibold text-gold">
+              <span className="font-text text-[2.8rem] font-semibold text-gold">
                 {c.n}
               </span>
-              <h3 className="mt-2.5 font-display text-[1.05rem] font-semibold leading-snug tracking-[-0.01em] text-ink">
+              <h3 className="mt-1 font-display text-[1.05rem] font-semibold leading-snug tracking-[-0.01em] text-ink">
                 {c.title}
               </h3>
               <p className="mt-1.5 text-[0.82rem] leading-relaxed text-ink-soft">
@@ -190,7 +190,7 @@ function CapabilityList({ className }: { className?: string }) {
           key={c.n}
           className="rounded-2xl border border-line-night bg-night-card/80 p-4"
         >
-          <span className="font-display text-[0.75rem] font-semibold text-gold">
+          <span className="font-text text-[0.75rem] font-semibold text-gold">
             {c.n}
           </span>
           <h3 className="mt-1.5 font-display text-[0.98rem] font-semibold leading-snug text-mist">
@@ -245,10 +245,10 @@ export function Hero() {
               trigger: outer.current,
               start: "top top",
               end: "bottom bottom",
-              scrub: 1,
-              // reveal the diagram at the same moment the Scene 2 text starts
-              // fading in (see the sceneB tween at timeline position 0.3)
-              onUpdate: (self) => setRevealed(self.progress >= 0.3),
+              scrub: 1.6,
+              // reveal the diagram the moment the Scene 2 text starts fading in
+              // (sceneB tween sits at ~0.28 of the normalised timeline)
+              onUpdate: (self) => setRevealed(self.progress >= 0.28),
             },
           });
 
@@ -257,12 +257,12 @@ export function Hero() {
           // hits 80% height. Then it HOLDS there for the rest of the pinned scroll.
           tl.to(
             sceneOneRef.current,
-            { yPercent: -22, autoAlpha: 0, ease: "none", duration: 0.32 },
+            { yPercent: -22, autoAlpha: 0, ease: "none", duration: 0.42 },
             0,
           )
             .to(
               plexusLight.current,
-              { autoAlpha: 0.2, ease: "none", duration: 0.32 },
+              { autoAlpha: 0.2, ease: "none", duration: 0.42 },
               0,
             )
             .to(
@@ -274,7 +274,7 @@ export function Hero() {
                 borderTopLeftRadius: "1.25rem",
                 borderTopRightRadius: "1.25rem",
                 ease: "power2.inOut",
-                duration: 0.36,
+                duration: 0.55,
               },
               0,
             )
@@ -285,15 +285,15 @@ export function Hero() {
                 yPercent: -12,
                 filter: "blur(6px)",
                 ease: "none",
-                duration: 0.14,
+                duration: 0.16,
               },
-              0.2,
+              0.34,
             )
             .fromTo(
               sceneB.current,
               { autoAlpha: 0, y: 22 },
-              { autoAlpha: 1, y: 0, ease: "power2.out", duration: 0.26 },
-              0.3,
+              { autoAlpha: 1, y: 0, ease: "power2.out", duration: 0.3 },
+              0.46,
             )
             // capability cards rise up to straddle the panel's bottom edge
             .fromTo(
@@ -306,10 +306,10 @@ export function Hero() {
                 autoAlpha: 1,
                 yPercent: 0,
                 ease: "power3.out",
-                duration: 0.3,
-                stagger: 0.06,
+                duration: 0.34,
+                stagger: 0.07,
               },
-              0.34,
+              0.5,
             )
             // then keep drifting at their own speeds through the hold
             .to(
@@ -319,10 +319,10 @@ export function Hero() {
                 ease: "none",
                 duration: 0.44,
               },
-              0.64,
+              0.82,
             )
             // hold the finished Scene 2 state for the remaining scroll
-            .to({}, { duration: 0.5 });
+            .to({}, { duration: 0.4 });
         },
       );
 
@@ -336,9 +336,9 @@ export function Hero() {
   return (
     <section
       ref={outer}
-      className="relative bg-paper md:h-[200vh] motion-reduce:md:h-auto"
+      className="relative bg-orange-50 md:h-[240vh] motion-reduce:md:h-auto"
     >
-      <div className="relative overflow-hidden bg-paper md:sticky md:top-[4.25rem] md:h-[calc(100svh-4.25rem)] motion-reduce:md:static motion-reduce:md:h-auto motion-reduce:md:overflow-visible">
+      <div className="relative overflow-hidden bg-orange-50 md:sticky md:top-[4.25rem] md:h-[calc(100svh-4.25rem)] motion-reduce:md:static motion-reduce:md:h-auto motion-reduce:md:overflow-visible">
         {/* light plexus behind scene one */}
         <motion.div
           ref={plexusLight}

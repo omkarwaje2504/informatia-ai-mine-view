@@ -6,13 +6,13 @@ export function DeliveryApproach() {
   return (
     <section
       id="approach"
-      className="relative overflow-hidden border-t border-line bg-paper-bright py-10"
+      className="relative overflow-hidden border-t border-line bg-orange-50 py-10 lg:py-20"
     >
       <div className="pointer-events-none absolute inset-0 opacity-50">
-        <Plexus variant="light" density={0.85} />
+        <Plexus variant="dark" density={0.85} />
       </div>
       <div className="container-x relative">
-        <header className="max-w-2xl">
+        <header className="max-w-2xl" data-reveal>
           <p className="eyebrow text-ink-muted">{approach.eyebrow}</p>
           <h2 className="mt-5 font-display text-[2rem] font-bold leading-[1.08] tracking-[-0.02em] text-ink sm:text-[2.6rem]">
             {approach.heading}
@@ -22,7 +22,10 @@ export function DeliveryApproach() {
           </p>
         </header>
 
-        <div className="mt-12 flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-3">
+        <div
+          className="mt-12 flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-3"
+          data-reveal-group
+        >
           {approach.steps.map((s, i) => (
             <Fragment key={s.title}>
               <div className="lg:min-w-0 lg:flex-1">

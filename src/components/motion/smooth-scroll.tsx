@@ -6,10 +6,17 @@ import { gsap, ScrollTrigger } from "@/lib/gsap";
 
 /**
  * Buttery inertial scrolling (Lenis) wired into the GSAP ticker so
- * ScrollTrigger scrubs stay perfectly in sync. Disabled for reduced motion.
+ * ScrollTrigger scrubs stay perfectly in sync. Also forces every load /
+ * refresh to start at the top. Lenis is disabled for reduced motion.
  */
 export function SmoothScroll() {
   useEffect(() => {
+    // always begin at the top — never restore the previous scroll position
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+    window.scrollTo(0, 0);
+
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const lenis = new Lenis({
@@ -18,6 +25,7 @@ export function SmoothScroll() {
       smoothWheel: true,
       touchMultiplier: 1.5,
     });
+    lenis.scrollTo(0, { immediate: true });
 
     lenis.on("scroll", ScrollTrigger.update);
 

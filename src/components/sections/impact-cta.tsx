@@ -1,4 +1,5 @@
 import { Plexus } from "@/components/hero/plexus";
+import { PointerSplash } from "@/components/motion/pointer-splash";
 import { impact } from "@/lib/content";
 
 /** Curved purple→green wave — the transition into the dark closing section. */
@@ -41,13 +42,13 @@ function LogoMarquee() {
   ];
 
   return (
-    <div className="mt-10 space-y-4">
-      <p className="text-[0.9rem] font-semibold uppercase tracking-[0.2em] text-mist-faint">
+    <div className="my-12 w-full space-y-4">
+      <p className="container-x text-[0.9rem] font-semibold uppercase tracking-[0.2em] text-mist-faint">
         {impact.bandLabel}
       </p>
 
       {/* Left → Right */}
-      <div className="flex overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_5%,#000_95%,transparent)]">
+      <div className="flex w-full overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_4%,#000_96%,transparent)]">
         <div className="flex shrink-0 items-center gap-4 motion-safe:animate-[marquee-right_45s_linear_infinite] hover:[animation-play-state:paused]">
           {loop(leftRow).map((c, i) => (
             <span
@@ -68,7 +69,7 @@ function LogoMarquee() {
       </div>
 
       {/* Right → Left */}
-      <div className="flex overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_5%,#000_95%,transparent)]">
+      <div className="flex w-full overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_4%,#000_96%,transparent)]">
         <div className="flex shrink-0 items-center gap-4 motion-safe:animate-[marquee-left_45s_linear_infinite] hover:[animation-play-state:paused]">
           {loop(rightRow).map((c, i) => (
             <span
@@ -93,10 +94,10 @@ function LogoMarquee() {
 
 export function ImpactCta() {
   return (
-    <section id="connect" className="relative bg-night text-mist">
-      <BrandWave />
+    <section id="connect" className="relative bg-night text-mist ">
+      
 
-      <div className="relative overflow-hidden pb-24 pt-10">
+      <div className="relative overflow-hidden py-10 lg:py-20">
         <div className="pointer-events-none absolute inset-0 opacity-20">
           <Plexus variant="dark" density={0.6} />
         </div>
@@ -108,7 +109,10 @@ export function ImpactCta() {
           }}
         />
 
-        <div className="container-x relative">
+        {/* mouse splash */}
+        <PointerSplash tone="purple" size={30} />
+
+        <div className="container-x relative" data-reveal>
           <h2
             className="mt-6 max-w-4xl font-display text-[2.1rem] font-bold leading-[1.72] tracking-[-0.03em] sm:text-[3.2rem] lg:text-[3rem]"
             style={{
@@ -125,17 +129,23 @@ export function ImpactCta() {
           <p className="mt-2 max-w-xl text-[1.1rem]  text-mist">
             {impact.body}
           </p>
+        </div>
 
-          <LogoMarquee />
+        {/* full-bleed client logo marquee */}
+        <LogoMarquee />
 
+        <div className="container-x relative">
           {/* proof stats */}
-          <dl className="mt-10 flex flex-col gap-x-16 gap-y-8 border-t border-line-night pt-10 sm:flex-row">
+          <dl
+            className="flex flex-col gap-x-16 gap-y-8 border-t border-line-night pt-10 sm:flex-row"
+            data-reveal-group
+          >
             {impact.stats.map((s) => (
-              <div key={s.label} className="flex items-baseline gap-4">
-                <dt className="font-text text-[2.8rem] font-bold leading-none tracking-[-0.03em] text-gold sm:text-[4.4rem]">
+              <div key={s.label} className="flex flex-col items-baseline gap-1">
+                <dt className="font-text text-[2.8rem] font-bold leading-none text-gold sm:text-[5.9rem]">
                   {s.value}
                 </dt>
-                <dd className="max-w-[8rem] text-[0.9rem] leading-snug text-mist-soft">
+                <dd className=" text-[1.1rem] leading-snug text-white">
                   {s.label}
                 </dd>
               </div>

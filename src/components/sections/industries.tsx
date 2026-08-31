@@ -17,7 +17,7 @@ export function IndustriesShowcase() {
   return (
     <section
       id="industries"
-      className="relative overflow-hidden bg-paper py-24 md:py-12"
+      className="relative overflow-hidden bg-orange-50 py-10 lg:py-20"
     >
       <div className="pointer-events-none absolute inset-0 opacity-50">
         <Plexus variant="light" density={0.85} />
@@ -25,7 +25,7 @@ export function IndustriesShowcase() {
       <div className="container-x relative">
         <div className="grid gap-12 lg:grid-cols-[22rem_1fr] lg:gap-16">
           {/* left rail — sticks while the cards scroll past */}
-          <div className="lg:sticky lg:top-28 lg:self-start">
+          <div className="lg:sticky lg:top-28 lg:self-start" data-reveal>
             <p className="eyebrow text-ink-muted">{industries.eyebrow}</p>
             <h2 className="mt-5 font-display text-[2rem] font-bold leading-[1.08] tracking-[-0.02em] text-ink sm:text-[2.6rem]">
               {industries.heading}
@@ -51,7 +51,7 @@ export function IndustriesShowcase() {
           </div>
 
           {/* right — tabs + the active sector card */}
-          <div>
+          <div data-reveal data-reveal-y="30">
             <div className="flex flex-wrap gap-2">
               {industries.sectors.map((s, i) => (
                 <button
@@ -60,7 +60,7 @@ export function IndustriesShowcase() {
                   onClick={() => setActive(i)}
                   aria-pressed={i === active}
                   className={cn(
-                    "rounded-full px-4 py-2 text-[0.7rem] font-semibold uppercase tracking-[0.14em] transition-colors duration-200",
+                    "rounded-full px-4 py-2 text-sm font-medium  transition-colors duration-200",
                     i === active
                       ? "bg-ink text-paper"
                       : "border border-line text-ink-muted hover:border-ink hover:text-ink",

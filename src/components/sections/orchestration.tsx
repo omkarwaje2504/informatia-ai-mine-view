@@ -2,38 +2,29 @@
 
 import { useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
+import {
+  FileInput,
+  Fingerprint,
+  Gavel,
+  TriangleAlert,
+  Landmark,
+  type LucideIcon,
+} from "lucide-react";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { Plexus } from "@/components/hero/plexus";
+import { PointerSplash } from "@/components/motion/pointer-splash";
 import { orchestration } from "@/lib/content";
 import { cn } from "@/lib/utils";
 
 const { eyebrow, heading, body, points, nodes } = orchestration;
 const STEPS = points.length; // scroll states: 0 … STEPS
 
-/* minimal line glyphs, one per stage / point */
-const GLYPH_PATHS = [
-  "M7 3h7l4 4v14H7zM14 3v4h4",
-  "M4 8V5a1 1 0 011-1h3M20 8V5a1 1 0 00-1-1h-3M4 16v3a1 1 0 001 1h3M20 16v3a1 1 0 01-1 1h-3",
-  "M4 12l5 5L20 6",
-  "M12 3l9 16H3zM12 10v4M12 17h.01",
-  "M3 7h18v10H3zM12 9.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5",
-];
+/* one icon per stage / point */
+const GLYPHS: LucideIcon[] = [FileInput, Fingerprint, Gavel, TriangleAlert, Landmark];
 
 function Glyph({ i, className }: { i: number; className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.6}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-      aria-hidden
-    >
-      <path d={GLYPH_PATHS[i] ?? GLYPH_PATHS[0]} />
-    </svg>
-  );
+  const Icon = GLYPHS[i] ?? GLYPHS[0];
+  return <Icon className={className} strokeWidth={1.6} aria-hidden />;
 }
 
 /* Fixed geometry so connectors line up exactly with the node boxes.
@@ -200,6 +191,9 @@ export function Orchestration() {
           }}
         />
 
+        {/* mouse splash */}
+        <PointerSplash tone="purple" size={25} />
+
         <div className="container-x relative z-10 mx-auto w-full py-16 md:py-20">
           <div className="grid gap-14 lg:grid-cols-[minmax(0,24rem)_1fr] lg:gap-16">
             {/* LEFT — heading stays put; the list grows beneath it */}
@@ -235,10 +229,10 @@ export function Orchestration() {
                     >
                       <Glyph
                         i={i}
-                        className="mt-0.5 h-4 w-4 shrink-0 text-mist-faint"
+                        className="mt-0.5 h-6 w-6 shrink-0 text-mist-faint"
                       />
                       <div>
-                        <p className="text-[0.9rem] font-semibold text-mist">
+                        <p className="text-[1.2rem] font-medium text-mist">
                           {p.title}
                         </p>
                         <p className="mt-1 text-[0.82rem] leading-relaxed text-mist-soft">

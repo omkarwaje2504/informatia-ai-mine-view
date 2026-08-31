@@ -26,7 +26,7 @@ function subscribe(cb: () => void) {
 
 // Failsafe: never leave gated content hidden if the preloader misbehaves.
 if (typeof window !== "undefined") {
-  window.setTimeout(markAppReady, 5000);
+  window.setTimeout(markAppReady, 6500);
 }
 
 export function useAppReady(): boolean {

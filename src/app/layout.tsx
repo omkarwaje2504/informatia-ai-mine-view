@@ -4,6 +4,7 @@ import { display, text } from "@/lib/fonts";
 import { site } from "@/lib/site";
 import { CursorLayer } from "@/components/motion/cursor-layer";
 import { SmoothScroll } from "@/components/motion/smooth-scroll";
+import { ScrollReveal } from "@/components/motion/scroll-reveal";
 import { Preloader } from "@/components/motion/preloader";
 
 export const metadata: Metadata = {
@@ -27,6 +28,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="en" className={`${display.variable} ${text.variable} h-full`}>
       <body className="flex min-h-full flex-col bg-paper text-ink">
         <SmoothScroll />
+        <ScrollReveal />
         <Preloader />
         {children}
         <CursorLayer />
