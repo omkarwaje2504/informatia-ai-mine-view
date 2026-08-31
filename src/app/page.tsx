@@ -2,8 +2,10 @@ import { PromoBanner } from "@/components/hero/promo-banner";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { Hero } from "@/components/hero/hero";
+import { Orchestration } from "@/components/sections/orchestration";
 import { IndustriesShowcase } from "@/components/sections/industries";
-import { IndustrySolutions } from "@/components/sections/industry-solutions";
+import { DeliveryApproach } from "@/components/sections/delivery-approach";
+import { ImpactCta } from "@/components/sections/impact-cta";
 import { promo } from "@/lib/content";
 
 export default function HomePage() {
@@ -14,7 +16,9 @@ export default function HomePage() {
       <main className="flex-1">
         <Hero />
         <IndustriesShowcase />
-        <IndustrySolutions />
+        <Orchestration />
+        <DeliveryApproach />
+        <ImpactCta />
       </main>
       <SiteFooter />
     </>

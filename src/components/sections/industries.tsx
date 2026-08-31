@@ -17,9 +17,12 @@ export function IndustriesShowcase() {
   return (
     <section
       id="industries"
-      className="relative border-t border-line bg-paper py-24 md:py-32"
+      className="relative overflow-hidden bg-paper py-24 md:py-12"
     >
-      <div className="container-x">
+      <div className="pointer-events-none absolute inset-0 opacity-50">
+        <Plexus variant="light" density={0.85} />
+      </div>
+      <div className="container-x relative">
         <div className="grid gap-12 lg:grid-cols-[22rem_1fr] lg:gap-16">
           {/* left rail — sticks while the cards scroll past */}
           <div className="lg:sticky lg:top-28 lg:self-start">
@@ -31,30 +34,19 @@ export function IndustriesShowcase() {
               {industries.sub}
             </p>
 
-            <div className="mt-8 border-t border-line pt-6">
-              <p className="max-w-xs text-sm leading-relaxed text-ink-muted">
-                {industries.note}
-              </p>
-              <div className="mt-4 flex flex-wrap gap-3">
-                <Link
-                  href={industries.ctas.primary.href}
-                  className="group inline-flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 text-[0.85rem] font-medium text-paper transition-colors duration-300 hover:bg-purple"
+            <div className="mt-3 border-t border-line pt-6">
+              <Link
+                href={industries.ctas.primary.href}
+                className="group inline-flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 text-[0.85rem] font-medium text-paper transition-colors duration-300 hover:bg-purple"
+              >
+                {industries.ctas.primary.label}
+                <span
+                  aria-hidden
+                  className="transition-transform duration-300 ease-out-expo group-hover:translate-x-1"
                 >
-                  {industries.ctas.primary.label}
-                  <span
-                    aria-hidden
-                    className="transition-transform duration-300 ease-out-expo group-hover:translate-x-1"
-                  >
-                    →
-                  </span>
-                </Link>
-                <Link
-                  href={industries.ctas.secondary.href}
-                  className="inline-flex items-center rounded-full border border-line px-5 py-2.5 text-[0.85rem] font-medium text-ink transition-colors duration-300 hover:border-ink"
-                >
-                  {industries.ctas.secondary.label}
-                </Link>
-              </div>
+                  →
+                </span>
+              </Link>
             </div>
           </div>
 
@@ -94,43 +86,26 @@ export function IndustriesShowcase() {
                 initial={reduce ? false : { opacity: 0, x: 28 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.45, ease: EASE }}
-                className="relative flex min-h-[30rem] flex-col justify-between gap-10 p-8 sm:p-12"
+                className="relative flex min-h-[22rem] flex-col gap-8 p-8 sm:p-12"
               >
-                  <div>
-                    <h3 className="max-w-xl font-display text-[1.7rem] font-bold leading-[1.12] tracking-[-0.02em] text-mist sm:text-[2.15rem]">
-                      {sector.title}
-                    </h3>
-                    <ul className="mt-7 max-w-xl space-y-3.5">
-                      {sector.points.map((p) => (
-                        <li
-                          key={p}
-                          className="flex gap-3 text-[0.95rem] leading-relaxed text-mist-soft"
-                        >
-                          <span
-                            aria-hidden
-                            className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-teal-light"
-                          />
-                          {p}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div>
-                    <p className="text-[0.7rem] font-medium uppercase tracking-[0.18em] text-mist-faint">
-                      {sector.trusted.label}
-                    </p>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {sector.trusted.tags.map((t) => (
-                        <span
-                          key={t}
-                          className="rounded-full border border-line-night bg-white/5 px-3 py-1 text-[0.72rem] font-medium text-mist-soft backdrop-blur-sm"
-                        >
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
+                <h3 className="max-w-xl font-display text-[1.7rem] font-bold leading-[1.12] tracking-[-0.02em] text-mist sm:text-[2.15rem]">
+                  {sector.title}
+                </h3>
+                <ol className="max-w-2xl space-y-4">
+                  {sector.points.map((p, i) => (
+                    <li key={p} className="flex gap-4">
+                      <span
+                        aria-hidden
+                        className="mt-0.5 font-display text-[0.9rem] font-semibold text-teal-light"
+                      >
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <span className="text-[0.95rem] leading-relaxed text-mist-soft">
+                        {p}
+                      </span>
+                    </li>
+                  ))}
+                </ol>
               </motion.div>
             </div>
           </div>

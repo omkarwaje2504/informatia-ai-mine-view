@@ -6,10 +6,6 @@ import { motion, useReducedMotion, useTransform } from "framer-motion";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { Plexus } from "./plexus";
 import { FlowLine } from "./flow-line";
-import {
-  ProductList,
-  ProductNetworkContent,
-} from "@/components/sections/product-network";
 import { useParallax } from "@/hooks/use-parallax";
 import { useAppReady } from "@/hooks/use-app-ready";
 import { capabilities, sceneOne, sceneTwo } from "@/lib/content";
@@ -224,7 +220,6 @@ export function Hero() {
   const panel = useRef<HTMLDivElement>(null);
   const titleA = useRef<HTMLDivElement>(null);
   const sceneB = useRef<HTMLDivElement>(null);
-  const productLayer = useRef<HTMLDivElement>(null);
 
   const [revealed, setRevealed] = useState(false);
 
@@ -236,7 +231,6 @@ export function Hero() {
         "(min-width: 768px) and (prefers-reduced-motion: no-preference)",
         () => {
           gsap.set(sceneB.current, { autoAlpha: 0 });
-          gsap.set(productLayer.current, { autoAlpha: 0 });
 
           const cards = gsap.utils.toArray<HTMLElement>(
             "[data-cap-card]",
@@ -327,37 +321,8 @@ export function Hero() {
               },
               0.64,
             )
-            // BEAT 3 — the box opens to full height and the Scene 2 text +
-            // cards cross-fade into the product network, held inside the panel.
-            .to(
-              panel.current,
-              { height: "100%", ease: "power2.inOut", duration: 0.3 },
-              1.16,
-            )
-            .to(
-              sceneB.current,
-              { autoAlpha: 0, y: -24, ease: "power2.in", duration: 0.24 },
-              1.16,
-            )
-            .to(
-              cards,
-              {
-                autoAlpha: 0,
-                yPercent: -40,
-                ease: "power2.in",
-                duration: 0.24,
-                stagger: 0.04,
-              },
-              1.16,
-            )
-            .fromTo(
-              productLayer.current,
-              { autoAlpha: 0, y: 26 },
-              { autoAlpha: 1, y: 0, ease: "power2.out", duration: 0.3 },
-              1.34,
-            )
-            // hold on the network for the remaining scroll
-            .to({}, { duration: 0.45 });
+            // hold the finished Scene 2 state for the remaining scroll
+            .to({}, { duration: 0.5 });
         },
       );
 
@@ -371,7 +336,7 @@ export function Hero() {
   return (
     <section
       ref={outer}
-      className="relative bg-paper md:h-[260vh] motion-reduce:md:h-auto"
+      className="relative bg-paper md:h-[200vh] motion-reduce:md:h-auto"
     >
       <div className="relative overflow-hidden bg-paper md:sticky md:top-[4.25rem] md:h-[calc(100svh-4.25rem)] motion-reduce:md:static motion-reduce:md:h-auto motion-reduce:md:overflow-visible">
         {/* light plexus behind scene one */}
@@ -458,7 +423,6 @@ export function Hero() {
               <div className="relative w-full max-w-[48rem]">
                 <SceneTwoContent centered flowActive={revealed} />
                 <CapabilityList className="hidden motion-reduce:grid" />
-                <ProductList className="hidden motion-reduce:grid" />
               </div>
             </div>
 
@@ -466,16 +430,7 @@ export function Hero() {
             <div className="container-x flex h-full flex-col justify-center py-14 lg:hidden">
               <SceneTwoContent flowActive={revealed} />
               <CapabilityList />
-              <ProductList />
             </div>
-          </div>
-
-          {/* BEAT 3 — product network, revealed inside the box on scroll */}
-          <div
-            ref={productLayer}
-            className="z-20 hidden md:absolute md:inset-0 md:block motion-reduce:md:hidden"
-          >
-            <ProductNetworkContent />
           </div>
         </motion.div>
 

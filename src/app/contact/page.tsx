@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { ContactForm } from "@/components/sections/contact-form";
+import { Plexus } from "@/components/hero/plexus";
 
 import { site } from "@/lib/site";
 
@@ -21,8 +22,11 @@ export default function ContactPage() {
   return (
     <>
       <SiteHeader />
-      <main className="flex-1 pt-32 sm:pt-40">
-        <section className="container-x pb-24 sm:pb-32">
+      <main className="relative flex-1 overflow-hidden pt-32 sm:pt-40">
+        <div className="pointer-events-none absolute inset-0 opacity-50">
+          <Plexus variant="light" density={0.85} />
+        </div>
+        <section className="container-x relative pb-24 sm:pb-32">
           <div className="grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
             <div>
               <p className="eyebrow flex items-center gap-3 text-teal">

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Logo } from "@/components/brand/logo";
 import { ButtonLink } from "@/components/ui/button";
+import { Plexus } from "@/components/hero/plexus";
 import { nav, ctas, site } from "@/lib/site";
 
 const industries = [
@@ -11,8 +12,11 @@ const industries = [
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-line bg-paper">
-      <div className="container-x py-16">
+    <footer className="relative overflow-hidden border-t border-line bg-paper">
+      <div className="pointer-events-none absolute inset-0 opacity-50">
+        <Plexus variant="light" density={0.85} />
+      </div>
+      <div className="container-x relative py-16">
         <div className="grid gap-10 lg:grid-cols-[1.4fr_1fr_1fr] lg:gap-16">
           <div>
             <Logo href={null} className="h-9" />

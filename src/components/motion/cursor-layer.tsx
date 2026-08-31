@@ -28,20 +28,28 @@ export function CursorLayer() {
     const gp = { ...target };
     let raf = 0;
     let shown = false;
+    // the trailing glow only lives while the hero ("We build brands") is on
+    // screen — past it, just the ring follows the pointer
+    let glowAllowed = true;
 
+    const paintGlow = () => {
+      const v = glowAllowed && shown ? "1" : "0";
+      g.style.opacity = v;
+      gs.style.opacity = v;
+    };
     const show = () => {
       if (shown) return;
       shown = true;
       r.style.opacity = "1";
-      g.style.opacity = "1";
-      gs.style.opacity = "1";
+      paintGlow();
     };
     const hide = () => {
       shown = false;
       r.style.opacity = "0";
-      g.style.opacity = "0";
-      gs.style.opacity = "0";
+      paintGlow();
     };
+
+    const hero = document.querySelector("main > section");
 
     const onMove = (e: PointerEvent) => {
       target.x = e.clientX;
@@ -59,6 +67,13 @@ export function CursorLayer() {
     const onUp = () => r.classList.remove("is-down");
 
     const tick = () => {
+      // glow only while the hero ("We build brands") is still on screen
+      const allowed = hero ? hero.getBoundingClientRect().bottom > 40 : true;
+      if (allowed !== glowAllowed) {
+        glowAllowed = allowed;
+        paintGlow();
+      }
+
       rp.x += (target.x - rp.x) * 0.4;
       rp.y += (target.y - rp.y) * 0.4;
       gp.x += (target.x - gp.x) * 0.12;
