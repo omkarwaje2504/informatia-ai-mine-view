@@ -218,3 +218,30 @@ html.lenis body {
     stroke-dashoffset: 0;
   }
 }
+
+/* --------------------------------------------------------------------------
+   Large / TV-scale displays (43"–55" 4K monitors, ultrawides).
+   The whole design is rem-based, so scaling the root font-size scales type,
+   spacing and rem max-widths together; container-x is widened on top so
+   content still fills the panel instead of stranding it in a 1344px column.
+   -------------------------------------------------------------------------- */
+@media (min-width: 2560px) {
+  html { font-size: 18px; }
+  .container-x { max-width: 96rem; }
+  .cursor-ring { height: 34px; width: 34px; }
+  .cursor-glow { height: 560px; width: 560px; }
+}
+@media (min-width: 3200px) {
+  html { font-size: 20px; }
+  .container-x { max-width: 108rem; }
+}
+@media (min-width: 3840px) {
+  html { font-size: 22px; }
+  .container-x { max-width: 116rem; }
+  .cursor-ring { height: 40px; width: 40px; }
+  .cursor-glow { height: 680px; width: 680px; }
+}
+@media (min-width: 5120px) {
+  html { font-size: 26px; }
+  .container-x { max-width: 128rem; }
+}

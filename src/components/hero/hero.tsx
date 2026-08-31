@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, type RefObject } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { motion, useReducedMotion, useTransform } from "framer-motion";
 import { gsap, useGSAP } from "@/lib/gsap";
@@ -155,33 +155,6 @@ function SceneTwoContent({
   );
 }
 
-/* ---- pixel-shatter grid: the "We build" surface breaks into shards ---- */
-
-const SHARD_COLS = 14;
-const SHARD_ROWS = 9;
-
-function ShatterGrid({ gridRef }: { gridRef: RefObject<HTMLDivElement | null> }) {
-  return (
-    <div
-      ref={gridRef}
-      aria-hidden
-      className="pointer-events-none absolute inset-0 z-30 hidden md:grid motion-reduce:md:hidden"
-      style={{
-        gridTemplateColumns: `repeat(${SHARD_COLS}, 1fr)`,
-        gridTemplateRows: `repeat(${SHARD_ROWS}, 1fr)`,
-      }}
-    >
-      {Array.from({ length: SHARD_COLS * SHARD_ROWS }).map((_, i) => (
-        <div
-          key={i}
-          data-shard
-          className="bg-gradient-to-br from-night-2 to-night opacity-0 [outline:1px_solid_rgba(255,255,255,0.03)] [outline-offset:-1px] will-change-transform"
-        />
-      ))}
-    </div>
-  );
-}
-
 /* ---- four capabilities: a row that straddles the Scene 2 panel's edge ---- */
 
 function CapabilityRow() {
@@ -252,7 +225,6 @@ export function Hero() {
   const titleA = useRef<HTMLDivElement>(null);
   const sceneB = useRef<HTMLDivElement>(null);
   const productLayer = useRef<HTMLDivElement>(null);
-  const shatterGrid = useRef<HTMLDivElement>(null);
 
   const [revealed, setRevealed] = useState(false);
 
@@ -270,11 +242,6 @@ export function Hero() {
             "[data-cap-card]",
             outer.current,
           );
-          const shards = gsap.utils.toArray<HTMLElement>(
-            "[data-shard]",
-            outer.current,
-          );
-          gsap.set(shards, { autoAlpha: 0, transformOrigin: "50% 50%" });
           // per-card travel + drift → staggered parallax depth
           const RISE = [72, 108, 86, 120];
           const DRIFT = [-4, -9, -6, -12];
@@ -360,67 +327,37 @@ export function Hero() {
               },
               0.64,
             )
-            // BEAT 3 — the box opens, the "We build" surface re-forms as a grid
-            // of shards, then every shard scatters away to uncover the network.
+            // BEAT 3 — the box opens to full height and the Scene 2 text +
+            // cards cross-fade into the product network, held inside the panel.
             .to(
               panel.current,
               { height: "100%", ease: "power2.inOut", duration: 0.3 },
-              1.14,
+              1.16,
             )
             .to(
               sceneB.current,
-              { autoAlpha: 0, y: -18, ease: "power1.in", duration: 0.16 },
-              1.14,
+              { autoAlpha: 0, y: -24, ease: "power2.in", duration: 0.24 },
+              1.16,
             )
             .to(
               cards,
               {
                 autoAlpha: 0,
-                yPercent: -30,
-                ease: "power1.in",
-                duration: 0.16,
-                stagger: 0.02,
-              },
-              1.14,
-            )
-            // shards wipe in to re-cover the panel (fast diagonal sweep)
-            .to(
-              shards,
-              {
-                autoAlpha: 1,
-                ease: "none",
-                duration: 0.04,
-                stagger: {
-                  amount: 0.2,
-                  grid: [SHARD_ROWS, SHARD_COLS],
-                  from: "start",
-                },
-              },
-              1.14,
-            )
-            // network sits ready, hidden behind the cover
-            .set(productLayer.current, { autoAlpha: 1 }, 1.5)
-            // shatter — each shard scatters on its own vector
-            .to(
-              shards,
-              {
-                autoAlpha: 0,
-                scale: 0.3,
-                rotation: () => gsap.utils.random(-100, 100),
-                x: () => gsap.utils.random(-180, 180),
-                y: () => gsap.utils.random(-160, 220),
+                yPercent: -40,
                 ease: "power2.in",
-                duration: 0.5,
-                stagger: {
-                  amount: 0.5,
-                  grid: [SHARD_ROWS, SHARD_COLS],
-                  from: "random",
-                },
+                duration: 0.24,
+                stagger: 0.04,
               },
-              1.58,
+              1.16,
+            )
+            .fromTo(
+              productLayer.current,
+              { autoAlpha: 0, y: 26 },
+              { autoAlpha: 1, y: 0, ease: "power2.out", duration: 0.3 },
+              1.34,
             )
             // hold on the network for the remaining scroll
-            .to({}, { duration: 0.5 });
+            .to({}, { duration: 0.45 });
         },
       );
 
@@ -434,7 +371,7 @@ export function Hero() {
   return (
     <section
       ref={outer}
-      className="relative bg-paper md:h-[320vh] motion-reduce:md:h-auto"
+      className="relative bg-paper md:h-[260vh] motion-reduce:md:h-auto"
     >
       <div className="relative overflow-hidden bg-paper md:sticky md:top-[4.25rem] md:h-[calc(100svh-4.25rem)] motion-reduce:md:static motion-reduce:md:h-auto motion-reduce:md:overflow-visible">
         {/* light plexus behind scene one */}
@@ -540,9 +477,6 @@ export function Hero() {
           >
             <ProductNetworkContent />
           </div>
-
-          {/* the shatter cover — sweeps in, then breaks apart to reveal it */}
-          <ShatterGrid gridRef={shatterGrid} />
         </motion.div>
 
         {/* capability cards — straddle the panel edge, lg+ with motion only */}
