@@ -1,14 +1,18 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, type RefObject } from "react";
 import Link from "next/link";
 import { motion, useReducedMotion, useTransform } from "framer-motion";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { Plexus } from "./plexus";
-import { OrchestratorDiagram, OrchestratorList } from "./orchestrator-diagram";
+import { FlowLine } from "./flow-line";
+import {
+  ProductList,
+  ProductNetworkContent,
+} from "@/components/sections/product-network";
 import { useParallax } from "@/hooks/use-parallax";
 import { useAppReady } from "@/hooks/use-app-ready";
-import { sceneOne, sceneTwo } from "@/lib/content";
+import { capabilities, sceneOne, sceneTwo } from "@/lib/content";
 import { cn } from "@/lib/utils";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -63,51 +67,38 @@ function toneClass(tone: string) {
 
 function SceneTwoHeadline() {
   return (
-    <h2 className="font-display text-[1.9rem] font-bold leading-[1.06] tracking-[-0.02em] sm:text-[2.5rem] lg:text-[3rem]">
+    <h2 className="font-display mt-20 text-[2.1rem] font-bold leading-[1.04] tracking-[-0.02em] sm:text-[2.75rem] lg:text-[3.4rem]">
       {sceneTwo.headingLines.map((line, i) => (
-        <span key={line.text} className="block">
-          <span
-            className={cn("rise-in inline-block", toneClass(line.tone))}
-            style={{ animationDelay: `${0.05 + i * 0.08}s` }}
-          >
-            {line.text}
-          </span>
-          {"trailing" in line && line.trailing ? (
-            <span
-              className="rise-in ml-3 inline-block font-serif text-[0.5em] font-normal italic text-mist"
-              style={{ animationDelay: `${0.05 + i * 0.08 + 0.05}s` }}
-            >
-              {line.trailing}
-            </span>
-          ) : null}
+        <span
+          key={line.text}
+          className={cn("rise-in block", toneClass(line.tone))}
+          style={{ animationDelay: `${0.05 + i * 0.08}s` }}
+        >
+          {line.text}
         </span>
       ))}
     </h2>
   );
 }
 
-/** Centred text block — sits in the middle of the constellation. */
-function SceneTwoContent({ centered = false }: { centered?: boolean }) {
+/** Minimal Scene 2 block — eyebrow, headline, one line of body, the flow, CTAs. */
+function SceneTwoContent({
+  centered = false,
+  flowActive = true,
+}: {
+  centered?: boolean;
+  flowActive?: boolean;
+}) {
   return (
-    <div
-      className={cn(
-        centered ? "mx-auto max-w-[36rem] text-center" : "max-w-xl",
-      )}
-    >
-      <p
-        className="fade-in mb-6 inline-flex items-center gap-2 rounded-full border border-line-night bg-night/50 px-3.5 py-1.5 text-[0.68rem] font-medium uppercase tracking-[0.18em] text-mist-soft backdrop-blur-sm"
-        style={{ animationDelay: "0s" }}
-      >
-        <span className="h-1.5 w-1.5 rounded-full bg-gold" />
-        {sceneTwo.eyebrow}
-      </p>
+    <div className={cn(centered ? "mx-auto max-w-[46rem] text-center" : "max-w-xl")}>
+
 
       <SceneTwoHeadline />
 
       <div
         className={cn(
-          "mt-6 space-y-3.5 text-[0.95rem] leading-relaxed text-mist-soft",
-          centered ? "mx-auto max-w-[30rem]" : "max-w-md",
+          "mt-2 text-[1.2rem] leading-relaxed text-mist-soft",
+          centered ? "mx-auto max-w-[34rem]" : "max-w-md",
         )}
       >
         {sceneTwo.body.map((p, i) => (
@@ -122,8 +113,15 @@ function SceneTwoContent({ centered = false }: { centered?: boolean }) {
       </div>
 
       <div
+        className={cn("fade-in mt-11", centered && "flex justify-center")}
+        style={{ animationDelay: "0.56s" }}
+      >
+        <FlowLine steps={sceneTwo.flow} active={flowActive} />
+      </div>
+
+      <div
         className={cn(
-          "fade-in mt-8 flex flex-wrap gap-3",
+          "fade-in mt-11 flex flex-wrap gap-3",
           centered && "justify-center",
         )}
         style={{ animationDelay: "0.72s" }}
@@ -142,11 +140,98 @@ function SceneTwoContent({ centered = false }: { centered?: boolean }) {
         </Link>
         <Link
           href={sceneTwo.ctas.secondary.href}
-          className="inline-flex items-center rounded-full border border-line-night bg-night/40 px-6 py-3 text-[0.9rem] font-medium text-mist backdrop-blur-sm transition-colors duration-300 hover:border-mist"
+          className="group inline-flex items-center gap-2 rounded-full border border-line-night bg-night/40 px-6 py-3 text-[0.9rem] font-medium text-mist backdrop-blur-sm transition-colors duration-300 hover:border-mist"
         >
           {sceneTwo.ctas.secondary.label}
+          <span
+            aria-hidden
+            className="transition-transform duration-300 ease-out-expo group-hover:translate-x-1"
+          >
+            →
+          </span>
         </Link>
       </div>
+    </div>
+  );
+}
+
+/* ---- pixel-shatter grid: the "We build" surface breaks into shards ---- */
+
+const SHARD_COLS = 14;
+const SHARD_ROWS = 9;
+
+function ShatterGrid({ gridRef }: { gridRef: RefObject<HTMLDivElement | null> }) {
+  return (
+    <div
+      ref={gridRef}
+      aria-hidden
+      className="pointer-events-none absolute inset-0 z-30 hidden md:grid motion-reduce:md:hidden"
+      style={{
+        gridTemplateColumns: `repeat(${SHARD_COLS}, 1fr)`,
+        gridTemplateRows: `repeat(${SHARD_ROWS}, 1fr)`,
+      }}
+    >
+      {Array.from({ length: SHARD_COLS * SHARD_ROWS }).map((_, i) => (
+        <div
+          key={i}
+          data-shard
+          className="bg-gradient-to-br from-night-2 to-night opacity-0 [outline:1px_solid_rgba(255,255,255,0.03)] [outline-offset:-1px] will-change-transform"
+        />
+      ))}
+    </div>
+  );
+}
+
+/* ---- four capabilities: a row that straddles the Scene 2 panel's edge ---- */
+
+function CapabilityRow() {
+  return (
+    <div className="pointer-events-none absolute inset-x-0 top-[80%] z-40 hidden -translate-y-1/2 lg:block motion-reduce:hidden">
+      <div className="container-x">
+        <div className="grid grid-cols-4 gap-4">
+          {capabilities.map((c) => (
+            <article
+              key={c.n}
+              data-cap-card
+              className="pointer-events-auto rounded-2xl border border-line bg-paper-bright/95 p-5 opacity-0 shadow-float backdrop-blur-md"
+            >
+              <span className="font-display text-[0.8rem] font-semibold text-gold">
+                {c.n}
+              </span>
+              <h3 className="mt-2.5 font-display text-[1.05rem] font-semibold leading-snug tracking-[-0.01em] text-ink">
+                {c.title}
+              </h3>
+              <p className="mt-1.5 text-[0.82rem] leading-relaxed text-ink-soft">
+                {c.detail}
+              </p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/** Stacked fallback — used below lg and for reduced motion. */
+function CapabilityList({ className }: { className?: string }) {
+  return (
+    <div className={cn("mt-10 grid gap-3 sm:grid-cols-2", className)}>
+      {capabilities.map((c) => (
+        <article
+          key={c.n}
+          className="rounded-2xl border border-line-night bg-night-card/80 p-4"
+        >
+          <span className="font-display text-[0.75rem] font-semibold text-gold">
+            {c.n}
+          </span>
+          <h3 className="mt-1.5 font-display text-[0.98rem] font-semibold leading-snug text-mist">
+            {c.title}
+          </h3>
+          <p className="mt-1 text-[0.8rem] leading-relaxed text-mist-soft">
+            {c.detail}
+          </p>
+        </article>
+      ))}
     </div>
   );
 }
@@ -166,6 +251,8 @@ export function Hero() {
   const panel = useRef<HTMLDivElement>(null);
   const titleA = useRef<HTMLDivElement>(null);
   const sceneB = useRef<HTMLDivElement>(null);
+  const productLayer = useRef<HTMLDivElement>(null);
+  const shatterGrid = useRef<HTMLDivElement>(null);
 
   const [revealed, setRevealed] = useState(false);
 
@@ -177,6 +264,20 @@ export function Hero() {
         "(min-width: 768px) and (prefers-reduced-motion: no-preference)",
         () => {
           gsap.set(sceneB.current, { autoAlpha: 0 });
+          gsap.set(productLayer.current, { autoAlpha: 0 });
+
+          const cards = gsap.utils.toArray<HTMLElement>(
+            "[data-cap-card]",
+            outer.current,
+          );
+          const shards = gsap.utils.toArray<HTMLElement>(
+            "[data-shard]",
+            outer.current,
+          );
+          gsap.set(shards, { autoAlpha: 0, transformOrigin: "50% 50%" });
+          // per-card travel + drift → staggered parallax depth
+          const RISE = [72, 108, 86, 120];
+          const DRIFT = [-4, -9, -6, -12];
 
           const tl = gsap.timeline({
             scrollTrigger: {
@@ -233,7 +334,92 @@ export function Hero() {
               { autoAlpha: 1, y: 0, ease: "power2.out", duration: 0.26 },
               0.3,
             )
-            // hold the finished state for the remaining scroll
+            // capability cards rise up to straddle the panel's bottom edge
+            .fromTo(
+              cards,
+              {
+                autoAlpha: 0,
+                yPercent: (i: number) => RISE[i] ?? 90,
+              },
+              {
+                autoAlpha: 1,
+                yPercent: 0,
+                ease: "power3.out",
+                duration: 0.3,
+                stagger: 0.06,
+              },
+              0.34,
+            )
+            // then keep drifting at their own speeds through the hold
+            .to(
+              cards,
+              {
+                yPercent: (i: number) => DRIFT[i] ?? -6,
+                ease: "none",
+                duration: 0.44,
+              },
+              0.64,
+            )
+            // BEAT 3 — the box opens, the "We build" surface re-forms as a grid
+            // of shards, then every shard scatters away to uncover the network.
+            .to(
+              panel.current,
+              { height: "100%", ease: "power2.inOut", duration: 0.3 },
+              1.14,
+            )
+            .to(
+              sceneB.current,
+              { autoAlpha: 0, y: -18, ease: "power1.in", duration: 0.16 },
+              1.14,
+            )
+            .to(
+              cards,
+              {
+                autoAlpha: 0,
+                yPercent: -30,
+                ease: "power1.in",
+                duration: 0.16,
+                stagger: 0.02,
+              },
+              1.14,
+            )
+            // shards wipe in to re-cover the panel (fast diagonal sweep)
+            .to(
+              shards,
+              {
+                autoAlpha: 1,
+                ease: "none",
+                duration: 0.04,
+                stagger: {
+                  amount: 0.2,
+                  grid: [SHARD_ROWS, SHARD_COLS],
+                  from: "start",
+                },
+              },
+              1.14,
+            )
+            // network sits ready, hidden behind the cover
+            .set(productLayer.current, { autoAlpha: 1 }, 1.5)
+            // shatter — each shard scatters on its own vector
+            .to(
+              shards,
+              {
+                autoAlpha: 0,
+                scale: 0.3,
+                rotation: () => gsap.utils.random(-100, 100),
+                x: () => gsap.utils.random(-180, 180),
+                y: () => gsap.utils.random(-160, 220),
+                ease: "power2.in",
+                duration: 0.5,
+                stagger: {
+                  amount: 0.5,
+                  grid: [SHARD_ROWS, SHARD_COLS],
+                  from: "random",
+                },
+              },
+              1.58,
+            )
+            // hold on the network for the remaining scroll
             .to({}, { duration: 0.5 });
         },
       );
@@ -248,7 +434,7 @@ export function Hero() {
   return (
     <section
       ref={outer}
-      className="relative bg-paper md:h-[200vh] motion-reduce:md:h-auto"
+      className="relative bg-paper md:h-[320vh] motion-reduce:md:h-auto"
     >
       <div className="relative overflow-hidden bg-paper md:sticky md:top-[4.25rem] md:h-[calc(100svh-4.25rem)] motion-reduce:md:static motion-reduce:md:h-auto motion-reduce:md:overflow-visible">
         {/* light plexus behind scene one */}
@@ -278,13 +464,8 @@ export function Hero() {
           transition={{ duration: 0.6, ease: EASE, delay: 1.1 }}
           className="pointer-events-none absolute bottom-[42%] left-1/2 z-20 hidden -translate-x-1/2 flex-col items-center gap-2 text-[0.62rem] uppercase tracking-[0.24em] text-ink-faint md:flex"
         >
-          Scroll
-          <motion.span
-            aria-hidden
-            className="block h-8 w-px bg-gradient-to-b from-ink-faint to-transparent"
-            animate={reduce ? undefined : { scaleY: [0.3, 1, 0.3], originY: 0 }}
-            transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-          />
+          
+ 
         </motion.div>
 
         {/* MORPHING DARK PANEL */}
@@ -300,24 +481,24 @@ export function Hero() {
             "motion-reduce:md:static motion-reduce:md:h-auto motion-reduce:md:w-[92%] motion-reduce:md:top-auto motion-reduce:md:translate-x-0",
           )}
         >
-          <Plexus variant="dark" density={1.1} className="opacity-60" />
+          <Plexus variant="dark" density={0.85} className="opacity-35" />
           <div
             className="pointer-events-none absolute inset-0"
             style={{
               background:
-                "radial-gradient(50% 80% at 8% 12%, rgba(108,42,142,0.42), transparent 60%), radial-gradient(45% 75% at 94% 94%, rgba(28,195,182,0.2), transparent 60%)",
+                "radial-gradient(60% 90% at 12% 6%, rgba(108,42,142,0.22), transparent 62%)",
             }}
           />
-          {/* always-on purple glow */}
+          {/* always-on purple glow — kept faint so the type carries the scene */}
           <motion.div
             aria-hidden
-            className="pointer-events-none absolute left-1/2 top-[38%] h-[38rem] w-[38rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-purple/40 blur-[130px]"
+            className="pointer-events-none absolute left-1/2 top-[40%] h-[30rem] w-[30rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-purple/25 blur-[140px]"
             animate={
               reduce
                 ? undefined
-                : { scale: [1, 1.16, 1], opacity: [0.45, 0.72, 0.45] }
+                : { scale: [1, 1.12, 1], opacity: [0.28, 0.45, 0.28] }
             }
-            transition={{ duration: 6.5, repeat: Infinity, ease: "easeInOut" }}
+            transition={{ duration: 7.5, repeat: Infinity, ease: "easeInOut" }}
           />
 
           {/* Scene A — centred title while the panel is small */}
@@ -326,7 +507,7 @@ export function Hero() {
             className="relative z-10 hidden px-8 text-center md:absolute md:inset-0 md:grid md:place-items-center motion-reduce:md:hidden"
           >
             <h2 className="max-w-4xl font-display text-[clamp(1.6rem,3.4vw,2.9rem)] font-bold leading-[1.1] tracking-[-0.02em] text-mist">
-              {sceneTwo.centeredHeading}
+              What starts as an idea can<br/> become an experience.
             </h2>
           </div>
 
@@ -335,24 +516,37 @@ export function Hero() {
             ref={sceneB}
             className="relative z-10 md:absolute md:inset-0 motion-reduce:md:static motion-reduce:md:py-14"
           >
-            {/* lg+ : text centred inside the full-stage constellation */}
-            <div className="relative hidden h-full lg:block">
-              <OrchestratorDiagram active={revealed} />
-              <div className="absolute inset-0 z-20 grid place-items-center px-6">
-                <div className="pointer-events-none absolute h-[26rem] w-[42rem] rounded-full bg-[radial-gradient(ellipse,rgba(10,14,26,0.9),rgba(10,14,26,0.55)_45%,transparent_72%)]" />
-                <div className="pointer-events-auto relative">
-                  <SceneTwoContent centered />
-                </div>
+            {/* lg+ : a single centred column, lifted to clear the card row */}
+            <div className="relative hidden h-full px-6 lg:grid lg:place-items-center lg:pb-[20vh]">
+              <div className="relative w-full max-w-[48rem]">
+                <SceneTwoContent centered flowActive={revealed} />
+                <CapabilityList className="hidden motion-reduce:grid" />
+                <ProductList className="hidden motion-reduce:grid" />
               </div>
             </div>
 
             {/* below lg : stacked */}
-            <div className="container-x flex h-full flex-col justify-center gap-8 py-14 lg:hidden">
-              <SceneTwoContent />
-              <OrchestratorList />
+            <div className="container-x flex h-full flex-col justify-center py-14 lg:hidden">
+              <SceneTwoContent flowActive={revealed} />
+              <CapabilityList />
+              <ProductList />
             </div>
           </div>
+
+          {/* BEAT 3 — product network, revealed inside the box on scroll */}
+          <div
+            ref={productLayer}
+            className="z-20 hidden md:absolute md:inset-0 md:block motion-reduce:md:hidden"
+          >
+            <ProductNetworkContent />
+          </div>
+
+          {/* the shatter cover — sweeps in, then breaks apart to reveal it */}
+          <ShatterGrid gridRef={shatterGrid} />
         </motion.div>
+
+        {/* capability cards — straddle the panel edge, lg+ with motion only */}
+        <CapabilityRow />
       </div>
     </section>
   );
