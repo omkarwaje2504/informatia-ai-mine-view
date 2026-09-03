@@ -5,29 +5,30 @@
  */
 
 export const promo = {
-  eyebrow: "Trusted by 60+ organizations worldwide",
-  text: "Successful deliveries across banking, healthcare & pharma, and enterprise.",
+  eyebrow: "60+ global clients · 350+ successful deliveries",
+  text: "Digital, AI and engagement solutions built on the technology-led foundation of Sai Ashirwad.",
 };
 
 export const sceneOne = {
-  heading: "Intelligent AI and digital solutions that deliver measurable outcomes.",
-  body: "We empower organizations to design, build and scale AI-powered digital solutions that drive engagement, efficiency and growth across industries.",
+  heading:
+    "Connecting businesses. Empowering sales. Accelerating growth.",
+  body: "Digital, AI and engagement solutions that bridge the customer journey, empower sales teams and unify field execution.",
 };
 
 export const sceneTwo = {
-  eyebrow: "Brand Strategy · Creative · Digital · AI",
+  eyebrow: "AI · Digital Platforms · Engagement · Data",
   headingLines: [
-    { text: "We build brands.", tone: "mist" },
-    { text: "We build what's next.", tone: "gold" },
+    { text: "Built on experience.", tone: "mist" },
+    { text: "Focused on what's next.", tone: "gold" },
   ],
-  centeredHeading: "What starts as an idea can become an experience.",
+  centeredHeading: "One connected approach to growth.",
   body: [
-    "From a brand idea to the people it needs to reach, we connect strategy, creativity and technology across every touchpoint.",
+    "Informatia AI builds on the technology-led foundation of Sai Ashirwad with modern digital capabilities and AI-first solutions.",
   ],
-  flow: ["Idea", "Brand", "Experience", "Intelligence"],
+  flow: ["Strategy", "Engagement", "Execution"],
   ctas: {
-    primary: { href: "/contact", label: "Book a Meeting" },
-    secondary: { href: "/#work", label: "Explore Our Work" },
+    primary: { href: "/capabilities", label: "Explore Our Solutions" },
+    secondary: { href: "/connect", label: "Start a Conversation" },
   },
 } as const;
 
@@ -36,10 +37,26 @@ export const sceneTwo = {
  * panel's bottom edge and rise in with staggered parallax on scroll.
  */
 export const capabilities = [
-  { n: "01", title: "Brand Strategy", detail: "Find the idea worth remembering." },
-  { n: "02", title: "Campaigns & Creative", detail: "Turn the idea into a distinctive identity." },
-  { n: "03", title: "Digital Engagement", detail: "Extend the brand into living experiences." },
-  { n: "04", title: "AI Solutions", detail: "Make those experiences smarter and personal." },
+  {
+    n: "01",
+    title: "AI & Intelligent Solutions",
+    detail: "Practical AI and automation built around business needs.",
+  },
+  {
+    n: "02",
+    title: "Digital Platforms",
+    detail: "Scalable web, mobile and enterprise applications.",
+  },
+  {
+    n: "03",
+    title: "Digital Engagement",
+    detail: "Technology-led experiences that connect brands, teams and audiences.",
+  },
+  {
+    n: "04",
+    title: "Data & Insights",
+    detail: "Dashboards and intelligence that turn activity into actionable visibility.",
+  },
 ] as const;
 
 /**
@@ -77,42 +94,45 @@ export const capabilities = [
  */
 export const industries = {
   eyebrow: "Industries We Serve",
-  heading: "We've built our expertise by serving regulated enterprises.",
-  sub: "Trusted where compliance, scale and measurable outcomes aren't optional.",
-  note: "Discover why 60+ enterprises partner with Informatia AI.",
+  heading: "Built for the industries we know best.",
+  sub: "From the business objective to the final audience, we bring strategy, technology and execution together.",
+  note: "60+ enterprises partner with Informatia AI.",
   ctas: {
-    primary: { href: "/contact", label: "Start a Conversation" },
-    secondary: { href: "/contact", label: "Request a Consultation" },
+    primary: { href: "/#industries", label: "Explore Industries" },
+    secondary: { href: "/connect", label: "Start a Conversation" },
   },
   sectors: [
     {
       id: "healthcare",
-      tab: "Healthcare & Life Sciences",
-      title: "Healthcare & Life Sciences",
+      tab: "Healthcare & Pharma",
+      title: "Healthcare & Pharma",
+      href: "/industries/healthcare-pharma",
       points: [
-        "Patient & HCP engagement platforms (PixPro, RxPad, Enkare, HScore, AI Doctor Avatar)",
-        "Field force & commercial analytics tools (RxPert, Prace, Funzo)",
-        "Clinician-first EHR/EMR design and compliant digital architectures",
+        "Patient-first digital solutions — health assessments, kiosks, AI Doctor Avatar and QR journeys.",
+        "HCP engagement — websites, virtual clinic experiences and personalized communication.",
+        "Field force and commercial excellence — field analytics, engagement apps and dashboards.",
       ],
     },
     {
       id: "bfsi",
-      tab: "Banking & Financial Services",
-      title: "Banking & Financial Services (BFSI)",
+      tab: "Banking & Financial Institutions",
+      title: "Banking & Financial Institutions",
+      href: "/industries/banking-financial-institutions",
       points: [
-        "Digital banking portals, FinTech platform engineering, and cloud-ready architectures",
-        "AI-driven process automation and intelligent document/data processing",
-        "Real-time risk scoring, predictive intelligence dashboards, and compliance-ready systems",
+        "Better customer connections — digital platforms, web and mobile, enterprise applications.",
+        "Teams that work smarter — AI workflows, process automation and intelligent data processing.",
+        "Workflows and insights together — dashboards, analytics, reporting and integrations.",
       ],
     },
     {
       id: "enterprise",
       tab: "Enterprises & Corporates",
       title: "Enterprises & Corporates",
+      href: "/industries/enterprises-corporates",
       points: [
-        "Legacy system re-architecting, API-first development, and cloud modernization",
-        "Task orchestration, AI assistants, and enterprise workflow integration",
-        "Unified leadership dashboards, data governance, and employee experience portals",
+        "Connect people, platforms and processes — enterprise apps, digital workspaces and integrations.",
+        "Better tools for teams — AI assistants, workflow automation and task automation.",
+        "Execution in one view — enterprise dashboards, analytics and workflow integration.",
       ],
     },
   ],
@@ -227,38 +247,39 @@ export const engagementTracks = {
  */
 export const orchestration = {
   index: "01",
-  eyebrow: "Orchestration",
-  heading: "Where work gets coordinated",
-  body: "Coordinate work across AI, people and systems — keeping every process moving with visibility, durability and control.",
-  cta: { href: "/contact", label: "Explore business orchestration" },
+  eyebrow: "What We Do",
+  heading: "One connected approach to growth",
+  body: "We connect your business, your teams and your solutions to the customers and stakeholders you ultimately need to reach.",
+  cta: { href: "/capabilities", label: "Explore our capabilities" },
   points: [
     {
-      title: "One process, end to end",
+      title: "Bridge the customer gap",
       detail:
-        "A workflow runs as one governed case, with every stage and handoff on a single canvas.",
+        "We connect your business, your teams and your solutions to the customers and stakeholders you ultimately need to reach.",
     },
     {
-      title: "Durable by design",
+      title: "Empower your sales force",
       detail:
-        "Processes pause for documents and approvals, then resume exactly where they left off. No state lost.",
+        "We equip sales and field teams with smarter digital tools, engagement solutions and actionable intelligence to execute more effectively.",
     },
     {
-      title: "Exceptions, handled",
+      title: "Unify sales execution",
       detail:
-        "Low-confidence decisions route to people automatically, with full context attached.",
-    },
-    {
-      title: "Outcomes you can measure",
-      detail:
-        "Every run produces one traceable result, start to finish.",
+        "We build connected sales-force applications that bring field activity, engagement and business insights into one unified experience.",
     },
   ],
   nodes: [
-    { title: "Application intake", stage: "Stage 01", badge: "Routed", x: 2, y: 4 },
-    { title: "Credit & identity", stage: "Stage 02", badge: "Verified", x: 54, y: 4 },
-    { title: "Underwriting decision", stage: "Stage 03", badge: "Approved", x: 2, y: 40 },
-    { title: "Exception", stage: "Low confidence", badge: "Overridden", x: 54, y: 40 },
-    { title: "Funding & closing", stage: "Stage 04", badge: "Funded", x: 2, y: 76 },
+    { title: "Strategy", stage: "Stage 01", badge: "Aligned", x: 2, y: 4 },
+    { title: "Engagement", stage: "Stage 02", badge: "Connected", x: 54, y: 4 },
+    {
+      title: "Field execution",
+      stage: "Stage 03",
+      badge: "Enabled",
+      x: 2,
+      y: 40,
+    },
+    { title: "Insights", stage: "In one view", badge: "Measured", x: 54, y: 40 },
+    { title: "Growth", stage: "Stage 04", badge: "Delivered", x: 2, y: 76 },
   ],
 } as const;
 
@@ -267,15 +288,35 @@ export const orchestration = {
  * the four-step approach section.
  */
 export const approach = {
-  eyebrow: "Our Delivery Approach",
-  heading: "A structured path to measurable outcomes.",
+  eyebrow: "How We Deliver",
+  heading: "From the business objective to the final audience.",
   intro:
-    "A clear, structured model that keeps delivery aligned, transparent and measurable.",
+    "We bring strategy, technology and execution together — a clear, structured model that keeps delivery aligned and measurable.",
   steps: [
-    { n: "01", title: "Understand", detail: "Clarify core business objectives, user needs, and regulatory constraints." },
-    { n: "02", title: "Design", detail: "Define technical solution architecture, experience strategy, and execution roadmaps." },
-    { n: "03", title: "Build", detail: "Execute rapid development with speed, enterprise scalability, and quality precision." },
-    { n: "04", title: "Optimize", detail: "Measure live performance metrics, refine systems, and scale total impact." },
+    {
+      n: "01",
+      title: "Understand",
+      detail:
+        "Start with the business objective, the users and the constraints.",
+    },
+    {
+      n: "02",
+      title: "Design",
+      detail:
+        "Shape the solution architecture, experience strategy and execution roadmap.",
+    },
+    {
+      n: "03",
+      title: "Build",
+      detail:
+        "Execute with speed, enterprise scalability and quality precision.",
+    },
+    {
+      n: "04",
+      title: "Execute & Optimize",
+      detail:
+        "Deploy, measure live performance and scale the total impact.",
+    },
   ],
 } as const;
 
@@ -284,8 +325,8 @@ export const approach = {
  * into one block. Client logos live in public/clients/ (from saiashirwad.com).
  */
 export const impact = {
-  eyebrow: "Partner with us",
-  bandLabel: "Trusted by leading pharma, healthcare & retail brands",
+  eyebrow: "Let's build",
+  bandLabel: "Trusted by leading pharma, healthcare & financial brands",
   clients: [
     { name: "Sun Pharma", logo: "/clients/sun-pharma.png" },
     { name: "Cipla", logo: "/clients/cipla.png" },
@@ -309,15 +350,16 @@ export const impact = {
     { value: "98%", label: "Client retention rate" },
   ],
   questions: [
-    { lead: "Exploring", highlight: "AI adoption" },
-    { lead: "Modernizing", highlight: "digital platforms" },
-    { lead: "Scaling", highlight: "engagement" },
+    { lead: "Stronger", highlight: "customer engagement" },
+    { lead: "A more empowered", highlight: "sales force" },
+    { lead: "Unified", highlight: "digital execution" },
   ],
-  body: "Partner with our leadership and engineering teams to transform technology into measurable outcomes.",
+  heading: "Let's build the connection that drives growth.",
+  body: "Whether the goal is stronger customer engagement, a more empowered sales force or unified digital execution, Informatia AI can take it from strategy to deployment.",
   leadership:
-    "Founded and led by CEO Rohan Sakhale, bringing deep cross-industry digital-transformation expertise.",
+    "Rohan Sakhale founded Informatia AI with a vision to turn emerging technology into practical solutions that create measurable business impact. Drawing on extensive digital-transformation experience across industries, he leads the company at the intersection of strategy, technology and execution.",
   ctas: {
-    primary: { href: "/contact", label: "Start a Conversation" },
-    secondary: { href: "/contact", label: "Request a Consultation" },
+    primary: { href: "/connect", label: "Start a Conversation" },
+    secondary: { href: "/capabilities", label: "Explore Our Solutions" },
   },
 } as const;

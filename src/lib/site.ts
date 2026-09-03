@@ -13,17 +13,17 @@ export const site = {
 } as const;
 
 export const nav = [
-  { href: "/#about", label: "About us" },
-  { href: "/#capabilities", label: "Capabilities" },
+  { href: "/about", label: "About" },
+  { href: "/capabilities", label: "Capabilities" },
   { href: "/#industries", label: "Industries" },
-  { href: "/#approach", label: "Our Approach" },
-  { href: "/#careers", label: "Work with us" },
+  { href: "/careers", label: "Grow With Us" },
+  { href: "/connect", label: "Connect" },
 ] as const;
 
 /** currently-highlighted nav item */
 export const activeNav = "Capabilities";
 
 export const ctas = {
-  primary: { href: "/contact", label: "Start Conversation" },
-  secondary: { href: "/#approach", label: "Explore More" },
+  primary: { href: "/connect", label: "Start a Conversation" },
+  secondary: { href: "/capabilities", label: "Explore Our Solutions" },
 } as const;

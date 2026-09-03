@@ -136,12 +136,13 @@ function SceneTwoContent({
         </Link>
         <Link
           href={sceneTwo.ctas.secondary.href}
-          className="group inline-flex items-center gap-2 rounded-full border border-line-night bg-night/40 px-6 py-3 text-[0.9rem] font-medium text-mist backdrop-blur-sm transition-colors duration-300 hover:border-mist"
+           style={{ border: "0.1px solid gold" }}
+          className="group inline-flex items-center border-solid  gap-2 rounded-full bg-night/40 px-6 py-3 text-[0.9rem] font-medium text-mist backdrop-blur-sm transition-colors duration-300 hover:border-mist"
         >
           {sceneTwo.ctas.secondary.label}
           <span
             aria-hidden
-            className="transition-transform duration-300 ease-out-expo group-hover:translate-x-1"
+            className="transition-transform  duration-300 ease-out-expo group-hover:translate-x-1"
           >
             →
           </span>
@@ -237,8 +238,8 @@ export function Hero() {
             outer.current,
           );
           // per-card travel + drift → staggered parallax depth
-          const RISE = [72, 108, 86, 120];
-          const DRIFT = [-4, -9, -6, -12];
+          const RISE = [72, 108, 86, 200];
+          const DRIFT = [-6, -6, -6, -6];
 
           const tl = gsap.timeline({
             scrollTrigger: {
