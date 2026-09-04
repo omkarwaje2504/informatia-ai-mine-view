@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Plexus } from "@/components/hero/plexus";
 import { PointerSplash } from "@/components/motion/pointer-splash";
 import { impact } from "@/lib/content";
@@ -61,7 +62,7 @@ function LogoMarquee() {
                 alt={c.name}
                 width={192}
                 height={64}
-                className="h-16 w-auto object-contain grayscale opacity-80 transition duration-300 group-hover:opacity-100 group-hover:grayscale-0"
+                className="h-16 w-auto object-contain transition duration-300 group-hover:opacity-100 group-hover:grayscale-0"
               />
             </span>
           ))}
@@ -82,7 +83,7 @@ function LogoMarquee() {
                 alt={c.name}
                 width={192}
                 height={64}
-                className="h-16 w-auto object-contain grayscale opacity-80 transition duration-300 group-hover:opacity-100 group-hover:grayscale-0"
+                className="h-16 w-auto object-contain transition duration-300 group-hover:opacity-100 group-hover:grayscale-0"
               />
             </span>
           ))}
@@ -151,6 +152,45 @@ export function ImpactCta() {
               </div>
             ))}
           </dl>
+
+          {/* closing call to action */}
+          <div
+            className="mt-16 rounded-3xl border border-[#f2ddc4] bg-orange-50 p-8 sm:mt-20 sm:p-12"
+            data-reveal
+          >
+            <h2 className="max-w-3xl font-display text-[1.9rem] font-bold leading-[1.12] tracking-[-0.02em] text-ink sm:text-[2.6rem]">
+              {impact.ctaHeading}
+            </h2>
+            <p className="mt-4 max-w-xl text-[1.05rem] leading-relaxed text-ink-soft">
+              {impact.ctaBody}
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link
+                href={impact.ctas.primary.href}
+                className="group inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-[0.9rem] font-medium text-paper transition-colors duration-300 hover:bg-purple"
+              >
+                {impact.ctas.primary.label}
+                <span
+                  aria-hidden
+                  className="transition-transform duration-300 ease-out-expo group-hover:translate-x-1"
+                >
+                  →
+                </span>
+              </Link>
+              <Link
+                href={impact.ctas.secondary.href}
+                className="group inline-flex items-center gap-2 rounded-full border border-ink/20 px-6 py-3 text-[0.9rem] font-medium text-ink transition-colors duration-300 hover:border-ink"
+              >
+                {impact.ctas.secondary.label}
+                <span
+                  aria-hidden
+                  className="transition-transform duration-300 ease-out-expo group-hover:translate-x-1"
+                >
+                  →
+                </span>
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </section>

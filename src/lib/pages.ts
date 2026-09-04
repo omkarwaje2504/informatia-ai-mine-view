@@ -40,6 +40,13 @@ export const aboutPage = {
     role: "Founder & CEO",
     photo: "/team/rohan-sakhale.jpg",
     bio: "Rohan Sakhale founded Informatia AI with a vision to turn emerging technology into practical solutions that create measurable business impact. With over a decade of technology and business leadership experience, he leads the company at the intersection of strategy, technology and execution.",
+    quote:
+      "We don't start with technology. We start with the outcome the business needs — then build the shortest path to it.",
+    credentials: [
+      "10+ years in technology and business leadership",
+      "Built on the foundation of Sai Ashirwad Informatia",
+    ],
+    note: "This belief shapes every engagement we take on.",
   },
   team: {
     eyebrow: "Our Team",
