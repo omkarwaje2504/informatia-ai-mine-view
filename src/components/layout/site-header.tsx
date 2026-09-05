@@ -1,15 +1,28 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion, useReducedMotion } from "framer-motion";
 import { HeaderLogo } from "@/components/brand/header-logo";
-import { nav, activeNav } from "@/lib/site";
+import { nav } from "@/lib/site";
 import { useAppReady } from "@/hooks/use-app-ready";
 import { cn } from "@/lib/utils";
+
+/** Is this nav item the current route? Hash links (e.g. "/#industries")
+ * point at a section of the homepage rather than their own route, so they
+ * count as active whenever we're on the homepage. Everything else is an
+ * exact — or nested-route — match against the current pathname. */
+function isActive(href: string, pathname: string) {
+  if (href.startsWith("/#")) return pathname === "/";
+  if (href === "/") return pathname === "/";
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
 
 export function SiteHeader() {
   const reduce = useReducedMotion();
   const go = useAppReady() || !!reduce;
+  const pathname = usePathname();
+
   return (
     <motion.header
       initial={reduce ? false : { y: -20, opacity: 0 }}
@@ -28,7 +41,7 @@ export function SiteHeader() {
 
         <nav className="hidden items-center gap-1 lg:flex">
           {nav.map((item, i) => {
-            const active = item.label === activeNav;
+            const active = isActive(item.href, pathname);
             return (
               <motion.div
                 key={item.href}
@@ -38,6 +51,7 @@ export function SiteHeader() {
               >
                 <Link
                   href={item.href}
+                  aria-current={active ? "page" : undefined}
                   className={cn(
                     "group relative block px-3 py-2 text-[0.9rem] transition-colors duration-200",
                     active ? "text-purple" : "text-ink-soft hover:text-ink",
@@ -56,13 +70,13 @@ export function SiteHeader() {
           })}
         </nav>
 
-        <MobileNav />
+        <MobileNav pathname={pathname} />
       </div>
     </motion.header>
   );
 }
 
-function MobileNav() {
+function MobileNav({ pathname }: { pathname: string }) {
   return (
     <details className="group relative lg:hidden">
       <summary className="flex h-10 w-10 cursor-pointer list-none items-center justify-center [&::-webkit-details-marker]:hidden">
@@ -73,18 +87,22 @@ function MobileNav() {
         </span>
       </summary>
       <div className="absolute right-0 mt-3 w-56 origin-top-right rounded-2xl border border-line bg-paper-bright p-2 shadow-float">
-        {nav.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={cn(
-              "block rounded-xl px-4 py-3 text-sm transition-colors hover:bg-paper",
-              item.label === activeNav ? "text-purple" : "text-ink-soft",
-            )}
-          >
-            {item.label}
-          </Link>
-        ))}
+        {nav.map((item) => {
+          const active = isActive(item.href, pathname);
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              aria-current={active ? "page" : undefined}
+              className={cn(
+                "block rounded-xl px-4 py-3 text-sm transition-colors hover:bg-paper",
+                active ? "text-purple" : "text-ink-soft",
+              )}
+            >
+              {item.label}
+            </Link>
+          );
+        })}
       </div>
     </details>
   );

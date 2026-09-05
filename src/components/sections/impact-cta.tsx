@@ -1,5 +1,11 @@
+"use client";
+
+import Link from "next/link";
+import { useRef } from "react";
+import { useReducedMotion } from "framer-motion";
 import { Plexus } from "@/components/hero/plexus";
 import { PointerSplash } from "@/components/motion/pointer-splash";
+import { gsap, useGSAP } from "@/lib/gsap";
 import { impact } from "@/lib/content";
 
 /** Curved purple→green wave — the transition into the dark closing section. */
@@ -61,7 +67,7 @@ function LogoMarquee() {
                 alt={c.name}
                 width={192}
                 height={64}
-                className="h-16 w-auto object-contain grayscale opacity-80 transition duration-300 group-hover:opacity-100 group-hover:grayscale-0"
+                className="h-16 w-auto object-contain transition duration-300 group-hover:opacity-100 group-hover:grayscale-0"
               />
             </span>
           ))}
@@ -82,7 +88,7 @@ function LogoMarquee() {
                 alt={c.name}
                 width={192}
                 height={64}
-                className="h-16 w-auto object-contain grayscale opacity-80 transition duration-300 group-hover:opacity-100 group-hover:grayscale-0"
+                className="h-16 w-auto object-contain transition duration-300 group-hover:opacity-100 group-hover:grayscale-0"
               />
             </span>
           ))}
@@ -93,12 +99,44 @@ function LogoMarquee() {
 }
 
 export function ImpactCta() {
-  return (
-    <section id="connect" className="relative bg-night text-mist ">
-      
+  const reduce = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+  const bgRef = useRef<HTMLDivElement>(null);
 
+  // as this section rises up and covers the pinned "How We Deliver" steps
+  // above it, drift the backdrop at a different rate for a parallax cue
+  useGSAP(
+    () => {
+      if (reduce || !sectionRef.current || !bgRef.current) return;
+      gsap.fromTo(
+        bgRef.current,
+        { yPercent: -15 },
+        {
+          yPercent: 15,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
+        },
+      );
+    },
+    { scope: sectionRef, dependencies: [reduce] },
+  );
+
+  return (
+    <section
+      ref={sectionRef}
+      id="connect"
+      className="relative bg-night text-mist "
+    >
       <div className="relative overflow-hidden py-10 lg:py-20">
-        <div className="pointer-events-none absolute inset-0 opacity-20">
+        <div
+          ref={bgRef}
+          className="pointer-events-none absolute inset-x-0 -top-[15%] h-[130%] opacity-20 will-change-transform"
+        >
           <Plexus variant="dark" density={0.6} />
         </div>
         <div
@@ -151,6 +189,45 @@ export function ImpactCta() {
               </div>
             ))}
           </dl>
+
+          {/* closing call to action */}
+          <div
+            className="mt-16 rounded-3xl border border-[#f2ddc4] bg-orange-50 p-8 sm:mt-20 sm:p-12"
+            data-reveal
+          >
+            <h2 className="max-w-3xl font-display text-[1.9rem] font-bold leading-[1.12] tracking-[-0.02em] text-ink sm:text-[2.6rem]">
+              {impact.ctaHeading}
+            </h2>
+            <p className="mt-4 max-w-xl text-[1.05rem] leading-relaxed text-ink-soft">
+              {impact.ctaBody}
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link
+                href={impact.ctas.primary.href}
+                className="group inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-[0.9rem] font-medium text-paper transition-colors duration-300 hover:bg-purple"
+              >
+                {impact.ctas.primary.label}
+                <span
+                  aria-hidden
+                  className="transition-transform duration-300 ease-out-expo group-hover:translate-x-1"
+                >
+                  →
+                </span>
+              </Link>
+              <Link
+                href={impact.ctas.secondary.href}
+                className="group inline-flex items-center gap-2 rounded-full border border-ink/20 px-6 py-3 text-[0.9rem] font-medium text-ink transition-colors duration-300 hover:border-ink"
+              >
+                {impact.ctas.secondary.label}
+                <span
+                  aria-hidden
+                  className="transition-transform duration-300 ease-out-expo group-hover:translate-x-1"
+                >
+                  →
+                </span>
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </section>
