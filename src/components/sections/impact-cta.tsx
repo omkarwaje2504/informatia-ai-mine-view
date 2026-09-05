@@ -1,6 +1,11 @@
+"use client";
+
 import Link from "next/link";
+import { useRef } from "react";
+import { useReducedMotion } from "framer-motion";
 import { Plexus } from "@/components/hero/plexus";
 import { PointerSplash } from "@/components/motion/pointer-splash";
+import { gsap, useGSAP } from "@/lib/gsap";
 import { impact } from "@/lib/content";
 
 /** Curved purple→green wave — the transition into the dark closing section. */
@@ -94,12 +99,44 @@ function LogoMarquee() {
 }
 
 export function ImpactCta() {
-  return (
-    <section id="connect" className="relative bg-night text-mist ">
-      
+  const reduce = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+  const bgRef = useRef<HTMLDivElement>(null);
 
+  // as this section rises up and covers the pinned "How We Deliver" steps
+  // above it, drift the backdrop at a different rate for a parallax cue
+  useGSAP(
+    () => {
+      if (reduce || !sectionRef.current || !bgRef.current) return;
+      gsap.fromTo(
+        bgRef.current,
+        { yPercent: -15 },
+        {
+          yPercent: 15,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
+        },
+      );
+    },
+    { scope: sectionRef, dependencies: [reduce] },
+  );
+
+  return (
+    <section
+      ref={sectionRef}
+      id="connect"
+      className="relative bg-night text-mist "
+    >
       <div className="relative overflow-hidden py-10 lg:py-20">
-        <div className="pointer-events-none absolute inset-0 opacity-20">
+        <div
+          ref={bgRef}
+          className="pointer-events-none absolute inset-x-0 -top-[15%] h-[130%] opacity-20 will-change-transform"
+        >
           <Plexus variant="dark" density={0.6} />
         </div>
         <div

@@ -20,9 +20,6 @@ export const nav = [
   { href: "/connect", label: "Connect" },
 ] as const;
 
-/** currently-highlighted nav item */
-export const activeNav = "Capabilities";
-
 export const ctas = {
   primary: { href: "/connect", label: "Start a Conversation" },
   secondary: { href: "/capabilities", label: "Explore Our Solutions" },

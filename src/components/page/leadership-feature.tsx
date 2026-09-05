@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { useRef } from "react";
 import { motion, useReducedMotion } from "framer-motion";
+import { gsap, useGSAP } from "@/lib/gsap";
 
 const EASE_OUT = [0.16, 1, 0.3, 1] as const;
 
@@ -28,6 +30,8 @@ export function LeadershipFeature({
   cta: { href: string; label: string };
 }) {
   const reduce = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+  const photoRef = useRef<HTMLImageElement>(null);
   const rise = (i = 0) =>
     reduce
       ? {}
@@ -38,36 +42,68 @@ export function LeadershipFeature({
           transition: { duration: 0.6, delay: i * 0.07, ease: EASE_OUT },
         };
 
+  // as this section rises up and covers the pinned heritage/beliefs stack,
+  // drift the founder photo at a different rate for a parallax depth cue
+  useGSAP(
+    () => {
+      if (reduce || !sectionRef.current || !photoRef.current) return;
+      gsap.fromTo(
+        photoRef.current,
+        { yPercent: -12 },
+        {
+          yPercent: 12,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
+        },
+      );
+    },
+    { scope: sectionRef, dependencies: [reduce] },
+  );
+
   return (
-    <section className="relative overflow-hidden border-t border-line-night bg-night text-mist">
-      {/* full-bleed founder photo */}
-      <div className="absolute inset-0" aria-hidden>
+    <section
+      ref={sectionRef}
+      className="relative border-t border-line-night bg-night text-mist"
+    >
+      {/* founder photo — pinned full-height while the content below scrolls
+          over it, releasing once the content ends and continuing normally
+          from there. */}
+      <div
+        className="sticky top-0 z-0 h-screen w-full overflow-hidden"
+        aria-hidden
+      >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
+          ref={photoRef}
           src={leader.photo}
           alt=""
-          className="h-full w-full object-cover object-top opacity-70"
+          className="h-[130%] w-full scale-110 object-cover object-top will-change-transform"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-night/80 via-night/90 to-night" />
+        <div className="absolute inset-0 bg-gradient-to-b from-night/80 via-night/60 to-night" />
       </div>
 
-      <div className="container-x relative py-24 md:py-32">
+      <div className="container-x relative z-10 -mt-[100vh] py-24 md:py-32">
         {/* name + role, badge to the right */}
         <div className="flex flex-wrap items-start justify-between gap-8">
           <motion.div {...rise(0)}>
             <h2 className="font-display text-[3rem] font-normal leading-[0.95] tracking-[-0.02em] text-mist sm:text-[4.5rem] lg:text-[5.5rem]">
               {leader.name}
             </h2>
-            <p className="mt-2 text-[1.1rem] text-mist/55 sm:text-[1.4rem]">
+            <p className="mt-2 text-[1.1rem] text-mist sm:text-[1.4rem]">
               {leader.role}
             </p>
           </motion.div>
 
           <motion.div
             {...rise(1)}
-            className="flex max-w-[12rem] items-start gap-2.5 text-[0.8rem] leading-snug text-mist-soft"
+            className="flex max-w-[12rem] items-start gap-2.5 text-[0.9rem] leading-snug text-white"
           >
-            <span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full border border-mist/25 text-[0.7rem]">
+            <span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full border border-mist text-[0.7rem]">
               ✦
             </span>
             {leader.credentials[0]}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { markAppReady } from "@/hooks/use-app-ready";
 
@@ -12,11 +12,14 @@ const HOLD_MS = 3000;
 const COUNT_MS = 2700;
 
 type Phase = "loading" | "leaving" | "skip";
+type Flight = { x: number; y: number; scale: number };
 
 export function Preloader() {
   const reduce = useReducedMotion();
   const [phase, setPhase] = useState<Phase>("loading");
   const [count, setCount] = useState(0);
+  const [flight, setFlight] = useState<Flight | null>(null);
+  const markRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (reduce) {
@@ -37,6 +40,21 @@ export function Preloader() {
 
     const leave = window.setTimeout(() => {
       document.documentElement.style.overflow = "";
+
+      // measure where the header's logo actually sits so the mark can fly
+      // to (and morph into) that exact spot rather than just fading out
+      const from = markRef.current?.getBoundingClientRect();
+      const to = document
+        .querySelector('header img[src="/Informatia-main.svg"]')
+        ?.getBoundingClientRect();
+      if (from && to && from.width > 0) {
+        setFlight({
+          x: to.left + to.width / 2 - (from.left + from.width / 2),
+          y: to.top + to.height / 2 - (from.top + from.height / 2),
+          scale: to.width / from.width,
+        });
+      }
+
       setPhase("leaving"); // triggers the wipe-out; markAppReady on exit-complete
     }, HOLD_MS);
 
@@ -66,27 +84,36 @@ export function Preloader() {
             ))}
           </div>
 
-          {/* content */}
+          {/* mark — kept independent of the text/progress fade below so it
+              can fly to (and morph into) the header logo's exact spot
+              instead of just disappearing with the rest of the content */}
           <motion.div
-            className="absolute inset-0 flex flex-col items-center justify-center px-6 text-mist"
-            exit={{ opacity: 0, transition: { duration: 0.3 } }}
+            className="pointer-events-none absolute inset-0 flex items-center justify-center pb-16"
+            style={{ opacity: 1 }}
+            initial={{ y: 18, scale: 0.92 }}
+            animate={{ y: 0, scale: 1 }}
+            exit={
+              flight
+                ? {
+                    x: flight.x,
+                    y: flight.y,
+                    scale: flight.scale,
+                    transition: { duration: 0.7, ease: EASE_INOUT },
+                  }
+                : { opacity: 0, transition: { duration: 0.3 } }
+            }
+            transition={{ duration: 0.9, ease: EASE_OUT, delay: 0.12 }}
           >
-            <div className="relative">
+            <div ref={markRef} className="relative">
               <motion.span
                 aria-hidden
                 className="absolute inset-0 -z-10 rounded-full bg-purple-light/25 blur-3xl"
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: [0, 0.8, 0.5], scale: 1.3 }}
+                exit={{ opacity: 0, transition: { duration: 0.25 } }}
                 transition={{ duration: 1.6, ease: EASE_OUT, delay: 0.2 }}
               />
-              <motion.svg
-                viewBox="0 0 1044 761.33"
-                className="h-20 w-auto sm:h-24"
-                aria-hidden
-                initial={{ opacity: 0, y: 18, scale: 0.92 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ duration: 0.9, ease: EASE_OUT, delay: 0.12 }}
-              >
+              <svg viewBox="0 0 1044 761.33" className="h-20 w-auto sm:h-24" aria-hidden>
                 <defs>
                   <clipPath id="pl-wipe-a">
                     <motion.rect
@@ -117,11 +144,17 @@ export function Preloader() {
                   fill="var(--color-teal-light)"
                   d="M732.06,7.79h-161.13l307.28,746.88h159.96L732.06,7.79h0Z"
                 />
-              </motion.svg>
+              </svg>
             </div>
+          </motion.div>
 
+          {/* tagline */}
+          <motion.div
+            className="absolute inset-0 flex flex-col items-center justify-center px-6 pt-32 text-mist sm:pt-36"
+            exit={{ opacity: 0, transition: { duration: 0.3 } }}
+          >
             <motion.p
-              className="mt-2 text-[1.7rem] text-white"
+              className="text-[1.7rem] text-white"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 1.15 }}

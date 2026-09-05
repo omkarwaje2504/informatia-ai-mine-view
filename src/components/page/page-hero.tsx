@@ -7,14 +7,29 @@ export function PageHero({
   heading,
   intro,
   children,
+  bgImage,
 }: {
   eyebrow: string;
   heading: string;
   intro?: string;
   children?: ReactNode;
+  /** optional photographic background, dimmed under a dark scrim */
+  bgImage?: string;
 }) {
   return (
     <section className="relative overflow-hidden bg-night pb-16 pt-36 text-mist sm:pt-44 md:pb-24">
+      {bgImage ? (
+        <div className="absolute inset-0">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={bgImage}
+            alt=""
+            aria-hidden
+            className="h-full w-full object-cover opacity-55"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-night/60 via-night/75 to-night" />
+        </div>
+      ) : null}
       <div className="pointer-events-none absolute inset-0 opacity-25">
         <Plexus variant="dark" density={0.6} />
       </div>

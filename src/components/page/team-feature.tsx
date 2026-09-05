@@ -31,57 +31,14 @@ export function TeamFeature({
           transition: { duration: 0.6, delay: i * 0.07, ease: EASE_OUT },
         };
 
-  const teamCount = team.departments.length;
-  const peopleCount = team.departments.reduce(
-    (n, d) => n + d.members.length,
-    0,
-  );
 
   return (
     <>
-      {/* headline row — badge floated right */}
-      <div className="flex flex-wrap items-start justify-between gap-8">
-        <motion.h2
-          {...rise(0)}
-          className="font-display text-[3rem] font-normal leading-[0.95] tracking-[-0.02em] text-mist sm:text-[4rem] lg:text-[4.8rem]"
-        >
-          {team.eyebrow}
-        </motion.h2>
-        <motion.div
-          {...rise(1)}
-          className="flex max-w-[12rem] items-start gap-2.5 text-[0.8rem] leading-snug text-mist-soft"
-        >
-          <span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full border border-mist/25 text-[0.7rem]">
-            ✦
-          </span>
-          {teamCount} teams · {peopleCount} people delivering
-        </motion.div>
-      </div>
-
-      {/* narrow supporting copy — words blur/fade in on scroll */}
-      <p className="mt-14 max-w-[17rem] text-[0.92rem] leading-relaxed text-mist-soft md:mt-20">
-        {team.body.split(" ").map((word, i) => (
-          <motion.span
-            key={i}
-            className="inline-block will-change-[filter,opacity]"
-            initial={reduce ? false : { opacity: 0.08, filter: "blur(8px)" }}
-            whileInView={{ opacity: 1, filter: "blur(0px)" }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.45, delay: i * 0.03, ease: EASE_OUT }}
-          >
-            {word}&nbsp;
-          </motion.span>
-        ))}
-      </p>
-
-      {/* divider */}
       <motion.div
         {...rise(2)}
         aria-hidden
-        className="my-10 flex items-center gap-3 text-mist/40 md:my-14"
+        className="flex items-center gap-3 text-mist/40"
       >
-        <span className="h-px flex-1 bg-mist/15" />
-        <span className="text-lg leading-none">+</span>
       </motion.div>
 
       <TeamNetwork leader={leader} departments={team.departments} />
