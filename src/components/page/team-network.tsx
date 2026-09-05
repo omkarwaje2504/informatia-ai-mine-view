@@ -109,14 +109,12 @@ function layout(nodes: Node[]): Placed[] {
   return placed;
 }
 
-/** Smaller gap on narrow screens — the same fixed gap that reads as
- * "not too close" on desktop would force an impractically tall section
- * once 29 cards have to share a narrow width. */
+/** Gap scales continuously with the actual container width instead of
+ * jumping at a few fixed breakpoints — a "laptop"-width screen (1100-1440px)
+ * sits right between two old steps and was getting whichever gap/pill-size
+ * combo happened to not fit, causing overlap. */
 function gapFor(containerW: number) {
-  if (containerW < 480) return 8;
-  if (containerW < 820) return 12;
-  if (containerW < 1100) return 16;
-  return 20;
+  return clamp(containerW * 0.012, 8, 20);
 }
 
 /**
@@ -253,9 +251,10 @@ function fitLayout(
   let height = Math.max(startHeight, 1);
   let placed = resolveCollisions(base, sizes, containerW, height, hubSize, gap);
   let tries = 0;
-  // capped so the network always fits in ~one screen — with the full page
-  // width to spread across, the wider canvas does the work instead
-  const maxHeight = Math.min(startHeight * 1.5, hardCap);
+  // capped so the network stays roughly one screen tall — with the full
+  // page width to spread across and width-aware pill sizing, the wider
+  // canvas does most of the work instead of extra height
+  const maxHeight = Math.min(startHeight * 2.1, hardCap);
   while (
     countOverlaps(placed, sizes, containerW, height, gap) > 0 &&
     height < maxHeight &&
@@ -335,7 +334,7 @@ function Pill({
     >
       <motion.div
         ref={registerRef}
-        className="flex w-20 items-center gap-1 rounded-lg border bg-night-2/85 px-1.5 py-1 backdrop-blur-sm sm:w-32 sm:gap-2 sm:rounded-xl sm:px-3 sm:py-2 md:w-40 lg:w-[12.5rem] lg:gap-2.5 lg:px-3.5"
+        className="flex w-[clamp(5rem,11vw,12.5rem)] items-center gap-1 rounded-lg border bg-night-2/85 px-1.5 py-1 backdrop-blur-sm sm:gap-2 sm:rounded-xl sm:px-3 sm:py-2 lg:gap-2.5 lg:px-3.5"
         style={{ borderColor: active ? node.color : "var(--color-line-night)" }}
         animate={
           arrived && !reduce
@@ -414,7 +413,7 @@ export function TeamNetwork({
         container.offsetWidth,
         container.offsetHeight,
         hubSize,
-        window.innerHeight * 0.95,
+        window.innerHeight * 1.05,
       );
       setPlaced(fitted.placed);
       setHeight((prev) =>

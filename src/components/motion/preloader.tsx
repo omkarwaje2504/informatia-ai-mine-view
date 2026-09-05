@@ -150,11 +150,11 @@ export function Preloader() {
 
           {/* tagline */}
           <motion.div
-            className="absolute inset-0 flex flex-col items-center justify-center px-6 pt-32 text-mist sm:pt-36"
+            className="absolute inset-0 flex flex-col items-center text-center justify-center px-6 pt-32 text-mist sm:pt-36"
             exit={{ opacity: 0, transition: { duration: 0.3 } }}
           >
             <motion.p
-              className="text-[1.7rem] text-white"
+              className="text-[1.7rem] text-white leading-tight"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 1.15 }}

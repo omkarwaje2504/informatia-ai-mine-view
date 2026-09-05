@@ -70,11 +70,12 @@ export function LeadershipFeature({
       ref={sectionRef}
       className="relative border-t border-line-night bg-night text-mist"
     >
-      {/* founder photo — pinned full-height while the content below scrolls
-          over it, releasing once the content ends and continuing normally
-          from there. */}
+      {/* founder photo — on mobile/tablet it's pinned full-height while the
+          content below scrolls over it, releasing once the content ends and
+          continuing normally; on desktop it's the plain full-bleed backdrop
+          behind the whole section, not sticky. */}
       <div
-        className="sticky top-0 z-0 h-screen w-full overflow-hidden"
+        className="sticky top-0 z-0 h-screen w-full overflow-hidden lg:absolute lg:inset-0 lg:h-full"
         aria-hidden
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -87,7 +88,7 @@ export function LeadershipFeature({
         <div className="absolute inset-0 bg-gradient-to-b from-night/80 via-night/60 to-night" />
       </div>
 
-      <div className="container-x relative z-10 -mt-[100vh] py-24 md:py-32">
+      <div className="container-x relative z-10 -mt-[100vh] py-24 md:py-32 lg:mt-0">
         {/* name + role, badge to the right */}
         <div className="flex flex-wrap items-start justify-between gap-8">
           <motion.div {...rise(0)}>
