@@ -36,23 +36,31 @@ export function SiteFooter() {
       {/* --- link grid --- */}
       <div className="container-x relative z-10 pb-12 pt-20">
         <div
-          className="grid gap-12 lg:grid-cols-[1.6fr_1fr_1fr_1.1fr] lg:gap-10"
+          className="grid gap-8 lg:grid-cols-[1.6fr_1fr_1fr_1.1fr] lg:gap-10"
           data-reveal-group
           data-reveal-y="30"
         >
           <div>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/Informatia.svg" alt="Informatia AI" className="h-9 w-auto" />
+            <img
+              src="/Informatia.svg"
+              alt="Informatia AI"
+              className="h-9 w-auto"
+            />
             <p className="mt-5 max-w-xs text-sm leading-relaxed text-ink-soft">
-              A digital and AI solutions company turning technology into measurable
-              business outcomes — for complex, regulated environments.
+              A digital and AI solutions company turning technology into
+              measurable business outcomes — for complex, regulated
+              environments.
             </p>
             <Link
               href={ctas.primary.href}
               className="group mt-6 inline-flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 text-[0.85rem] font-medium text-paper transition-colors duration-300 hover:bg-purple"
             >
               {ctas.primary.label}
-              <span aria-hidden className="transition-transform duration-300 group-hover:translate-x-1">
+              <span
+                aria-hidden
+                className="transition-transform duration-300 group-hover:translate-x-1"
+              >
                 →
               </span>
             </Link>
@@ -62,7 +70,7 @@ export function SiteFooter() {
             <h3 className="text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-teal">
               Company
             </h3>
-            <ul className="mt-4 space-y-3">
+            <ul className="mt-2 md:mt-4 space-y-1 md:space-y-3">
               {nav.map((item) => (
                 <li key={item.href}>
                   <FooterLink href={item.href}>{item.label}</FooterLink>
@@ -78,7 +86,7 @@ export function SiteFooter() {
             <h3 className="text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-teal">
               Industries
             </h3>
-            <ul className="mt-4 space-y-3 text-sm text-ink-soft">
+            <ul className="mt-2 md:mt-4 space-y-1 md:space-y-3 text-sm text-ink-soft">
               {industries.map((i) => (
                 <li key={i}>{i}</li>
               ))}
@@ -89,7 +97,7 @@ export function SiteFooter() {
             <h3 className="text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-teal">
               Get in touch
             </h3>
-            <ul className="mt-4 space-y-3 text-sm text-ink-soft">
+            <ul className="mt-2 md:mt-4 space-y-1 md:space-y-3 text-sm text-ink-soft">
               <li>
                 <a
                   href={`mailto:${site.email}`}
@@ -140,19 +148,13 @@ export function SiteFooter() {
         </div>
 
         {/* --- oversized wordmark, within the container --- */}
-        <div
-          className="mt-6 w-full select-none border-t border-line pt-10"
+        {/* <div
+          className="mt-6 w-full select-none border-t border-line pt-10 hidden lg:block"
           data-reveal
           data-reveal-y="60"
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/Informatia-logo.png"
-            alt=""
-            aria-hidden
-            className="w-full opacity-95"
-          />
-        </div>
+          <p className="text-[9rem] font-display font-extrabold text-ink">INFORMATIA AI</p>
+        </div> */}
       </div>
     </footer>
   );

@@ -62,7 +62,7 @@ export default function AboutRoute() {
                 <div className="md:mt-6 grid gap-3 md:gap-6 sm:grid-cols-2 lg:grid-cols-4">
                   {a.beliefs.items.map((b, i) => (
                     <div key={b.title} className="border-t-2 border-mist/80 md:pt-5">
-                      <span className="font-text text-[0.8rem] font-semibold text-gold hidden sm:inline-block">
+                      <span className="font-text text-[3rem] font-semibold text-gold hidden sm:inline-block">
                         {String(i + 1).padStart(2, "0")}
                       </span>
                       <h3 className="mt-2 font-display text-[1.1rem] font-semibold leading-snug text-mist">
@@ -90,13 +90,13 @@ export default function AboutRoute() {
           <LeadershipFeature leader={a.leadership} cta={a.cta} />
         </div>
 
-        {/* team — full width, no container-x, so the network can scatter
-            edge to edge */}
-        <section className="relative overflow-hidden border-t border-line-night bg-night-2 py-10 text-mist">
+        {/* team — one dynamic viewport minus the sticky navbar, full width so
+            the network scatters edge to edge without the page scrolling */}
+        <section className="relative h-[calc(100dvh-73px)] overflow-hidden border-t border-line-night bg-night-2 text-mist">
           <div className="pointer-events-none absolute inset-0 opacity-20">
             <Plexus variant="dark" density={0.55} />
           </div>
-          <div className="relative">
+          <div className="relative h-full">
             <TeamFeature
               team={a.team}
               leader={{ name: a.leadership.name, role: a.leadership.role }}

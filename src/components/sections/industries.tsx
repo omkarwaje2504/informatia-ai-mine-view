@@ -17,7 +17,7 @@ export function IndustriesShowcase() {
   return (
     <section
       id="industries"
-      className="relative overflow-hidden bg-orange-50 py-10 lg:py-20"
+      className="relative overflow-hidden bg-orange-50 py-10"
     >
       <div className="pointer-events-none absolute inset-0 opacity-50">
         <Plexus variant="light" density={0.85} />
@@ -34,7 +34,7 @@ export function IndustriesShowcase() {
               {industries.sub}
             </p>
 
-            <div className="mt-3 border-t border-line pt-6">
+            <div className="mt-3 border-t border-line pt-6 hidden lg:block">
               <Link
                 href={industries.ctas.primary.href}
                 className="group inline-flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 text-[0.85rem] font-medium text-paper transition-colors duration-300 hover:bg-purple"
@@ -71,7 +71,7 @@ export function IndustriesShowcase() {
               ))}
             </div>
 
-            <div className="relative mt-5 overflow-hidden rounded-3xl border border-line-night bg-night text-mist">
+            <div className="relative md:mt-5 overflow-hidden rounded-3xl border border-line-night bg-night text-mist">
               <Plexus variant="dark" density={0.6} className="opacity-25" />
               <div
                 className="pointer-events-none absolute inset-0"
@@ -107,6 +107,20 @@ export function IndustriesShowcase() {
                   ))}
                 </ol>
               </motion.div>
+            </div>
+            <div className="mt-3 border-t border-line pt-6 lg:hidden">
+              <Link
+                href={industries.ctas.primary.href}
+                className="group inline-flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 text-[0.85rem] font-medium text-paper transition-colors duration-300 hover:bg-purple"
+              >
+                {industries.ctas.primary.label}
+                <span
+                  aria-hidden
+                  className="transition-transform duration-300 ease-out-expo group-hover:translate-x-1"
+                >
+                  →
+                </span>
+              </Link>
             </div>
           </div>
         </div>

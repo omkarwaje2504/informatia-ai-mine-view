@@ -43,7 +43,7 @@ export const aboutPage = {
     quote:
       "We don't start with technology. We start with the outcome the business needs — then build the shortest path to it.",
     credentials: [
-      "10+ years in technology and business leadership",
+      "16+ years in technology and business leadership",
       "Built on the foundation of Sai Ashirwad Informatia",
     ],
     note: "This belief shapes every engagement we take on.",
@@ -57,8 +57,8 @@ export const aboutPage = {
         members: [
           { name: "Annil Lad", role: "Head" },
           { name: "Prasad", role: "Lead" },
-          { name: "Krish", role: "Executive" },
-          { name: "Tanmay", role: "Executive" },
+          // { name: "Krish", role: "Executive" },
+          // { name: "Tanmay", role: "Executive" },
         ],
       },
       {
@@ -66,10 +66,10 @@ export const aboutPage = {
         members: [
           { name: "Omkar", role: "Tech Head" },
           { name: "Wasim", role: "Backend / App Lead" },
-          { name: "Vedant", role: "Frontend Lead" },
-          { name: "Deepak", role: "App Developer" },
-          { name: "Gaurav", role: "Backend Developer" },
-          { name: "Ashwin", role: "Frontend Developer" },
+          // { name: "Vedant", role: "Frontend Lead" },
+          // { name: "Deepak", role: "App Developer" },
+          // { name: "Gaurav", role: "Backend Developer" },
+          // { name: "Ashwin", role: "Frontend Developer" },
         ],
       },
       {
@@ -77,9 +77,9 @@ export const aboutPage = {
         members: [
           { name: "Sanjib", role: "Lead" },
           { name: "Pooja", role: "Designer" },
-          { name: "Vaishnavi", role: "Designer" },
-          { name: "Mithili", role: "Designer" },
-          { name: "Shruti", role: "Designer" },
+          // { name: "Vaishnavi", role: "Designer" },
+          // { name: "Mithili", role: "Designer" },
+          // { name: "Shruti", role: "Designer" },
         ],
       },
       {
@@ -87,8 +87,8 @@ export const aboutPage = {
         members: [
           { name: "Akash Mashke", role: "" },
           { name: "Akash Sakpal", role: "" },
-          { name: "Pratik", role: "" },
-          { name: "Aniket", role: "" },
+          // { name: "Pratik", role: "" },
+          // { name: "Aniket", role: "" },
         ],
       },
       {
@@ -96,8 +96,8 @@ export const aboutPage = {
         members: [
           { name: "Kamlesh", role: "Service Head" },
           { name: "Virgin", role: "Client Service" },
-          { name: "Akansha", role: "Client Service" },
-          { name: "Subhodh", role: "Client Service" },
+          // { name: "Akansha", role: "Client Service" },
+          // { name: "Subhodh", role: "Client Service" },
         ],
       },
       {
@@ -147,7 +147,12 @@ export const capabilitiesPage = {
       headline: "Build for performance. Design for people.",
       detail:
         "Create scalable digital platforms and intuitive experiences that connect businesses with their users.",
-      tags: ["Enterprise Applications", "Web & Mobile", "UX/UI", "Digital Platforms"],
+      tags: [
+        "Enterprise Applications",
+        "Web & Mobile",
+        "UX/UI",
+        "Digital Platforms",
+      ],
     },
     {
       n: "03",
@@ -213,7 +218,8 @@ export const careersPage = {
     },
     {
       title: "Learn across disciplines",
-      detail: "Gain exposure across strategy, design, technology and execution.",
+      detail:
+        "Gain exposure across strategy, design, technology and execution.",
     },
     {
       title: "Agility + execution",
@@ -358,7 +364,12 @@ export const industryPages: Record<string, IndustryPage> = {
         title: "Bring workflows & insights together",
         detail:
           "Connect business information, operational activity and reporting so teams have a clearer view of what is happening and what needs attention.",
-        tags: ["Dashboards", "Analytics", "Reporting", "Enterprise Integrations"],
+        tags: [
+          "Dashboards",
+          "Analytics",
+          "Reporting",
+          "Enterprise Integrations",
+        ],
       },
     ],
     delivery: {

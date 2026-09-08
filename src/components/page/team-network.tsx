@@ -1,11 +1,17 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  motion,
+  useReducedMotion,
+  useMotionValue,
+  animate,
+  type PanInfo,
+} from "framer-motion";
 
-type Member = { name: string; role: string };
+type Member = { name: string; role: string; avatarUrl?: string };
 type Department = { name: string; members: readonly Member[] };
-type Node = Member & { dept: string; color: string; priority: boolean };
+type Node = Member & { dept: string; color: string };
 type Placed = { node: Node; x: number; y: number };
 
 const PALETTE = [
@@ -17,21 +23,6 @@ const PALETTE = [
 ];
 const EASE_OUT = [0.16, 1, 0.3, 1] as const;
 
-/** These are the senior/lead names — they anchor the innermost ring,
- * closest to the founder, with everyone else scattered further out. */
-const PRIORITY = new Set([
-  "Annil Lad",
-  "Omkar",
-  "Wasim",
-  "Prasad",
-  "Kamlesh",
-  "Aniket",
-  "Sushant",
-  "Tina",
-  "Manjiri",
-  "Sanjib",
-]);
-
 /** Every member, flattened in department order, each carrying its
  * department's colour so the whole cluster can be highlighted together. */
 function flatten(departments: readonly Department[]): Node[] {
@@ -40,7 +31,10 @@ function flatten(departments: readonly Department[]): Node[] {
       ...m,
       dept: dept.name,
       color: PALETTE[di % PALETTE.length],
-      priority: PRIORITY.has(m.name),
+      // fallback to a shared photo — replace per-member once individual
+      // headshots exist. Must be a web path (served from /public), not a
+      // filesystem path.
+      avatarUrl: m.avatarUrl ?? "/doctor.jpg",
     })),
   );
 }
@@ -65,48 +59,106 @@ function seedOf(name: string) {
 const clamp = (v: number, min: number, max: number) =>
   Math.max(min, Math.min(max, v));
 
+/** every card stays at least this many px inside the box edges */
+const INSET = 14;
+
 /** Round to 3dp — trig can differ in its last bit between the server and
  * client runtimes, which is enough to trip a hydration mismatch on the
  * serialized path/style strings. */
 const round = (v: number) => Math.round(v * 1000) / 1000;
 
-/** Scatter every node across the full circle around the hub — the priority
- * names anchor the innermost ring, everyone else splits across two outer
- * rings, each evenly spaced then nudged with jitter so the whole thing
- * reads as organic rather than a mechanical grid. */
-function layout(nodes: Node[]): Placed[] {
-  const buckets: Node[][] = [[], [], []];
-  let restCount = 0;
-  nodes.forEach((node) => {
-    if (node.priority) {
-      buckets[0].push(node);
-    } else {
-      buckets[1 + (restCount % 2)].push(node);
-      restCount++;
-    }
-  });
+/** The central "drop card for preview" panel — a portrait card, ~40% of the
+ * viewport height. */
+function hubSize(screenH: number) {
+  const s = Number.isFinite(screenH) && screenH > 0 ? screenH : 720;
+  const h = Math.round(clamp(s * 0.4, 190, 400));
+  return { w: Math.round(h * 0.72), h };
+}
 
-  const placed: Placed[] = [];
-  buckets.forEach((bucket, ring) => {
-    const n = bucket.length;
-    bucket.forEach((node, idx) => {
-      const seed = seedOf(node.name);
-      const angle =
-        (idx / n) * Math.PI * 2 -
-        Math.PI / 2 +
-        ring * 0.35 +
-        (rnd(seed * 7 + 3) - 0.5) * 0.22;
-      const radius = 22 + ring * 15 + (rnd(seed * 13 + 1) - 0.5) * 4;
-      const dx = Math.cos(angle);
-      const dy = Math.sin(angle);
-      placed.push({
-        node,
-        x: round(clamp(50 + dx * radius, 12, 88)),
-        y: round(clamp(50 + dy * radius, 6, 94)),
-      });
-    });
+/** Orbiting card — a small landscape rectangle (~2:1), text only; it scales
+ * up and flips to the photo once dropped on the hub. */
+function cardSize(W: number, H: number) {
+  const w0 = Number.isFinite(W) && W > 0 ? W : 1280;
+  const h0 = Number.isFinite(H) && H > 0 ? H : 720;
+  const w = Math.round(clamp(Math.min(w0 * 0.115, h0 * 0.26), 128, 190));
+  const h = Math.round(w * 0.5);
+  return { w, h: Math.max(h, 56) };
+}
+
+const finite = (v: number, fallback: number) =>
+  Number.isFinite(v) ? v : fallback;
+
+/**
+ * Lay every card on a jittered grid that fills the whole area evenly, then
+ * carve out the cells the hub circle sits on and give those cards the
+ * left-over outer cells instead. Even coverage, still organic — the
+ * collision solver afterwards only has to nudge, never rescue.
+ */
+function scatter(
+  nodes: Node[],
+  W: number,
+  H: number,
+  cardW: number,
+  cardH: number,
+  hubD: number,
+): Placed[] {
+  const w = finite(W, 1280);
+  const h = finite(H, 720);
+  const cx = w / 2;
+  const cy = h / 2;
+  const hw = cardW / 2;
+  const hh = cardH / 2;
+  const clearR = hubD / 2 + Math.hypot(hw, hh) + 8;
+  const minX = hw + INSET;
+  const maxX = Math.max(minX + 1, w - hw - INSET);
+  const minY = hh + INSET;
+  const maxY = Math.max(minY + 1, h - hh - INSET);
+
+  // grid shaped to the area's aspect, a bit roomier than the card count
+  const ratio = w / Math.max(h, 1);
+  const cols = Math.max(3, Math.round(Math.sqrt(nodes.length * ratio * 1.25)));
+  const rows = Math.max(2, Math.ceil((nodes.length * 1.25) / cols));
+  const cw = w / cols;
+  const ch = h / rows;
+
+  // every cell whose centre is clear of the hub, ordered by a hash so cards
+  // don't fill row-by-row
+  const cells: { px: number; py: number }[] = [];
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const px = (c + 0.5) * cw;
+      const py = (r + 0.5) * ch;
+      if (Math.hypot(px - cx, py - cy) > clearR - Math.min(cw, ch) * 0.4) {
+        cells.push({ px, py });
+      }
+    }
+  }
+  cells.sort(
+    (a, b) => rnd(a.px * 1.7 + a.py * 3.1) - rnd(b.px * 1.7 + b.py * 3.1),
+  );
+
+  return nodes.map((node, i) => {
+    const cell = cells[i % Math.max(cells.length, 1)] ?? { px: cx, py: cy };
+    const s = seedOf(node.name);
+    let x = cell.px + (rnd(s * 7 + 1) - 0.5) * cw * 0.62;
+    let y = cell.py + (rnd(s * 13 + 2) - 0.5) * ch * 0.62;
+    x = clamp(x, minX, maxX);
+    y = clamp(y, minY, maxY);
+    // any that still land on the circle get pushed straight out …
+    const d = Math.hypot(x - cx, y - cy) || 1;
+    if (d < clearR) {
+      x = cx + ((x - cx) / d) * clearR;
+      y = cy + ((y - cy) / d) * clearR;
+    }
+    // … then pulled back fully inside the box
+    x = clamp(x, minX, maxX);
+    y = clamp(y, minY, maxY);
+    return {
+      node,
+      x: round(clamp(finite((x / w) * 100, 50), 0.5, 99.5)),
+      y: round(clamp(finite((y / h) * 100, 50), 0.5, 99.5)),
+    };
   });
-  return placed;
 }
 
 /** Gap scales continuously with the actual container width instead of
@@ -114,14 +166,17 @@ function layout(nodes: Node[]): Placed[] {
  * sits right between two old steps and was getting whichever gap/pill-size
  * combo happened to not fit, causing overlap. */
 function gapFor(containerW: number) {
-  return clamp(containerW * 0.012, 8, 20);
+  // small breathing room only — enough that cards never touch, but the
+  // cluster still reads as tight
+  return clamp(containerW * 0.005, 3, 9);
 }
 
 /**
- * Push overlapping cards apart using their *actual* rendered sizes, so no
- * two cards ever overlap at any breakpoint — the polar scatter from
- * layout() is just a starting guess; this settles it into something
- * collision-free.
+ * Relax the scattered cards so none overlap each other or the hub. Overlaps
+ * are resolved along the centre-to-centre vector (radial), never a single
+ * axis — that's what stops clusters collapsing into straight lines — and a
+ * soft wall force keeps cards off the edges instead of hard-pinning them
+ * there.
  */
 function resolveCollisions(
   base: Placed[],
@@ -148,21 +203,44 @@ function resolveCollisions(
   const cx0 = containerW / 2;
   const cy0 = containerH / 2;
 
-  for (let iter = 0; iter < 80; iter++) {
-    let moved = false;
+  for (let iter = 0; iter < 160; iter++) {
+    let moved = 0;
 
     for (let i = 0; i < items.length; i++) {
-      // keep clear of the hub
       const a = items[i];
+
+      // clear of the hub (radial)
       const dcx = a.cx - cx0;
       const dcy = a.cy - cy0;
       const dist = Math.hypot(dcx, dcy) || 0.001;
-      const minDist = hubHalf + gap + Math.max(a.hw, a.hh);
+      const minDist = hubHalf + Math.max(a.hw, a.hh);
       if (dist < minDist) {
         const push = minDist - dist;
         a.cx += (dcx / dist) * push;
         a.cy += (dcy / dist) * push;
-        moved = true;
+        moved += push;
+      }
+
+      // soft wall force — nudge away from any edge it's crowding
+      const overL = a.hw + INSET - a.cx;
+      const overR = a.cx - (containerW - a.hw - INSET);
+      const overT = a.hh + INSET - a.cy;
+      const overB = a.cy - (containerH - a.hh - INSET);
+      if (overL > 0) {
+        a.cx += overL * 0.6;
+        moved += overL;
+      }
+      if (overR > 0) {
+        a.cx -= overR * 0.6;
+        moved += overR;
+      }
+      if (overT > 0) {
+        a.cy += overT * 0.6;
+        moved += overT;
+      }
+      if (overB > 0) {
+        a.cy -= overB * 0.6;
+        moved += overB;
       }
 
       for (let j = i + 1; j < items.length; j++) {
@@ -171,28 +249,37 @@ function resolveCollisions(
         const dy = b.cy - a.cy;
         const overlapX = a.hw + b.hw - Math.abs(dx);
         const overlapY = a.hh + b.hh - Math.abs(dy);
-        if (overlapX > 0 && overlapY > 0) {
-          moved = true;
-          if (overlapX < overlapY) {
-            const push = overlapX / 2 + 0.5;
-            const dir = dx === 0 ? (i < j ? 1 : -1) : Math.sign(dx);
-            a.cx -= dir * push;
-            b.cx += dir * push;
-          } else {
-            const push = overlapY / 2 + 0.5;
-            const dir = dy === 0 ? 1 : Math.sign(dy);
-            a.cy -= dir * push;
-            b.cy += dir * push;
-          }
+        if (overlapX <= 0 || overlapY <= 0) continue;
+
+        let nx = dx;
+        let ny = dy;
+        let d = Math.hypot(nx, ny);
+        if (d < 0.01) {
+          // exactly stacked — fan out along the golden angle by index
+          const ang = i * 2.39996;
+          nx = Math.cos(ang);
+          ny = Math.sin(ang);
+          d = 1;
         }
+        nx /= d;
+        ny /= d;
+        const push = Math.min(overlapX, overlapY) / 2 + 0.5;
+        a.cx -= nx * push;
+        a.cy -= ny * push;
+        b.cx += nx * push;
+        b.cy += ny * push;
+        moved += push;
       }
     }
-    if (!moved) break;
+    if (moved < 0.5) break;
   }
 
+  // final safety clamp (the wall force means this rarely bites)
   items.forEach((it) => {
-    it.cx = clamp(it.cx, it.hw, containerW - it.hw);
-    it.cy = clamp(it.cy, it.hh, containerH - it.hh);
+    const lx = it.hw + INSET;
+    const ly = it.hh + INSET;
+    it.cx = clamp(it.cx, lx, Math.max(lx + 1, containerW - it.hw - INSET));
+    it.cy = clamp(it.cy, ly, Math.max(ly + 1, containerH - it.hh - INSET));
   });
 
   return items.map((it) => ({
@@ -202,86 +289,11 @@ function resolveCollisions(
   }));
 }
 
-function countOverlaps(
-  placed: Placed[],
-  sizes: Map<string, { w: number; h: number }>,
-  containerW: number,
-  containerH: number,
-  gap: number,
-): number {
-  const rects = placed.map((p) => {
-    const size = sizes.get(p.node.name) ?? { w: 130, h: 40 };
-    const cx = (p.x / 100) * containerW;
-    const cy = (p.y / 100) * containerH;
-    return {
-      left: cx - size.w / 2 - gap,
-      right: cx + size.w / 2 + gap,
-      top: cy - size.h / 2 - gap,
-      bottom: cy + size.h / 2 + gap,
-    };
-  });
-  let n = 0;
-  for (let i = 0; i < rects.length; i++) {
-    for (let j = i + 1; j < rects.length; j++) {
-      const a = rects[i];
-      const b = rects[j];
-      if (a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top) {
-        n++;
-      }
-    }
-  }
-  return n;
-}
+const SCAN_MS = 900;
 
-/**
- * The container's fixed height is just a starting guess — with 29 cards it
- * isn't always tall enough to fit everyone without overlap. Grow it (and
- * re-resolve) until nothing overlaps, so the promise is unconditional
- * rather than "usually fine".
- */
-function fitLayout(
-  base: Placed[],
-  sizes: Map<string, { w: number; h: number }>,
-  containerW: number,
-  startHeight: number,
-  hubSize: number,
-  hardCap: number,
-): { height: number; placed: Placed[] } {
-  const gap = gapFor(containerW);
-  let height = Math.max(startHeight, 1);
-  let placed = resolveCollisions(base, sizes, containerW, height, hubSize, gap);
-  let tries = 0;
-  // capped so the network stays roughly one screen tall — with the full
-  // page width to spread across and width-aware pill sizing, the wider
-  // canvas does most of the work instead of extra height
-  const maxHeight = Math.min(startHeight * 2.1, hardCap);
-  while (
-    countOverlaps(placed, sizes, containerW, height, gap) > 0 &&
-    height < maxHeight &&
-    tries < 25
-  ) {
-    height *= 1.08;
-    placed = resolveCollisions(base, sizes, containerW, height, hubSize, gap);
-    tries++;
-  }
-  return { height: Math.min(height, maxHeight), placed };
-}
-
-function Dot({ color, active }: { color: string; active: boolean }) {
-  return (
-    <span className="relative grid h-4 w-4 shrink-0 place-items-center sm:h-5 sm:w-5 lg:h-6 lg:w-6">
-      <span
-        className="absolute inset-0 rounded-full border transition-opacity duration-300"
-        style={{ borderColor: color, opacity: active ? 1 : 0.45 }}
-      />
-      <span
-        className="h-1.5 w-1.5 rounded-full transition-transform duration-300 sm:h-2 sm:w-2"
-        style={{ background: color, transform: active ? "scale(1.25)" : "scale(1)" }}
-      />
-    </span>
-  );
-}
-
+/** A light text card that floats in orbit and can be dragged onto the
+ * central panel — where its photo then previews. The card itself never
+ * changes; it just tosses toward the hub and springs back. */
 function Pill({
   placed,
   seed,
@@ -290,7 +302,13 @@ function Pill({
   onLeave,
   delay,
   reduce,
-  registerRef,
+  cardW,
+  cardH,
+  hubRef,
+  containerRef,
+  onDropOnHub,
+  onDragActiveChange,
+  isPreviewing,
 }: {
   placed: Placed;
   seed: number;
@@ -299,26 +317,96 @@ function Pill({
   onLeave: () => void;
   delay: number;
   reduce: boolean | null;
-  registerRef: (el: HTMLDivElement | null) => void;
+  cardW: number;
+  cardH: number;
+  hubRef: React.RefObject<HTMLDivElement | null>;
+  containerRef: React.RefObject<HTMLDivElement | null>;
+  onDropOnHub: (node: Node) => void;
+  onDragActiveChange: (active: boolean) => void;
+  isPreviewing: boolean;
 }) {
   const [arrived, setArrived] = useState(false);
+  const [dragging, setDragging] = useState(false);
   const { node, x, y } = placed;
   const active = hovered === node.dept;
 
-  // per-node float parameters — deterministic so server/client match, varied
-  // enough that the whole cluster doesn't bob in unison
+  const dragX = useMotionValue(0);
+  const dragY = useMotionValue(0);
+  const dragOpacity = useMotionValue(1);
+
+  // per-node float parameters — deterministic so server/client match
   const floatDuration = 4.5 + rnd(seed * 3 + 11) * 3;
   const floatDelay = rnd(seed * 5 + 23) * 1.5;
   const ampY = 5 + rnd(seed * 9 + 41) * 4;
   const ampX = 3 + rnd(seed * 17 + 53) * 4;
+  const floatEnabled = arrived && !reduce && !dragging && !isPreviewing;
+
+  // this card stays hidden the whole time it's the one previewing in the
+  // panel; it fades back onto its slot the moment another card takes over
+  useEffect(() => {
+    if (!isPreviewing) {
+      dragX.set(0);
+      dragY.set(0);
+      const a = animate(dragOpacity, 1, { duration: 0.45, ease: EASE_OUT });
+      return () => a.stop();
+    }
+  }, [isPreviewing, dragX, dragY, dragOpacity]);
+
+  const handleDragEnd = (
+    _e: MouseEvent | TouchEvent | PointerEvent,
+    info: PanInfo,
+  ) => {
+    setDragging(false);
+    onDragActiveChange(false);
+    const springBack = () => {
+      animate(dragX, 0, { duration: 0.5, ease: EASE_OUT });
+      animate(dragY, 0, { duration: 0.5, ease: EASE_OUT });
+    };
+    const hub = hubRef.current;
+    const container = containerRef.current;
+    if (!hub || !container) return springBack();
+
+    const hubRect = hub.getBoundingClientRect();
+    // framer's info.point is pageX/pageY (document coords) — bring the drop
+    // point into viewport space to match getBoundingClientRect
+    const dropX = info.point.x - window.scrollX;
+    const dropY = info.point.y - window.scrollY;
+    const pad = 36;
+    const onHub =
+      dropX > hubRect.left - pad &&
+      dropX < hubRect.right + pad &&
+      dropY > hubRect.top - pad &&
+      dropY < hubRect.bottom + pad;
+
+    if (!onHub) return springBack();
+
+    // slide toward the hub centre while fading out, so the card looks like
+    // it drops *into* the panel; hand off to the parent and then silently
+    // put the (still-invisible) card back on its orbit slot
+    const containerRect = container.getBoundingClientRect();
+    const slotCx = containerRect.left + (x / 100) * containerRect.width;
+    const slotCy = containerRect.top + (y / 100) * containerRect.height;
+    const hubCx = hubRect.left + hubRect.width / 2;
+    const hubCy = hubRect.top + hubRect.height / 2;
+    animate(dragX, hubCx - slotCx, { duration: 0.26, ease: EASE_OUT });
+    animate(dragOpacity, 0, { duration: 0.24, ease: "easeIn" });
+    animate(dragY, hubCy - slotCy, {
+      duration: 0.26,
+      ease: EASE_OUT,
+      onComplete: () => onDropOnHub(node),
+    });
+    // the card now stays hidden — the effect above fades it back onto its
+    // slot once it's no longer the previewed member
+  };
 
   return (
     <motion.div
-      className="absolute z-20"
+      className="absolute"
+      style={{ zIndex: dragging ? 1000 : 20 }}
       initial={
         reduce
           ? false
-          : { left: "50%", top: "50%", x: "-50%", y: "-50%", opacity: 0, scale: 0.15 }
+          : { left: "50%", top: "50%", x: "-50%", y: "-50%", opacity: 0, scale: 0.2 }
       }
       whileInView={{
         left: `${x}%`,
@@ -329,42 +417,61 @@ function Pill({
         scale: 1,
       }}
       viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.75, delay, ease: EASE_OUT }}
+      transition={{ duration: 0.7, delay, ease: EASE_OUT }}
       onAnimationComplete={() => setArrived(true)}
     >
       <motion.div
-        ref={registerRef}
-        className="flex w-[clamp(5rem,11vw,12.5rem)] items-center gap-1 rounded-lg border bg-night-2/85 px-1.5 py-1 backdrop-blur-sm sm:gap-2 sm:rounded-xl sm:px-3 sm:py-2 lg:gap-2.5 lg:px-3.5"
-        style={{ borderColor: active ? node.color : "var(--color-line-night)" }}
-        animate={
-          arrived && !reduce
-            ? { y: [0, -ampY, 0, ampY * 0.6, 0], x: [0, ampX, 0, -ampX * 0.6, 0] }
-            : { y: 0, x: 0 }
-        }
-        transition={
-          arrived && !reduce
-            ? {
-                duration: floatDuration,
-                delay: floatDelay,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }
-            : { duration: 0.2 }
-        }
-        onMouseEnter={onHover}
-        onMouseLeave={onLeave}
+        drag={!reduce}
+        dragMomentum={false}
+        dragElastic={0.12}
+        style={{ x: dragX, y: dragY, opacity: dragOpacity, touchAction: "none" }}
+        onDragStart={() => {
+          setDragging(true);
+          onDragActiveChange(true);
+        }}
+        onDragEnd={handleDragEnd}
+        whileDrag={{ scale: 1.08 }}
+        className="relative"
       >
-        <Dot color={node.color} active={active} />
-        <div className="min-w-0">
-          <p className="truncate text-[0.6rem] font-semibold leading-tight text-mist sm:text-[0.72rem] lg:text-[1.22rem]">
-            {node.name}
-          </p>
-          {node.role ? (
-            <p className="truncate text-[0.5rem] leading-tight text-mist-faint sm:text-[0.6rem] lg:text-[0.88rem]">
-              {node.role}
+        <motion.div
+          className="flex cursor-grab items-center bg-night-2 gap-2.5 overflow-hidden rounded-xl px-3 active:cursor-grabbing"
+          style={{
+            width: cardW,
+            height: cardH,
+border: `1px solid ${node.color}`,
+            boxShadow: active
+              ? `0 0 0 2px ${node.color}, 0 10px 30px -8px rgba(0,0,0,0.5)`
+              : "0 8px 24px -10px rgba(0,0,0,0.55)",
+          }}
+          animate={
+            floatEnabled
+              ? { y: [0, -ampY, 0, ampY * 0.6, 0], x: [0, ampX, 0, -ampX * 0.6, 0] }
+              : { y: 0, x: 0 }
+          }
+          transition={
+            floatEnabled
+              ? {
+                  duration: floatDuration,
+                  delay: floatDelay,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }
+              : { duration: 0.2 }
+          }
+          onMouseEnter={onHover}
+          onMouseLeave={onLeave}
+        >
+          <div className="min-w-0 flex-1 w-full text-center">
+            <p className="truncate font-display text-[0.76rem] font-medium leading-tight text-white sm:text-[0.84rem]">
+              {node.name}
             </p>
-          ) : null}
-        </div>
+            {node.role ? (
+              <p className="truncate text-[0.58rem] leading-tight text-ink-muted sm:text-[0.86rem]">
+                {node.role}
+              </p>
+            ) : null}
+          </div>
+        </motion.div>
       </motion.div>
     </motion.div>
   );
@@ -375,6 +482,11 @@ function Pill({
  * every individual team member scattered around it in three staggered
  * rings. On scroll into view each node grows outward from the hub to its
  * spot, then drifts in a gentle, never-ending float.
+ *
+ * Drag any card onto the hub to "scan" it: a sweeping beam plays over the
+ * card, then it flips to reveal the person's photo. Only one card is ever
+ * docked at a time — dropping a new one sends the currently docked card
+ * back to its orbit slot first.
  */
 export function TeamNetwork({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- kept for callers; the hub now shows a static "Our Team" label instead of the leader's name
@@ -386,58 +498,93 @@ export function TeamNetwork({
 }) {
   const reduce = useReducedMotion();
   const [hovered, setHovered] = useState<string | null>(null);
+  const [dragActive, setDragActive] = useState(false);
 
-  const base = useMemo(() => layout(flatten(departments)), [departments]);
-  const [placed, setPlaced] = useState(base);
-  const [height, setHeight] = useState<number | null>(null);
+  const nodes = useMemo(() => flatten(departments), [departments]);
+
+  // hub + card sizing, all derived from the viewport in the effect below
+  const [dims, setDims] = useState(() => ({
+    hub: { w: 210, h: 290 },
+    card: { w: 160, h: 80 },
+  }));
+  const [placed, setPlaced] = useState<Placed[]>(() =>
+    scatter(nodes, 1280, 760, 160, 80, 300),
+  );
 
   const containerRef = useRef<HTMLDivElement>(null);
   const hubRef = useRef<HTMLDivElement>(null);
-  const pillRefs = useRef(new Map<string, HTMLDivElement>());
+
+  // which member is previewing in the central panel, and whether the scan
+  // has finished (2 sweeps) and flipped to the photo
+  const [previewName, setPreviewName] = useState<string | null>(null);
+  const [revealed, setRevealed] = useState(false);
+  const scanTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (scanTimerRef.current) clearTimeout(scanTimerRef.current);
+    };
+  }, []);
+
+  const handleDropOnHub = useCallback((node: Node) => {
+    setPreviewName(node.name);
+    setRevealed(false);
+    if (scanTimerRef.current) clearTimeout(scanTimerRef.current);
+    // two full scan sweeps, then flip to the image
+    scanTimerRef.current = setTimeout(() => setRevealed(true), SCAN_MS * 2);
+  }, []);
+
+  const previewNode = previewName
+    ? (nodes.find((n) => n.name === previewName) ?? null)
+    : null;
 
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
     const resolve = () => {
+      const W = container.offsetWidth;
+      const H = container.offsetHeight;
+      // wait for the container to actually have a size (h-full of the
+      // h-[calc(100dvh-nav)] section) — the ResizeObserver re-fires once it does
+      if (W < 200 || H < 200) return;
+
+      const hub = hubSize(H);
+      const card = cardSize(W, H);
+      setDims({ hub, card });
+
       const sizes = new Map<string, { w: number; h: number }>();
-      pillRefs.current.forEach((el, name) => {
-        sizes.set(name, { w: el.offsetWidth, h: el.offsetHeight });
-      });
-      const hubSize = hubRef.current
-        ? Math.max(hubRef.current.offsetWidth, hubRef.current.offsetHeight)
-        : 0;
-      const fitted = fitLayout(
-        base,
+      nodes.forEach((n) => sizes.set(n.name, card));
+
+      // treat the portrait hub as a circle of its longer side for clearance
+      const hubClear = Math.max(hub.w, hub.h) + 16;
+      const scattered = scatter(nodes, W, H, card.w, card.h, hubClear);
+      const settled = resolveCollisions(
+        scattered,
         sizes,
-        container.offsetWidth,
-        container.offsetHeight,
-        hubSize,
-        window.innerHeight * 1.05,
+        W,
+        H,
+        hubClear,
+        gapFor(W),
       );
-      setPlaced(fitted.placed);
-      setHeight((prev) =>
-        prev !== null && Math.abs(prev - fitted.height) < 4 ? prev : fitted.height,
-      );
+      setPlaced(settled);
     };
 
     const raf = requestAnimationFrame(resolve);
     const ro = new ResizeObserver(() => resolve());
     ro.observe(container);
+    window.addEventListener("resize", resolve);
     return () => {
       cancelAnimationFrame(raf);
       ro.disconnect();
+      window.removeEventListener("resize", resolve);
     };
-  }, [base]);
+  }, [nodes]);
 
   return (
-    <div
-      ref={containerRef}
-      className="relative mt-8 h-[92vh] max-h-[58rem]"
-      style={height !== null ? { height: `${height}px` } : undefined}
-    >
+    <div ref={containerRef} className="relative h-full">
       <svg
-        className="absolute inset-0 h-full w-full"
+        className="pointer-events-none absolute inset-0 h-full w-full"
         viewBox="0 0 100 100"
         preserveAspectRatio="none"
         aria-hidden
@@ -459,8 +606,8 @@ export function TeamNetwork({
               key={node.name}
               d={`M50,50 Q${cx},${cy} ${x},${y}`}
               fill="none"
-              stroke={active ? node.color : "var(--color-line-night)"}
-              strokeWidth={active ? 0.35 : 0.15}
+              stroke={active ? node.color : "var(--color-line-soft)"}
+              strokeWidth={active ? 0.35 : 0.25}
               vectorEffect="non-scaling-stroke"
               style={{ transition: "stroke 0.25s, stroke-width 0.25s" }}
             />
@@ -468,28 +615,94 @@ export function TeamNetwork({
         })}
       </svg>
 
-      {/* hub */}
-      <div className="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2">
-        <span
-          aria-hidden
-          className="absolute -inset-4 rounded-full border border-teal-light/15 motion-safe:animate-pulse sm:-inset-6 lg:-inset-8"
-        />
-        <span
-          aria-hidden
-          className="absolute -inset-2 rounded-full border border-teal-light/25 sm:-inset-3 lg:-inset-4"
-        />
-        <div
-          ref={hubRef}
-          className="relative grid h-16 w-16 place-items-center rounded-full border-2 border-teal-light/50 bg-night text-center shadow-[0_0_70px_-14px_rgba(28,195,182,0.45)] sm:h-28 sm:w-28 md:h-32 md:w-32 lg:h-40 lg:w-40"
+      {/* hub — the portrait "drop card for preview" panel. A dropped card
+          first shows its name here, the scan beam sweeps twice, then the
+          panel flips to reveal the photo. */}
+      <motion.div
+        ref={hubRef}
+        animate={dragActive && !reduce ? { scale: 1.04 } : { scale: 1 }}
+        transition={{ duration: 0.25, ease: EASE_OUT }}
+        style={{ width: dims.hub.w, height: dims.hub.h, perspective: 1200 }}
+        className={
+          "absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 rounded-2xl transition-shadow duration-300 " +
+          (dragActive
+            ? "shadow-[0_0_140px_-8px_rgba(255,255,255,0.55)]"
+            : "shadow-[0_0_100px_-24px_rgba(255,255,255,0.4)]")
+        }
+      >
+        <motion.div
+          className="relative h-full w-full [transform-style:preserve-3d]"
+          animate={{ rotateY: revealed ? 180 : 0 }}
+          transition={{ duration: 0.6, ease: EASE_OUT }}
         >
-          <div className="px-1.5 sm:px-2.5 lg:px-3">
-            <p className="font-display text-[0.66rem] font-bold leading-tight text-mist sm:text-[0.85rem] md:text-[1rem] lg:text-[1.15rem]">
-              Our Team
-            </p>
+          {/* front — prompt, or the dropped name while it scans */}
+          <div
+            className={
+              "absolute inset-0 grid place-items-center overflow-hidden rounded-2xl px-5 text-center [backface-visibility:hidden] " +
+              (dragActive && !previewNode ? "bg-white" : "bg-mist/95")
+            }
+          >
+            {previewNode ? (
+              <div>
+                <p className="font-display text-[1.1rem] font-semibold leading-tight text-ink sm:text-[1.35rem]">
+                  {previewNode.name}
+                </p>
+                {previewNode.role ? (
+                  <p className="mt-1.5 text-[0.66rem] font-medium uppercase tracking-[0.16em] text-ink-muted sm:text-[0.72rem]">
+                    {previewNode.role}
+                  </p>
+                ) : null}
+              </div>
+            ) : (
+              <p className="font-display text-[0.82rem] font-medium uppercase leading-relaxed tracking-[0.16em] text-ink-muted sm:text-[0.95rem]">
+                {dragActive ? "Drop to preview" : "Drag and drop card for preview"}
+              </p>
+            )}
 
+            {previewNode && !revealed ? (
+              <motion.div
+                key={previewNode.name}
+                aria-hidden
+                className="pointer-events-none absolute inset-0"
+                initial={{ y: "-100%" }}
+                animate={{ y: "100%" }}
+                transition={{
+                  duration: SCAN_MS / 1000,
+                  ease: "linear",
+                  repeat: 1,
+                }}
+                style={{
+                  background:
+                    "linear-gradient(180deg, transparent 0%, color-mix(in oklab, var(--color-teal-light) 55%, transparent) 45%, color-mix(in oklab, var(--color-teal-light) 85%, transparent) 50%, color-mix(in oklab, var(--color-teal-light) 55%, transparent) 55%, transparent 100%)",
+                }}
+              />
+            ) : null}
           </div>
-        </div>
-      </div>
+
+          {/* back — the photo */}
+          <div className="absolute inset-0 overflow-hidden rounded-2xl bg-night-2 [backface-visibility:hidden] [transform:rotateY(180deg)]">
+            {previewNode?.avatarUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={previewNode.avatarUrl}
+                alt={previewNode.name}
+                className="absolute inset-0 h-full w-full object-cover"
+                draggable={false}
+              />
+            ) : null}
+            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-night via-night/80 to-transparent px-4 pb-3 pt-12 text-center">
+              <p className="font-display text-[0.9rem] font-semibold leading-tight text-mist">
+                {previewNode?.name}
+              </p>
+              {previewNode?.role ? (
+                <p className="mt-0.5 text-[0.68rem] uppercase tracking-[0.12em] text-teal-light/90">
+                  {previewNode.role}
+                </p>
+              ) : null}
+            </div>
+          </div>
+        </motion.div>
+      </motion.div>
 
       {placed.map((p, i) => (
         <Pill
@@ -501,10 +714,13 @@ export function TeamNetwork({
           onLeave={() => setHovered((h) => (h === p.node.dept ? null : h))}
           delay={i * 0.025}
           reduce={reduce}
-          registerRef={(el) => {
-            if (el) pillRefs.current.set(p.node.name, el);
-            else pillRefs.current.delete(p.node.name);
-          }}
+          cardW={170}
+          cardH={65}
+          hubRef={hubRef}
+          containerRef={containerRef}
+          onDropOnHub={handleDropOnHub}
+          onDragActiveChange={setDragActive}
+          isPreviewing={previewName === p.node.name}
         />
       ))}
     </div>

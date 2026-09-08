@@ -95,7 +95,7 @@ export function DeliveryApproach() {
                 <Fragment key={s.title}>
                   <div className="lg:min-w-0 lg:flex-1">
                     <div
-                      className="h-[3px] w-full origin-left bg-ink"
+                      className="h-[1px] lg:h-[3px] w-full origin-left bg-ink"
                       style={{ transform: `scaleX(${line})` }}
                     />
                     <div

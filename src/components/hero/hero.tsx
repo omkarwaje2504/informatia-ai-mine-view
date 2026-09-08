@@ -48,7 +48,7 @@ function SceneOneContent() {
       >
         {sceneOne.body}
       </p>
-      <h1 className="font-display text-[1.8rem] font-semibold leading-[1.22] tracking-[-0.01em] text-ink sm:text-[2.15rem] lg:max-w-[52rem] lg:text-[2.35rem]">
+      <h1 className="font-display text-[1.8rem] font-semibold leading-[1.22] tracking-[-0.01em] text-ink sm:text-[2.15rem] lg:max-w-[46rem] 2xl:max-w-[52rem] lg:text-[1.7rem] 2xl:text-[2.35rem]">
         <Words text={sceneOne.heading} />
       </h1>
     </div>
@@ -86,9 +86,11 @@ function SceneTwoContent({
   flowActive?: boolean;
 }) {
   return (
-    <div className={cn(centered ? "mx-auto max-w-[46rem] text-center" : "max-w-xl")}>
-
-
+    <div
+      className={cn(
+        centered ? "mx-auto max-w-[46rem] text-center" : "max-w-xl",
+      )}
+    >
       <SceneTwoHeadline />
 
       <div
@@ -109,7 +111,7 @@ function SceneTwoContent({
       </div>
 
       <div
-        className={cn("fade-in mt-11", centered && "flex justify-center")}
+        className={cn("fade-in flex  mt-11", centered && "flex justify-center")}
         style={{ animationDelay: "0.56s" }}
       >
         <FlowLine steps={sceneTwo.flow} active={flowActive} />
@@ -136,7 +138,7 @@ function SceneTwoContent({
         </Link>
         <Link
           href={sceneTwo.ctas.secondary.href}
-           style={{ border: "0.1px solid gold" }}
+          style={{ border: "0.1px solid gold" }}
           className="group inline-flex items-center border-solid  gap-2 rounded-full bg-night/40 px-6 py-3 text-[0.9rem] font-medium text-mist backdrop-blur-sm transition-colors duration-300 hover:border-mist"
         >
           {sceneTwo.ctas.secondary.label}
@@ -185,16 +187,16 @@ function CapabilityRow() {
 /** Stacked fallback — used below lg and for reduced motion. */
 function CapabilityList({ className }: { className?: string }) {
   return (
-    <div className={cn("mt-10 grid gap-3 sm:grid-cols-2", className)}>
+    <div className={cn("mt-10 mb-10 grid gap-3 sm:grid-cols-2", className)}>
       {capabilities.map((c) => (
         <article
           key={c.n}
           className="rounded-2xl border border-line-night bg-night-card/80 p-4"
         >
-          <span className="font-text text-[0.75rem] font-semibold text-gold">
-            {c.n}
-          </span>
           <h3 className="mt-1.5 font-display text-[0.98rem] font-semibold leading-snug text-mist">
+            <span className="font-text text-[1.25rem] pr-2 font-semibold text-gold">
+              {c.n}
+            </span>
             {c.title}
           </h3>
           <p className="mt-1 text-[0.8rem] leading-relaxed text-mist-soft">
@@ -355,7 +357,7 @@ export function Hero() {
         {/* SCENE 1 */}
         <div
           ref={sceneOneRef}
-          className="container-x relative pt-20 pb-16 md:absolute md:inset-x-0 md:top-0 md:pt-[9vh] motion-reduce:md:static"
+          className="container-x relative pt-10 md:pt-20 pb-16 md:absolute md:inset-x-0 md:top-0  motion-reduce:md:static"
         >
           <SceneOneContent />
         </div>
@@ -366,10 +368,7 @@ export function Hero() {
           animate={go ? { opacity: 1, y: 0 } : undefined}
           transition={{ duration: 0.6, ease: EASE, delay: 1.1 }}
           className="pointer-events-none absolute bottom-[42%] left-1/2 z-20 hidden -translate-x-1/2 flex-col items-center gap-2 text-[0.62rem] uppercase tracking-[0.24em] text-ink-faint md:flex"
-        >
-          
- 
-        </motion.div>
+        ></motion.div>
 
         {/* MORPHING DARK PANEL */}
         <motion.div
@@ -378,7 +377,7 @@ export function Hero() {
           animate={go ? { opacity: 1, y: 0 } : undefined}
           transition={{ duration: 1.05, ease: EASE, delay: 0.25 }}
           className={cn(
-            "relative mx-auto w-[92%] overflow-hidden rounded-t-[1.5rem] bg-night text-mist",
+            "relative mx-auto w-[97%] overflow-hidden rounded-t-[1.5rem] bg-night text-mist",
             // peek: anchored by top at 41% → occupies the bottom 59% of the stage
             "md:absolute md:left-1/2 md:top-[41%] md:h-[59%] md:w-[65%] md:-translate-x-1/2 md:rounded-t-[2.25rem]",
             "motion-reduce:md:static motion-reduce:md:h-auto motion-reduce:md:w-[92%] motion-reduce:md:top-auto motion-reduce:md:translate-x-0",
@@ -410,7 +409,8 @@ export function Hero() {
             className="relative z-10 hidden px-8 text-center md:absolute md:inset-0 md:grid md:place-items-center motion-reduce:md:hidden"
           >
             <h2 className="max-w-4xl font-display text-[clamp(1.6rem,3.4vw,2.9rem)] font-bold leading-[1.1] tracking-[-0.02em] text-mist">
-              What starts as an idea can<br/> become an experience.
+              What starts as an idea can
+              <br /> become an experience.
             </h2>
           </div>
 
@@ -428,7 +428,7 @@ export function Hero() {
             </div>
 
             {/* below lg : stacked */}
-            <div className="container-x flex h-full flex-col justify-center py-14 lg:hidden">
+            <div className="container-x flex h-full flex-col justify-center lg:hidden">
               <SceneTwoContent flowActive={revealed} />
               <CapabilityList />
             </div>

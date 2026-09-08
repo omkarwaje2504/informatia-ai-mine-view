@@ -35,64 +35,179 @@ function BrandWave() {
 }
 
 /** Scrolling client-logo strip — black by default, colour on hover, pauses on hover. */
+/** Responsive client-logo marquee.
+ * Desktop: 2 rows
+ * Mobile / tablet: 4 rows with randomized logo distribution
+ */
 function LogoMarquee() {
   const clients = impact.clients;
-  const half = Math.ceil(clients.length / 2);
 
-  const leftRow = clients.slice(0, half);
-  const rightRow = clients.slice(half);
+  // Deterministic shuffle so the order doesn't change on every render.
+  const shuffled = [...clients].sort((a, b) => {
+    const hash = (value: string) => {
+      let h = 0;
+      for (let i = 0; i < value.length; i++) {
+        h = (h << 5) - h + value.charCodeAt(i);
+        h |= 0;
+      }
+      return Math.abs(h);
+    };
+
+    return hash(a.name) - hash(b.name);
+  });
+
+  const desktopHalf = Math.ceil(clients.length / 2);
+
+  const desktopRows = [
+    clients.slice(0, desktopHalf),
+    clients.slice(desktopHalf),
+  ];
+
+  // Split randomized logos into 4 roughly equal rows for mobile/tablet.
+  const mobileRows = Array.from({ length: 4 }, (_, rowIndex) =>
+    shuffled.filter((_, index) => index % 4 === rowIndex),
+  );
 
   const loop = (items: readonly (typeof clients)[number][]) => [
     ...items,
     ...items,
   ];
 
+  const Logo = ({
+    client,
+    index,
+  }: {
+    client: (typeof clients)[number];
+    index: number;
+  }) => (
+    <span
+      key={`${client.name}-${index}`}
+      className="
+        group flex shrink-0 items-center justify-center
+        rounded-md bg-white
+        px-2.5 py-2
+        sm:rounded-lg sm:px-3 sm:py-2.5
+        lg:h-20 lg:px-4
+      "
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={client.logo}
+        alt={client.name}
+        width={150}
+        height={48}
+        className="
+          h-8 w-auto max-w-[90px]
+          object-contain
+          opacity-90
+          grayscale
+          transition duration-300
+          group-hover:opacity-100
+          group-hover:grayscale-0
+          sm:h-9 sm:max-w-[105px]
+          md:h-10 md:max-w-[120px]
+          lg:h-16 lg:max-w-[192px]
+        "
+      />
+    </span>
+  );
+
   return (
-    <div className="my-12 w-full space-y-4">
-      <p className="container-x text-[0.9rem] font-semibold uppercase tracking-[0.2em] text-mist-faint">
+    <div className="my-8 w-full space-y-3 sm:my-10 sm:space-y-4 lg:my-12">
+      <p className="container-x text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-mist-faint sm:text-[0.9rem] sm:tracking-[0.2em]">
         {impact.bandLabel}
       </p>
 
-      {/* Left → Right */}
-      <div className="flex w-full overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_4%,#000_96%,transparent)]">
-        <div className="flex shrink-0 items-center gap-4 motion-safe:animate-[marquee-right_45s_linear_infinite] hover:[animation-play-state:paused]">
-          {loop(leftRow).map((c, i) => (
-            <span
-              key={`left-${i}`}
-              className="group flex h-20 shrink-0 items-center rounded-lg bg-white px-4"
+      {/* =========================
+          MOBILE + TABLET
+          4 logo rows
+         ========================= */}
+      <div className="space-y-2.5 md:space-y-3 lg:hidden">
+        {mobileRows.map((row, rowIndex) => {
+          const items = loop(row);
+          const animationClass =
+            rowIndex % 2 === 0
+              ? "motion-safe:animate-[marquee-right_32s_linear_infinite]"
+              : "motion-safe:animate-[marquee-left_32s_linear_infinite]";
+
+          return (
+            <div
+              key={`mobile-row-${rowIndex}`}
+              className="
+          flex w-full overflow-hidden
+          [mask-image:linear-gradient(90deg,transparent,#000_5%,#000_95%,transparent)]
+        "
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={c.logo}
-                alt={c.name}
-                width={192}
-                height={64}
-                className="h-16 w-auto object-contain transition duration-300 group-hover:opacity-100 group-hover:grayscale-0"
-              />
-            </span>
-          ))}
-        </div>
+              <div
+                className={`
+            flex min-w-max shrink-0 items-center gap-2
+            sm:gap-2.5
+            ${animationClass}
+          `}
+              >
+                {items.map((client, index) => (
+                  <Logo
+                    key={`${rowIndex}-${client.name}-${index}`}
+                    client={client}
+                    index={index}
+                  />
+                ))}
+              </div>
+
+              {/* Duplicate track for completely seamless movement */}
+              <div
+                aria-hidden="true"
+                className={`
+            flex min-w-max shrink-0 items-center gap-2
+            sm:gap-2.5
+            ${animationClass}
+          `}
+              >
+                {items.map((client, index) => (
+                  <Logo
+                    key={`duplicate-${rowIndex}-${client.name}-${index}`}
+                    client={client}
+                    index={index}
+                  />
+                ))}
+              </div>
+            </div>
+          );
+        })}
       </div>
 
-      {/* Right → Left */}
-      <div className="flex w-full overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_4%,#000_96%,transparent)]">
-        <div className="flex shrink-0 items-center gap-4 motion-safe:animate-[marquee-left_45s_linear_infinite] hover:[animation-play-state:paused]">
-          {loop(rightRow).map((c, i) => (
-            <span
-              key={`right-${i}`}
-              className="group flex h-20 shrink-0 items-center rounded-lg bg-white px-4"
+      {/* =========================
+          DESKTOP
+          2 logo rows
+         ========================= */}
+      <div className="hidden space-y-4 lg:block">
+        {desktopRows.map((row, rowIndex) => (
+          <div
+            key={`desktop-row-${rowIndex}`}
+            className="
+              flex w-full overflow-hidden
+              [mask-image:linear-gradient(90deg,transparent,#000_4%,#000_96%,transparent)]
+            "
+          >
+            <div
+              className={`
+                flex shrink-0 items-center gap-4
+                motion-safe:animate-[marquee-${
+                  rowIndex === 0 ? "right" : "left"
+                }_45s_linear_infinite]
+                hover:[animation-play-state:paused]
+              `}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={c.logo}
-                alt={c.name}
-                width={192}
-                height={64}
-                className="h-16 w-auto object-contain transition duration-300 group-hover:opacity-100 group-hover:grayscale-0"
-              />
-            </span>
-          ))}
-        </div>
+              {loop(row).map((client, index) => (
+                <Logo
+                  key={`${rowIndex}-${client.name}-${index}`}
+                  client={client}
+                  index={index}
+                />
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -172,10 +287,10 @@ export function ImpactCta() {
         {/* full-bleed client logo marquee */}
         <LogoMarquee />
 
-        <div className="container-x relative">
+        <div className=" relative">
           {/* proof stats */}
           <dl
-            className="flex flex-col gap-x-16 gap-y-8 border-t border-line-night pt-10 sm:flex-row"
+            className="flex container-x gap-x-16 gap-y-8 border-t border-line-night pt-10"
             data-reveal-group
           >
             {impact.stats.map((s) => (
@@ -192,7 +307,7 @@ export function ImpactCta() {
 
           {/* closing call to action */}
           <div
-            className="mt-16 rounded-3xl border border-[#f2ddc4] bg-orange-50 p-8 sm:mt-20 sm:p-12"
+            className="mt-10 m-4 md:mx-10 rounded-3xl border border-[#f2ddc4] bg-orange-50 p-8 sm:mt-20 sm:p-12"
             data-reveal
           >
             <h2 className="max-w-3xl font-display text-[1.9rem] font-bold leading-[1.12] tracking-[-0.02em] text-ink sm:text-[2.6rem]">

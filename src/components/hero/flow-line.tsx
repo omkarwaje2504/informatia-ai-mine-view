@@ -36,7 +36,7 @@ export function FlowLine({
       variants={parent}
       initial="hidden"
       animate={show ? "show" : "hidden"}
-      className={cn("relative w-full max-w-[42rem]", className)}
+      className={cn("relative md:w-full md:max-w-[42rem]", className)}
       aria-hidden
     >
       {/* horizontal — sm and up */}
@@ -73,7 +73,7 @@ export function FlowLine({
       </div>
 
       {/* stacked — below sm */}
-      <div className="flex flex-col gap-3 sm:hidden">
+      <div className="flex md:flex-col md:gap-3 sm:hidden">
         {steps.map((s) => (
           <motion.div key={s} variants={node} className="flex items-center gap-3">
             <span className="block h-[0.55rem] w-[0.55rem] shrink-0 rounded-full border border-teal-light/70" />

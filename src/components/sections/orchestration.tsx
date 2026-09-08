@@ -25,7 +25,7 @@ export function Orchestration() {
   return (
     <section
       id="capabilities"
-      className="relative overflow-hidden bg-night py-20 text-mist md:py-28"
+      className="relative overflow-hidden bg-night py-10 md:py-20 text-mist"
     >
       {/* backdrop */}
       <div className="pointer-events-none absolute inset-0 opacity-20">
@@ -79,7 +79,10 @@ export function Orchestration() {
           ))}
 
           {/* how it connects — a compact stepper */}
-          <motion.div {...fold} className="pt-2 [transform-style:preserve-3d]">
+          <motion.div
+            {...fold}
+            className="pt-10 hidden lg:block [transform-style:preserve-3d]"
+          >
             <ol className="flex items-start">
               {nodes.map((n, i) => (
                 <li
@@ -93,10 +96,10 @@ export function Orchestration() {
                     />
                   ) : null}
                   <span className="relative z-10 h-[0.9rem] w-[0.9rem] rounded-full bg-teal-light ring-4 ring-night" />
-                  <span className="mt-3 font-display text-[0.82rem] font-semibold leading-tight text-mist sm:text-[0.95rem]">
+                  <span className="mt-3 font-display text-[0.82rem] leading-tight text-mist sm:text-[0.95rem]">
                     {n.title}
                   </span>
-                  <span className="mt-1 text-[0.58rem] font-medium uppercase tracking-[0.14em] text-teal-light">
+                  <span className="mt-1 text-[0.58rem] font-normal uppercase tracking-[0.14em] text-teal-light">
                     {n.badge}
                   </span>
                 </li>
@@ -107,7 +110,7 @@ export function Orchestration() {
 
         <Link
           href={cta.href}
-          className="group mt-10 inline-flex items-center gap-2 rounded-full border border-mist/25 px-6 py-3 text-[0.9rem] font-medium text-mist transition-colors duration-300 hover:border-teal-light hover:text-teal-light"
+          className="group mt-6 lg:mt-20 inline-flex items-center gap-2 rounded-full outline-2 outline-white  px-6 py-3 text-[0.9rem] font-medium text-mist transition-colors duration-300 hover:border-teal-light hover:text-teal-light"
         >
           {cta.label}
           <span
