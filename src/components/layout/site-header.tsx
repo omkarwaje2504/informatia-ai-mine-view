@@ -1,0 +1,109 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { motion, useReducedMotion } from "framer-motion";
+import { HeaderLogo } from "@/components/brand/header-logo";
+import { nav } from "@/lib/site";
+import { useAppReady } from "@/hooks/use-app-ready";
+import { cn } from "@/lib/utils";
+
+/** Is this nav item the current route? Hash links (e.g. "/#industries")
+ * point at a section of the homepage rather than their own route, so they
+ * count as active whenever we're on the homepage. Everything else is an
+ * exact — or nested-route — match against the current pathname. */
+function isActive(href: string, pathname: string) {
+  if (href.startsWith("/#")) return pathname === "/";
+  if (href === "/") return pathname === "/";
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+
+export function SiteHeader() {
+  const reduce = useReducedMotion();
+  const go = useAppReady() || !!reduce;
+  const pathname = usePathname();
+
+  return (
+    <motion.header
+      initial={reduce ? false : { y: -20, opacity: 0 }}
+      animate={go ? { y: 0, opacity: 1 } : undefined}
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+      className="sticky top-0 z-50 border-b border-line bg-orange-50 backdrop-blur-md py-1"
+    >
+      <div className="container-x flex h-16 items-center justify-between gap-6 sm:h-[4.25rem]">
+        <Link
+          href="/"
+          aria-label="Informatia AI — home"
+          className="group inline-flex shrink-0 items-center"
+        >
+          <HeaderLogo className="transition-transform duration-300 ease-out-expo group-hover:scale-[1.03]" />
+        </Link>
+
+        <nav className="hidden items-center gap-1 lg:flex">
+          {nav.map((item, i) => {
+            const active = isActive(item.href, pathname);
+            return (
+              <motion.div
+                key={item.href}
+                initial={reduce ? false : { opacity: 0, y: -8 }}
+                animate={go ? { opacity: 1, y: 0 } : undefined}
+                transition={{ duration: 0.4, delay: 0.25 + i * 0.05 }}
+              >
+                <Link
+                  href={item.href}
+                  aria-current={active ? "page" : undefined}
+                  className={cn(
+                    "group relative block px-3 py-2 text-[0.9rem] transition-colors duration-200",
+                    active ? "text-purple" : "text-ink-soft hover:text-ink",
+                  )}
+                >
+                  {item.label}
+                  <span
+                    className={cn(
+                      "pointer-events-none absolute inset-x-3 bottom-1 h-px origin-center bg-current transition-transform duration-300 ease-out-expo",
+                      active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100",
+                    )}
+                  />
+                </Link>
+              </motion.div>
+            );
+          })}
+        </nav>
+
+        <MobileNav pathname={pathname} />
+      </div>
+    </motion.header>
+  );
+}
+
+function MobileNav({ pathname }: { pathname: string }) {
+  return (
+    <details className="group relative lg:hidden">
+      <summary className="flex h-10 w-10 cursor-pointer list-none items-center justify-center [&::-webkit-details-marker]:hidden">
+        <span className="relative block h-3 w-6">
+          <span className="absolute left-0 top-0 h-0.5 w-full bg-ink transition-transform duration-300 group-open:top-1.5 group-open:rotate-45" />
+          <span className="absolute left-0 top-1.5 h-0.5 w-full bg-ink transition-opacity duration-200 group-open:opacity-0" />
+          <span className="absolute left-0 top-3 h-0.5 w-4 bg-ink transition-transform duration-300 group-open:top-1.5 group-open:w-full group-open:-rotate-45" />
+        </span>
+      </summary>
+      <div className="absolute right-0 mt-3 w-56 origin-top-right rounded-2xl border border-line bg-paper-bright p-2 shadow-float">
+        {nav.map((item) => {
+          const active = isActive(item.href, pathname);
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              aria-current={active ? "page" : undefined}
+              className={cn(
+                "block rounded-xl px-4 py-3 text-sm transition-colors hover:bg-paper",
+                active ? "text-purple" : "text-ink-soft",
+              )}
+            >
+              {item.label}
+            </Link>
+          );
+        })}
+      </div>
+    </details>
+  );
+}
