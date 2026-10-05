@@ -6,7 +6,7 @@ export const site = {
     "Informatia AI is a digital and AI solutions company that turns technology into measurable business outcomes — strategy, digital platforms and intelligent systems built for complex, regulated environments.",
   email: "sales@informatia.ai",
   phone: "1800 309 4544",
-  location: "India — partnering with 60+ clients worldwide",
+  location: "India — partnering with 75+ clients worldwide",
   url: "https://informatia.ai",
   linkedin: "https://in.linkedin.com/company/informatia-ai",
   instagram: "https://www.instagram.com/informatia.ai",
@@ -16,15 +16,7 @@ export const site = {
 export const nav = [
   { href: "/about", label: "About" },
   { href: "/capabilities", label: "Capabilities" },
-
-  {
-    label: "Products",
-    dropdown: [
-      { href: "/products", label: "Search by Product" },
-      { href: "/products/industries", label: "Search by Industries" },
-    ],
-  },
-
+  { href: "/products", label: "Products" },
   { href: "/industries", label: "Industries" },
   { href: "/careers", label: "Grow With Us" },
   { href: "/connect", label: "Connect" },

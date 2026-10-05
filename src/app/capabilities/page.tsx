@@ -27,7 +27,7 @@ export default function CapabilitiesRoute() {
                 className="grid gap-6 border-t border-ink py-8 md:grid-cols-[16rem_1fr] md:gap-12"
               >
                 <div>
-                  <span className="font-display text-[0.8rem] font-semibold text-gold">
+                  <span className="font-text text-[1.5rem] md:text-[2rem] font-semibold text-gold">
                     {t.n}
                   </span>
                   <h2 className="mt-2 font-display text-[1.4rem] font-semibold leading-snug tracking-[-0.01em] text-ink">

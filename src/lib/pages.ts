@@ -227,6 +227,230 @@ export const aboutPage = {
   },
   cta: { href: "/connect", label: "Start a Conversation" },
 } as const;
+export const productPage = {
+  eyebrow: "Explore Our Solutions",
+  heading: "Technology built around real business needs.",
+  intro:
+    "Informatia AI delivers practical, scalable solutions across AI, personalized engagement, health assessments, analytics and digital platforms to create meaningful connections.",
+  heritage: {
+    eyebrow: "Our Heritage",
+    heading: "Proven experience. Built for what's next.",
+    stat: { value: "40", label: "Years of legacy" },
+    paragraphs: [
+      "Informatia AI is built on the legacy of Sai Ashirwad Informatia, a trusted organization with 40 years of experience in successfully delivering solutions.",
+      "While Sai Ashirwad is our heritage, Informatia AI extends it by carrying that DNA forward with AI-first thinking, modern digital capabilities, and future-ready solutions.",
+    ],
+    closing:
+      "Our solutions are strategically aligned with your brand, cutting through the category noise and helping you reach new heights.",
+  },
+  beliefs: {
+    eyebrow: "What We Believe",
+    items: [
+      {
+        title: "Strategy before technology",
+        detail: "Start with the business objective.",
+      },
+      {
+        title: "AI with purpose",
+        detail: "Apply intelligence where it creates real value.",
+      },
+      {
+        title: "Built to scale",
+        detail: "Design practical, adaptable digital solutions.",
+      },
+      {
+        title: "Execute with Precision",
+        detail: "Turn ideas into solutions that work.",
+      },
+    ],
+  },
+  leadership: {
+    eyebrow: "Leadership",
+    name: "Rohan Sakhale",
+    role: "Founder & CEO",
+    photo: "/team/rohan-sakhale.jpg",
+    bio: "Rohan Sakhale, Founder of Informatia AI, combines strategic vision and digital expertise to deliver practical, scalable, and impact-driven AI solutions across industries, including healthcare and pharma. His passion for harnessing technology to solve real-world business challenges inspires the Informatia AI team to innovate with purpose, execute with precision, and create meaningful business impact.",
+    quote:
+      "We start with your business challenge, then build the right solution.",
+    credentials: [
+      "10+ years in technology and business leadership",
+      "Built on the foundation of Sai Ashirwad Informatia",
+    ],
+    note: "This belief shapes every engagement we take on.",
+  },
+  team: {
+    eyebrow: "Our Team",
+    body: "A multidisciplinary team of strategists, developers, designers and technology specialists focused on turning complex requirements into intuitive digital solutions.",
+    departments: [
+      {
+        name: "Sales",
+        members: [
+          {
+            name: "Annil Lad",
+            role: "Head",
+            avatarUrl: "/team/annil-lad.jpg",
+          },
+          {
+            name: "Prasad",
+            role: "Lead",
+            avatarUrl: "/team/prasad.jpg",
+          },
+        ],
+      },
+
+      {
+        name: "IT",
+        members: [
+          {
+            name: "Omkar",
+            role: "Tech Head",
+            avatarUrl: "/team/omkar.jpg",
+          },
+          {
+            name: "Wasim",
+            
+            role: "Backend / App Lead",
+            avatarUrl: "/team/wasim.jpg",
+            
+          },
+          {
+            name: "Vedant",
+            role: "Frontend Lead",
+            avatarUrl: "/team/vedant.jpg",
+          },
+          {
+            name: "Deepak",
+            role: "App Developer",
+            avatarUrl: "/team/deepak.jpg",
+          },
+          {
+            name: "Gaurav",
+            role: "Backend Developer",
+            avatarUrl: "/team/gaurav.jpg",
+          },
+          {
+            name: "Ashwin",
+            role: "Frontend Developer",
+            avatarUrl: "/team/ashwin.png",
+          },
+        ],
+      },
+
+      {
+        name: "Graphics",
+        members: [
+          {
+            name: "Sanjib",
+            role: "Lead",
+            avatarUrl: "/team/sanjib.jpg",
+          },
+          {
+            name: "Pooja",
+            role: "Designer",
+            avatarUrl: "/team/pooja.jpg",
+          },
+          {
+            name: "Vaishnavi",
+            role: "Designer",
+            avatarUrl: "/team/vaishnavi.jpg",
+          },
+        ],
+      },
+
+      {
+        name: "Video",
+        members: [
+          {
+            name: "Akash Mashke",
+            role: "",
+            avatarUrl: "/team/akash-mashke.jpg",
+          },
+          {
+            name: "Akash Sakpal",
+            role: "",
+            avatarUrl: "/team/akash-sakpal.jpg",
+          },
+          {
+            name: "Pratik",
+            role: "",
+            avatarUrl: "/team/pratik.jpg",
+          },
+          {
+            name: "Aniket",
+            role: "",
+            avatarUrl: "/team/aniket.jpg",
+          },
+        ],
+      },
+
+      {
+        name: "Sales Service",
+        members: [
+          {
+            name: "Kamlesh",
+            role: "Service Head",
+            avatarUrl: "/team/kamlesh.jpg",
+          },
+        ],
+      },
+
+      {
+        name: "Product",
+        members: [
+          {
+            name: "Sushant",
+            role: "Product Manager",
+            avatarUrl: "/team/sushant.jpg",
+          },
+          {
+            name: "Tina",
+            role: "Product Management",
+            avatarUrl: "/team/tina.jpg",
+          },
+        ],
+      },
+
+      {
+        name: "Content",
+        members: [
+          {
+            name: "Manjiri",
+            role: "Content Writer",
+            avatarUrl: "/team/manjiri.jpg",
+          },
+        ],
+      },
+
+      {
+        name: "Production",
+        members: [
+          {
+            name: "Ram Chandra",
+            role: "Production",
+            avatarUrl: "/team/ram-chandra.jpg",
+          },
+        ],
+      },
+
+      {
+        name: "Accounts",
+        members: [
+          {
+            name: "Akansha Raut",
+            role: "Accounts",
+            avatarUrl: "/team/akansha-raut.jpg",
+          },
+          {
+            name: "Swati",
+            role: "Accounts",
+            avatarUrl: "/team/swati.jpg",
+          },
+        ],
+      },
+    ],
+  },
+  cta: { href: "/connect", label: "Start a Conversation" },
+} as const;
 
 export const capabilitiesPage = {
   eyebrow: "Our Capabilities",
