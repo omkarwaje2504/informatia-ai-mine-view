@@ -6,6 +6,7 @@ import { LeadershipFeature } from "@/components/page/leadership-feature";
 import { TeamFeature } from "@/components/page/team-feature";
 import { Plexus } from "@/components/hero/plexus";
 import { aboutPage as a } from "@/lib/pages";
+import ScrollToTop from "@/components/motion/ScrollToTop";
 
 export const metadata: Metadata = {
   title: "About Us",
@@ -15,6 +16,7 @@ export const metadata: Metadata = {
 export default function AboutRoute() {
   return (
     <>
+      <ScrollToTop />
       <SiteHeader />
       <main className="flex-1">
         <PageHero
@@ -28,7 +30,7 @@ export default function AboutRoute() {
             half); leadership, a normal-flow section right after, scrolls up
             and visually covers this pinned pair, then continues scrolling
             normally like any other section. */}
-             <div className="relative" style={{ height: "calc(170vh)" }}>
+        <div className="relative" style={{ height: "calc(170vh)" }}>
           <section
             className="z-0 flex flex-col overflow-hidden border-t border-line"
             style={{
@@ -39,55 +41,55 @@ export default function AboutRoute() {
           >
             {/* heritage — top half */}
             <div className="flex flex-1/3 md:flex-1 items-center bg-paper">
-            <div className="container-x grid gap-4 py-8 lg:py-16 lg:grid-cols-[22rem_1fr] lg:gap-6">
+              <div className="container-x grid gap-4 py-8 lg:py-16 lg:grid-cols-[22rem_1fr] lg:gap-6">
 
-              {/* left: eyebrow + stat */}
-              <div className="flex flex-col gap-4">
-                <p className="eyebrow text-ink-muted">
-                  {a.heritage.eyebrow}
+                {/* left: eyebrow + stat */}
+                <div className="flex flex-col gap-4">
+                  <p className="eyebrow text-ink-muted">
+                    {a.heritage.eyebrow}
+                  </p>
+
+                  <div className="hidden lg:block">
+                    <div className="flex items-end gap-3">
+                      <span className="font-text text-[11rem] font-bold leading-[0.85] tracking-[-0.04em] text-ink">
+                        {a.heritage.stat.value}
+                      </span>
+
+                      <span className="pb-1 text-[0.8rem] font-semibold uppercase tracking-[0.2em] text-teal">
+                        {a.heritage.stat.label}
+                      </span>
+                    </div>
+
+                    <div className="mt-4 h-px w-40 bg-gradient-to-r from-purple-light to-teal-light" />
+                  </div>
+                </div>
+
+                {/* right: heading + paragraphs */}
+                <div>
+                  <h2 className="max-w-2xl font-display text-[1.8rem] font-bold leading-[1.12] tracking-[-0.02em] text-ink sm:text-[2.4rem]">
+                    {a.heritage.heading}
+                  </h2>
+
+                  <div className="mt-3 grid gap-4 lg:mt-5 lg:grid-cols-2 lg:gap-8">
+                    {a.heritage.paragraphs.map((p, i) => (
+                      <p
+                        key={i}
+                        className={`text-[0.88rem] leading-relaxed text-ink-soft ${i > 0 ? "hidden sm:block" : ""
+                          }`}
+                      >
+                        {p}
+                      </p>
+                    ))}
+                  </div>
+                </div>
+
+                {/* closing: full width */}
+                <p className="lg:col-span-2  max-w-none font-display text-[0.88rem] lg:text-[1rem] leading-snug text-ink sm:block lg:mt-4">
+                  {a.heritage.closing}
                 </p>
 
-                <div className="hidden lg:block">
-                  <div className="flex items-end gap-3">
-                    <span className="font-text text-[11rem] font-bold leading-[0.85] tracking-[-0.04em] text-ink">
-                      {a.heritage.stat.value}
-                    </span>
-
-                    <span className="pb-1 text-[0.8rem] font-semibold uppercase tracking-[0.2em] text-teal">
-                      {a.heritage.stat.label}
-                    </span>
-                  </div>
-
-                  <div className="mt-4 h-px w-40 bg-gradient-to-r from-purple-light to-teal-light" />
-                </div>
               </div>
-
-              {/* right: heading + paragraphs */}
-              <div>
-                <h2 className="max-w-2xl font-display text-[1.8rem] font-bold leading-[1.12] tracking-[-0.02em] text-ink sm:text-[2.4rem]">
-                  {a.heritage.heading}
-                </h2>
-
-                <div className="mt-3 grid gap-4 lg:mt-5 lg:grid-cols-2 lg:gap-8">
-                  {a.heritage.paragraphs.map((p, i) => (
-                    <p
-                      key={i}
-                      className={`text-[0.88rem] leading-relaxed text-ink-soft ${i > 0 ? "hidden sm:block" : ""
-                        }`}
-                    >
-                      {p}
-                    </p>
-                  ))}
-                </div>
-              </div>
-
-              {/* closing: full width */}
-              <p className="lg:col-span-2  max-w-none font-display text-[0.88rem] lg:text-[1rem] leading-snug text-ink sm:block lg:mt-4">
-                {a.heritage.closing}
-              </p>
-
             </div>
-          </div>
 
             {/* beliefs — bottom half */}
             <div className="relative flex flex-2/3 md:flex-1 md:items-center overflow-hidden bg-night text-mist">

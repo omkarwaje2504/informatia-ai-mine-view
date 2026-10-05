@@ -7,6 +7,7 @@ import { TeamFeature } from "@/components/page/team-feature";
 import { Plexus } from "@/components/hero/plexus";
 import { productPage as a } from "@/lib/pages";
 import ProductsShowcase from "@/components/sections/ProductsShowcase";
+import ScrollToTop from "@/components/motion/ScrollToTop";
 
 export const metadata: Metadata = {
   title: "Product",
@@ -16,6 +17,7 @@ export const metadata: Metadata = {
 export default function ProductRoute() {
   return (
     <>
+    <ScrollToTop/>
       <SiteHeader />
       <main className="flex-1">
         <PageHero

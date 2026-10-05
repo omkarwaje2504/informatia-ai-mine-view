@@ -4,6 +4,7 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { PageHero } from "@/components/page/page-hero";
 import { Plexus } from "@/components/hero/plexus";
 import { careersPage as c } from "@/lib/pages";
+import ScrollToTop from "@/components/motion/ScrollToTop";
 
 export const metadata: Metadata = {
   title: "Grow With Us",
@@ -13,6 +14,7 @@ export const metadata: Metadata = {
 export default function CareersRoute() {
   return (
     <>
+    <ScrollToTop/>
       <SiteHeader />
       <main className="flex-1">
         <PageHero eyebrow={c.eyebrow} heading={c.heading} intro={c.intro} />

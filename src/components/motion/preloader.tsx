@@ -154,7 +154,7 @@ export function Preloader() {
             exit={{ opacity: 0, transition: { duration: 0.3 } }}
           >
             <motion.p
-              className="text-[1.7rem] text-white"
+              className="text-[1.7rem] text-white text-center"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 1.15 }}

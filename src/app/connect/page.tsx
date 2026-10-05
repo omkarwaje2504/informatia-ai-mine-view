@@ -5,6 +5,8 @@ import { ContactForm } from "@/components/sections/contact-form";
 import { Plexus } from "@/components/hero/plexus";
 import { connectPage as c } from "@/lib/pages";
 import { site } from "@/lib/site";
+import ScrollToTop from "@/components/motion/ScrollToTop";
+
 
 export const metadata: Metadata = {
   title: "Connect With Us",
@@ -14,6 +16,7 @@ export const metadata: Metadata = {
 export default function ConnectRoute() {
   return (
     <>
+    <ScrollToTop/>
       <SiteHeader />
       <main className="relative flex-1 overflow-hidden pt-32 sm:pt-40">
         <div className="pointer-events-none absolute inset-0 opacity-50">
