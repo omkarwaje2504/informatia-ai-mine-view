@@ -1,6 +1,6 @@
 "use client"; // remove this line if you're not using Next.js App Router
 
-import { useId, useMemo, useRef, useState } from "react";
+import { useId, useMemo, useRef, useState, type ComponentType } from "react";
 import Fuse from "fuse.js";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Scrollbar } from "swiper/modules";
