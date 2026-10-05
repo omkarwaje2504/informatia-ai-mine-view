@@ -58,21 +58,52 @@ export function SiteFooter() {
             </Link>
           </div>
 
-          <nav aria-label="Company">
-            <h3 className="text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-teal">
-              Company
-            </h3>
-            <ul className="mt-4 space-y-3">
-              {nav.map((item) => (
-                <li key={item.href}>
-                  <FooterLink href={item.href}>{item.label}</FooterLink>
+
+<nav aria-label="Company">
+  <h3 className="text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-teal">
+    Company
+  </h3>
+
+  <ul className="mt-4 space-y-3">
+    {nav.map((item) => {
+      const hasDropdown = "dropdown" in item;
+
+      if (hasDropdown) {
+        return (
+          <li key={item.label}>
+            <span className="text-sm text-ink-soft">
+              {item.label}
+            </span>
+
+            <ul className="mt-2 space-y-2 pl-3">
+              {item.dropdown.map((subItem) => (
+                <li key={subItem.href}>
+                  <FooterLink href={subItem.href}>
+                    {subItem.label}
+                  </FooterLink>
                 </li>
               ))}
-              <li>
-                <FooterLink href="/contact">Contact</FooterLink>
-              </li>
             </ul>
-          </nav>
+          </li>
+        );
+      }
+
+      return (
+        <li key={item.href}>
+          <FooterLink href={item.href}>
+            {item.label}
+          </FooterLink>
+        </li>
+      );
+    })}
+
+    <li>
+      <FooterLink href="/contact">Contact</FooterLink>
+    </li>
+  </ul>
+</nav>
+
+
 
           <div>
             <h3 className="text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-teal">

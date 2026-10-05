@@ -12,13 +12,24 @@ export const site = {
   instagram: "https://www.instagram.com/informatia.ai",
 } as const;
 
+
 export const nav = [
   { href: "/about", label: "About" },
   { href: "/capabilities", label: "Capabilities" },
+
+  {
+    label: "Products",
+    dropdown: [
+      { href: "/products", label: "Search by Product" },
+      { href: "/products/industries", label: "Search by Industries" },
+    ],
+  },
+
   { href: "/industries", label: "Industries" },
   { href: "/careers", label: "Grow With Us" },
   { href: "/connect", label: "Connect" },
 ] as const;
+
 
 export const ctas = {
   primary: { href: "/connect", label: "Start a Conversation" },
