@@ -68,7 +68,7 @@ export default function IndustryCards() {
               >
                 {/* Content */}
                 <div
-                  className={`flex w-full flex-col justify-center md:w-1/2 ${imageOnRight ? "md:pr-12 lg:pr-16" : "md:pl-12 lg:pl-16"
+                  className={`flex w-full flex-col justify-center mt-4 md:mt-0 md:w-1/2 ${imageOnRight ? "md:pr-12 lg:pr-16" : "md:pl-12 lg:pl-16"
                     }`}
                 >
                   <span className="w-fit rounded-full bg-neutral-100 px-3 py-1 text-xs font-medium text-neutral-700">

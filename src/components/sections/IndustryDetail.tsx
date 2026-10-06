@@ -123,12 +123,12 @@ export default function IndustryDetail({
               >
                 {/* Section heading */}
                 <Reveal delay={sectionIndex * 100}>
-                  <div className="flex items-start gap-4">
-                    <span className="text-3xl font-semibold tabular-nums text-neutral-300 sm:text-4xl">
+                  <div className="flex items-start gap-6 sm:gap-4">
+                    <span className="text-2xl font-semibold tabular-nums text-neutral-300 sm:text-4xl">
                       {s.number}
                     </span>
 
-                    <div className="max-w-3xl">
+                    <div className="max-w-xl">
                       <h4 className="text-lg font-semibold text-neutral-900 sm:text-xl">
                         {s.title}
                       </h4>

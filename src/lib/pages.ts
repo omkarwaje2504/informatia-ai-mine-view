@@ -49,7 +49,7 @@ export const aboutPage = {
     quote:
       "We start with your business challenge, then build the right solution.",
     credentials: [
-      "10+ years in technology and business leadership",
+      "14+ years in technology and business leadership",
       "Built on the foundation of Sai Ashirwad Informatia",
     ],
     note: "This belief shapes every engagement we take on.",
