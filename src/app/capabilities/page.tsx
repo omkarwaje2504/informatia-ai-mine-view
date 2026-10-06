@@ -37,7 +37,7 @@ export default function CapabilitiesRoute() {
                   </h2>
                 </div>
                 <div>
-                  <p className="font-display text-[1.15rem] font-semibold text-ink">
+                  <p className="font-display text-[1rem] sm:text-[1.5rem] font-semibold text-ink">
                     {t.headline}
                   </p>
                   <p className="mt-3 max-w-2xl text-[0.95rem] leading-relaxed text-ink-soft">
@@ -71,7 +71,7 @@ export default function CapabilitiesRoute() {
                 "radial-gradient(58% 45% at 50% 0%, rgba(108,42,142,0.2), transparent 72%)",
             }}
           />
-          <div className="container-x relative max-w-3xl">
+          <div className="container-x relative">
             <h2 className="font-display text-[2rem] font-bold leading-[1.1] tracking-[-0.02em] text-mist sm:text-[2.8rem]">
               {c.close.heading}
             </h2>
@@ -94,7 +94,7 @@ export default function CapabilitiesRoute() {
               </Link>
               <Link
                 href={c.ctas.secondary.href}
-                className="inline-flex items-center rounded-full border border-line-night px-6 py-3 text-[0.9rem] font-medium text-mist transition-colors duration-300 hover:border-mist"
+                className="inline-flex items-center rounded-full !border !border-line-night px-6 py-3 text-[0.9rem] font-medium text-mist transition-colors duration-300 hover:border-mist"
               >
                 {c.ctas.secondary.label}
               </Link>

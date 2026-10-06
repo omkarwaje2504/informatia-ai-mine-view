@@ -18,7 +18,7 @@ export const nav = [
   { href: "/capabilities", label: "Capabilities" },
   { href: "/products", label: "Products" },
   { href: "/industries", label: "Industries" },
-  { href: "/careers", label: "Grow With Us" },
+  // { href: "/careers", label: "Grow With Us" },
   { href: "/connect", label: "Connect" },
 ] as const;
 

@@ -74,7 +74,7 @@ export function SiteFooter() {
             </ul>
           </nav>
 
-          <div>
+          {/* <div>
             <h3 className="text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-teal">
               Industries
             </h3>
@@ -83,7 +83,7 @@ export function SiteFooter() {
                 <li key={i}>{i}</li>
               ))}
             </ul>
-          </div>
+          </div> */}
 
           <div>
             <h3 className="text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-teal">

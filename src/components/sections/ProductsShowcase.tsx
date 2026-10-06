@@ -7,6 +7,8 @@ import { Scrollbar } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
 import "swiper/css";
 import "swiper/css/scrollbar";
+import { motion } from "framer-motion";
+import Link from "next/link";
 import {
     ArrowUpRight,
     BarChart3,
@@ -49,6 +51,7 @@ export const PRODUCTS: Product[] = [
     {
         name: "AI Avatar",
         category: "Video",
+        image: "/products/ai-avatar.png",
         icon: Bot,
         description:
             "AI-powered personalized videos that make doctor, patient and brand communication more engaging and easier to understand.",
@@ -56,6 +59,7 @@ export const PRODUCTS: Product[] = [
     {
         name: "Patient Education Videos",
         category: "Video",
+        image: "/products/patient-education-videos.png",
         icon: Clapperboard,
         description:
             "Simple, engaging videos for disease, therapy and patient education, customizable across therapies and languages.",
@@ -63,6 +67,7 @@ export const PRODUCTS: Product[] = [
     {
         name: "PixPro",
         category: "Print & Digital",
+        image: "/products/pixpro.png",
         icon: Printer,
         description:
             "Hyper-personalized print and digital communication tailored to individual doctors, customers and campaign needs.",
@@ -70,6 +75,7 @@ export const PRODUCTS: Product[] = [
     {
         name: "HScore",
         category: "Assessment",
+        image: "/products/hscore.png",
         icon: ClipboardCheck,
         description:
             "Digital health-risk assessments across multiple therapy areas, generating structured results to support doctor evaluation and patient engagement.",
@@ -77,6 +83,7 @@ export const PRODUCTS: Product[] = [
     {
         name: "Funzo",
         category: "Engagement",
+        image: "/products/funzo.png",
         icon: Gamepad2,
         description:
             "Customized games, quizzes and interactive experiences that make doctor, customer and field-force engagement more participative.",
@@ -84,6 +91,7 @@ export const PRODUCTS: Product[] = [
     {
         name: "RxPert",
         category: "Intelligence",
+        image: "/products/rxpert.png",
         icon: BarChart3,
         description:
             "Market and prescription intelligence that transforms SKU-level competitive information into actionable business insights.",
@@ -91,6 +99,7 @@ export const PRODUCTS: Product[] = [
     {
         name: "Prace",
         category: "Field Force",
+        image: "/products/prace.png",
         icon: Users,
         description:
             "A digital engagement platform designed to enable consistent, year-round interaction between field teams and healthcare professionals.",
@@ -98,6 +107,7 @@ export const PRODUCTS: Product[] = [
     {
         name: "Webie",
         category: "Web Presence",
+        image: "/products/webie.png",
         icon: Globe,
         description:
             "Personalized websites that help doctors and clinics build a stronger, more accessible digital presence.",
@@ -105,6 +115,7 @@ export const PRODUCTS: Product[] = [
     {
         name: "Insta360",
         category: "Virtual Clinic",
+        image: "/products/insta-360.png",
         icon: Orbit,
         description:
             "Interactive virtual clinic experiences that allow patients to explore a doctor's practice digitally.",
@@ -112,6 +123,7 @@ export const PRODUCTS: Product[] = [
     {
         name: "Enkare",
         category: "In-Clinic",
+        image: "/products/enkare.png",
         icon: MonitorPlay,
         description:
             "An in-clinic digital engagement solution bringing patient education, interaction and assessment into the waiting-area experience.",
@@ -119,6 +131,7 @@ export const PRODUCTS: Product[] = [
     {
         name: "Kampet",
         category: "Assessment",
+        image: "/products/kampet.png",
         icon: ScanLine,
         description:
             "A portable digital assessment solution combining health assessments with convenient on-the-spot report printing.",
@@ -126,6 +139,7 @@ export const PRODUCTS: Product[] = [
     {
         name: "QR-Enabled Solutions",
         category: "Phygital",
+        image: "/products/qr.png",
         icon: QrCode,
         description:
             "Connect physical communication with digital experiences, giving doctors and patients instant access to relevant content.",
@@ -133,6 +147,7 @@ export const PRODUCTS: Product[] = [
     {
         name: "WhatsApp Engagement",
         category: "Messaging",
+        image: "/products/whatsapp.png",
         icon: MessageCircle,
         description:
             "Personalized communication for awareness, education, reminders and ongoing patient engagement through WhatsApp.",
@@ -140,6 +155,7 @@ export const PRODUCTS: Product[] = [
     {
         name: "Online Reputation Management (ORM)",
         category: "Reputation",
+        image: "/products/orm.png",
         icon: Star,
         description:
             "Digital solutions that help doctors and clinics strengthen their online visibility, reputation and patient connections.",
@@ -147,6 +163,7 @@ export const PRODUCTS: Product[] = [
     {
         name: "Google Review Solutions",
         category: "Reputation",
+        image: "/products/google-review.png",
         icon: Star,
         description:
             "QR-enabled tools that simplify patient feedback and help clinics strengthen their online review presence.",
@@ -154,6 +171,7 @@ export const PRODUCTS: Product[] = [
     {
         name: "BigViz",
         category: "Large Screen",
+        image: "/products/bigviz.png",
         icon: Tv,
         description:
             "High-impact cinema and large-screen communication designed to extend healthcare and brand visibility to wider audiences.",
@@ -161,6 +179,7 @@ export const PRODUCTS: Product[] = [
     {
         name: "RxPad",
         category: "Point of Care",
+        image: "/products/rxpad.png",
         icon: NotebookPen,
         description:
             "Customized prescription pads that integrate brand communication into an important point-of-care touchpoint.",
@@ -168,6 +187,7 @@ export const PRODUCTS: Product[] = [
     {
         name: "Personalized Brand Assets",
         category: "Print & Digital",
+        image: "/products/brand-assets.png",
         icon: Gift,
         description:
             "Customized magazines, calendars, frames, desk materials and other physical and digital assets designed for targeted engagement.",
@@ -175,6 +195,7 @@ export const PRODUCTS: Product[] = [
     {
         name: "Adherence Solutions",
         category: "Patient Support",
+        image: "/products/adherence-solutions.png",
         icon: Pill,
         description:
             "Digital patient-support solutions that connect education, communication and follow-up throughout the treatment journey.",
@@ -182,6 +203,7 @@ export const PRODUCTS: Product[] = [
     {
         name: "Cardio App",
         category: "Cardiology",
+        image: "/products/cardio-app.png",
         icon: HeartPulse,
         description:
             "A cardiology-focused digital solution supporting structured patient assessment, engagement and follow-up.",
@@ -189,6 +211,7 @@ export const PRODUCTS: Product[] = [
     {
         name: "Nexus Ring",
         category: "Connected",
+        image: "/products/nexus-ring.png",
         icon: Orbit,
         description:
             "A connected digital touchpoint designed to extend patient engagement across assessment and follow-up.",
@@ -258,9 +281,15 @@ export default function ProductsShowcase({
         <section className="w-full bg-white py-12 sm:py-16">
             <div className="px-4 sm:px-6">
                 {/* Title */}
-                <h2 className="text-center tracking-tight text-[1.4rem] font-bold  text-ink sm:text-[2.4rem]">
+                <motion.h2
+                    initial={{ opacity: 0, y: 25 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.3 }}
+                    transition={{ duration: 0.6, ease: "easeOut" }}
+                    className="text-center tracking-tight text-[1.4rem] font-bold text-ink sm:text-[2.4rem] font-display"
+                >
                     Our Products &amp; Solutions
-                </h2>
+                </motion.h2>
 
                 {/* Search row: input left, button right */}
                 <div className="mx-auto mt-4 sm:mt-8 w-full max-w-7xl">
@@ -345,40 +374,42 @@ export default function ProductsShowcase({
                                             {/* Visual */}
                                             <div className="relative flex aspect-[4/3] items-center justify-center overflow-hidden rounded-lg bg-white">
                                                 {p.image ? (
-                                                    <img
-                                                        src={p.image}
-                                                        alt={p.name}
-                                                        draggable={false}
-                                                        className="h-full w-full object-cover"
-                                                    />
+                                                    <>
+                                                        <img
+                                                            src={p.image}
+                                                            alt={p.name}
+                                                            draggable={false}
+                                                            className="h-full w-full object-cover"
+                                                        />
+                                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                                                    </>
                                                 ) : (
                                                     <Icon
                                                         className="h-16 w-16 text-neutral-800"
                                                         strokeWidth={1.25}
                                                     />
                                                 )}
-                                                <span className="absolute left-3 top-3 rounded-full bg-neutral-100 px-3 py-1 text-xs font-medium text-neutral-700">
+                                                {/* <span className="absolute left-3 top-3 rounded-full bg-neutral-100 px-3 py-1 text-xs font-medium text-neutral-700">
                                                     {p.category}
-                                                </span>
+                                                </span> */}
                                             </div>
 
                                             {/* Text */}
                                             <div className="flex flex-1 flex-col px-1 pb-1 pt-4">
-                                                <h3 className="text-base font-semibold leading-snug text-neutral-900">
+                                                <h3 className="text-base sm:text-xl  font-semibold leading-snug text-neutral-900">
                                                     {p.name}
                                                 </h3>
                                                 <p className="mt-2 line-clamp-4 text-sm leading-relaxed text-neutral-600">
                                                     {p.description}
                                                 </p>
                                                 <div className="mt-auto flex justify-end pt-4">
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => onSelect?.(p)}
-                                                        aria-label={`Learn more about ${p.name}`}
+                                                    <Link
+                                                        href={`/connect?product=${encodeURIComponent(p.name)}`}
+                                                        aria-label={`Contact us about ${p.name}`}
                                                         className="flex h-10 w-10 items-center justify-center rounded-lg bg-neutral-200 text-neutral-800 transition-colors hover:bg-neutral-900 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900"
                                                     >
                                                         <ArrowUpRight className="h-5 w-5" />
-                                                    </button>
+                                                    </Link>
                                                 </div>
                                             </div>
                                         </article>
