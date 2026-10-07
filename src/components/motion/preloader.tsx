@@ -64,11 +64,16 @@ export function Preloader() {
       document.documentElement.style.overflow = "";
     };
   }, [reduce]);
+const handlePreloaderComplete = () => {
+  markAppReady();
 
+  // Tell page sections that the screen is now ready
+  window.dispatchEvent(new Event("page-transition-complete"));
+};
   if (phase === "skip") return null;
 
   return (
-    <AnimatePresence onExitComplete={markAppReady}>
+    <AnimatePresence onExitComplete={handlePreloaderComplete}>
       {phase === "loading" && (
         <motion.div key="preloader" className="fixed inset-0 z-[200] overflow-hidden">
           {/* wipe panels */}

@@ -76,15 +76,17 @@ export function PageTransition() {
     phase === "idle" ? "101%" : phase === "revealing" ? "-101%" : "0%";
 
   const handleDone = () => {
-    if (phaseRef.current === "covering") {
-      go("covered");
-      router.push(hrefRef.current!);
-      // safety net in case the route never changes
-      fallbackRef.current = window.setTimeout(() => go("revealing"), 3000);
-    } else if (phaseRef.current === "revealing") {
-      go("idle"); // snaps panels back below the screen, instantly
-    }
-  };
+  if (phaseRef.current === "covering") {
+    go("covered");
+    router.push(hrefRef.current!);
+
+    fallbackRef.current = window.setTimeout(() => go("revealing"), 3000);
+  } else if (phaseRef.current === "revealing") {
+    window.dispatchEvent(new Event("page-transition-complete"));
+
+    go("idle");
+  }
+};
 
   if (reduce) return null;
 

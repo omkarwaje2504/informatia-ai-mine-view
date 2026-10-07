@@ -360,7 +360,7 @@ type Pillar = {
 export const industryPage = {
   eyebrow: "Industries",
 
-  heading: "Deep industry expertise. Purpose-built digital solutions.",
+  heading: "Deep industry expertise. Purpose-built solutions.",
 
   intro:
     "We bring together industry knowledge, strategic thinking and technology to create digital solutions tailored to the unique needs of the businesses we serve.",

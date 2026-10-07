@@ -292,7 +292,7 @@ export default function ProductsShowcase({
                 </motion.h2>
 
                 {/* Search row: input left, button right */}
-                <div className="mx-auto mt-4 sm:mt-8 w-full max-w-7xl">
+                <div className="mt-4 sm:mt-8 w-full container-x">
                     <div className="relative">
                         <Search
                             className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400"

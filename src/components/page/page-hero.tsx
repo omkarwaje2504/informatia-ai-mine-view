@@ -1,4 +1,7 @@
-import type { ReactNode } from "react";
+"use client";
+
+import { useEffect, useState, type ReactNode } from "react";
+import { motion, type Variants } from "framer-motion";
 import { Plexus } from "@/components/hero/plexus";
 
 /** Shared hero for the sub-pages — dark, plexus backdrop, big display heading. */
@@ -16,6 +19,51 @@ export function PageHero({
   /** optional photographic background, dimmed under a dark scrim */
   bgImage?: string;
 }) {
+  const [transitionComplete, setTransitionComplete] = useState(false);
+
+  useEffect(() => {
+    const handleTransitionComplete = () => {
+      setTransitionComplete(true);
+    };
+
+    window.addEventListener(
+      "page-transition-complete",
+      handleTransitionComplete
+    );
+
+    return () => {
+      window.removeEventListener(
+        "page-transition-complete",
+        handleTransitionComplete
+      );
+    };
+  }, []);
+
+  const containerVariants: Variants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.12,
+        delayChildren: 0.05,
+      },
+    },
+  };
+
+  const itemVariants: Variants = {
+    hidden: {
+      opacity: 0,
+      y: 28,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.7,
+        ease: [0.22, 1, 0.36, 1],
+      },
+    },
+  };
+
   return (
     <section className="relative overflow-hidden bg-night pb-16 pt-36 text-mist sm:pt-44 md:pb-24">
       {bgImage ? (
@@ -27,12 +75,15 @@ export function PageHero({
             aria-hidden
             className="h-full w-full object-cover opacity-55"
           />
+
           <div className="absolute inset-0 bg-gradient-to-b from-night/60 via-night/75 to-night" />
         </div>
       ) : null}
+
       <div className="pointer-events-none absolute inset-0 opacity-25">
         <Plexus variant="dark" density={0.6} />
       </div>
+
       <div
         className="pointer-events-none absolute inset-0"
         style={{
@@ -40,20 +91,42 @@ export function PageHero({
             "radial-gradient(58% 55% at 15% 0%, rgba(108,42,142,0.22), transparent 70%)",
         }}
       />
-      <div className="container-x relative">
-        <p className="text-[0.66rem] font-semibold uppercase tracking-[0.24em] text-teal-light">
+
+      <motion.div
+        className="container-x relative"
+        variants={containerVariants}
+        initial="hidden"
+        animate={transitionComplete ? "visible" : "hidden"}
+      >
+        <motion.p
+          variants={itemVariants}
+          className="text-[0.66rem] font-semibold uppercase tracking-[0.24em] text-teal-light"
+        >
           {eyebrow}
-        </p>
-        <h1 className="mt-5 max-w-3xl font-display text-[2.3rem] font-bold leading-[1.08] tracking-[-0.03em] text-mist sm:text-[3.2rem] lg:text-[3.9rem]">
+        </motion.p>
+
+        <motion.h1
+          variants={itemVariants}
+          className="mt-5 max-w-4xl font-display text-[2.3rem] font-bold leading-[1.08] tracking-[-0.03em] text-mist sm:text-[3.2rem] lg:text-[3.9rem]"
+        >
           {heading}
-        </h1>
+        </motion.h1>
+
         {intro ? (
-          <p className="mt-6 max-w-2xl text-[1.05rem] leading-relaxed text-mist-soft">
+          <motion.p
+            variants={itemVariants}
+            className="mt-6 max-w-2xl text-[1.05rem] leading-relaxed text-mist-soft"
+          >
             {intro}
-          </p>
+          </motion.p>
         ) : null}
-        {children ? <div className="mt-8">{children}</div> : null}
-      </div>
+
+        {children ? (
+          <motion.div variants={itemVariants} className="mt-8">
+            {children}
+          </motion.div>
+        ) : null}
+      </motion.div>
     </section>
   );
 }
@@ -80,6 +153,7 @@ export function FlowRow({
               →
             </span>
           ) : null}
+
           <span>{s}</span>
         </span>
       ))}

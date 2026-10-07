@@ -6,6 +6,7 @@ import { PageHero, FlowRow } from "@/components/page/page-hero";
 import { Plexus } from "@/components/hero/plexus";
 import { capabilitiesPage as c } from "@/lib/pages";
 import ScrollToTop from "@/components/motion/ScrollToTop";
+import { CapabilitiesTracks } from "@/components/page/capabilities-tracks";
 
 export const metadata: Metadata = {
   title: "Our Capabilities",
@@ -21,43 +22,7 @@ export default function CapabilitiesRoute() {
         <PageHero eyebrow={c.eyebrow} heading={c.heading} intro={c.intro} />
 
         {/* tracks */}
-        <section className="relative border-t border-line bg-paper py-16 md:py-24">
-          <div className="container-x space-y-4">
-            {c.tracks.map((t) => (
-              <article
-                key={t.n}
-                className="grid gap-6 border-t border-ink py-8 md:grid-cols-[16rem_1fr] md:gap-12"
-              >
-                <div>
-                  <span className="font-text text-[1.5rem] md:text-[2rem] font-semibold text-gold">
-                    {t.n}
-                  </span>
-                  <h2 className="mt-2 font-display text-[1.4rem] font-semibold leading-snug tracking-[-0.01em] text-ink">
-                    {t.title}
-                  </h2>
-                </div>
-                <div>
-                  <p className="font-display text-[1rem] sm:text-[1.5rem] font-semibold text-ink">
-                    {t.headline}
-                  </p>
-                  <p className="mt-3 max-w-2xl text-[0.95rem] leading-relaxed text-ink-soft">
-                    {t.detail}
-                  </p>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {t.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="rounded-full border border-line px-2.5 py-1 text-[0.7rem] font-medium text-ink-muted"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
+      <CapabilitiesTracks />
 
         {/* close */}
         <section className="relative overflow-hidden bg-night py-20 text-mist md:py-28">
