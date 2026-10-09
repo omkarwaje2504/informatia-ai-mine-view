@@ -1,5 +1,7 @@
+import { proof } from "@/lib/site";
+
 /**
- * Content for the sub-pages — About, Capabilities, Careers, Connect and the
+ * Content for the sub-pages — About, Careers, Connect and the
  * three industry pages. Copy is taken from the client-supplied page docs.
  */
 
@@ -11,13 +13,31 @@ export const aboutPage = {
   heritage: {
     eyebrow: "Our Heritage",
     heading: "Proven experience. Built for what's next.",
-    stat: { value: "40", label: "Years of legacy" },
-    paragraphs: [
-      "Informatia AI is built on the legacy of Sai Ashirwad Informatia, a trusted organization with 40 years of experience in successfully delivering solutions.",
-      "While Sai Ashirwad is our heritage, Informatia AI extends it by carrying that DNA forward with AI-first thinking, modern digital capabilities, and future-ready solutions.",
+    summary:
+      "Built on a 40 year old legacy of Sai Ashirwad, Sai Ashirwad Informatia was established in 2014, evolving into Informatia AI in 2025, bringing decades of trust and expertise into the future of AI-driven innovation.",
+    journey: [
+      {
+        value: "40",
+        unit: "Years",
+        marker: "The Legacy",
+        title: "Sai Ashirwad Enterprises",
+        detail: "Four decades of trust and expertise that everything is built on.",
+      },
+      {
+        value: "14",
+        unit: "Years",
+        marker: "Est. 2014",
+        title: "Sai Ashirwad Informatia",
+        detail: "Carrying the legacy into technology and digital solutions.",
+      },
+      {
+        value: "1+",
+        unit: "Year",
+        marker: "Est. 2025",
+        title: "Informatia AI",
+        detail: "Bringing that expertise into the future of AI-driven innovation.",
+      },
     ],
-    closing:
-      "Our solutions are strategically aligned with your brand, cutting through the category noise and helping you reach new heights.",
   },
   beliefs: {
     eyebrow: "What We Believe",
@@ -56,6 +76,7 @@ export const aboutPage = {
   },
   team: {
     eyebrow: "Our Team",
+    heading: ["The Strategic Minds", "Driving Your AI-Led Growth"],
     body: "A multidisciplinary team of strategists, developers, designers and technology specialists focused on turning complex requirements into intuitive digital solutions.",
     departments: [
       {
@@ -235,74 +256,6 @@ export const productPage = {
   cta: { href: "/connect", label: "Start a Conversation" },
 } as const;
 
-export const capabilitiesPage = {
-  eyebrow: "Our Capabilities",
-  heading: "From strategy to execution.",
-  intro:
-    "We combine AI, digital technology, experience and execution to build practical solutions around real business needs.",
-  tracks: [
-    {
-      n: "01",
-      title: "AI Strategy & Enablement",
-      headline: "Turn AI ambition into action.",
-      detail:
-        "Identify the right AI opportunities and create a practical path from idea to adoption.",
-      tags: ["Strategy", "Feasibility", "AI Roadmaps", "Governance"],
-    },
-    {
-      n: "02",
-      title: "Digital Platforms & Experiences",
-      headline: "Build for performance. Design for people.",
-      detail:
-        "Create scalable digital platforms and intuitive experiences that connect businesses with their users.",
-      tags: ["Enterprise Applications", "Web & Mobile", "UX/UI", "Digital Platforms"],
-    },
-    {
-      n: "03",
-      title: "AI & Intelligent Automation",
-      headline: "Put intelligence to work.",
-      detail:
-        "Apply AI and automation to simplify workflows, reduce repetitive effort and support smarter execution.",
-      tags: [
-        "Generative AI",
-        "Workflow Automation",
-        "AI-Assisted Tools",
-        "Process Optimization",
-      ],
-    },
-    {
-      n: "04",
-      title: "Digital Engagement",
-      headline: "Connect every touchpoint.",
-      detail:
-        "Build connected digital journeys that bring audiences, campaigns, content and technology together.",
-      tags: [
-        "Omnichannel Engagement",
-        "Campaign Enablement",
-        "QR Solutions",
-        "Engagement Analytics",
-      ],
-    },
-    {
-      n: "05",
-      title: "Data & Insights",
-      headline: "Turn activity into actionable intelligence.",
-      detail:
-        "Transform digital and engagement data into clearer visibility for better decisions and continuous improvement.",
-      tags: ["Dashboards", "Analytics", "Reporting", "Optimization"],
-    },
-  ],
-  close: {
-    heading: "One partner. From idea to impact.",
-    flow: ["Understand", "Design", "Build", "Optimize"],
-    body: "Whether you're exploring AI, building a digital platform or creating a connected engagement ecosystem, we help take the requirement from strategy to execution.",
-  },
-  ctas: {
-    primary: { href: "/connect", label: "Start a Conversation" },
-    secondary: { href: "/#industries", label: "Explore Industries" },
-  },
-} as const;
-
 export const careersPage = {
   eyebrow: "Grow With Us",
   heading: "Build what's next with us.",
@@ -346,7 +299,7 @@ export const connectPage = {
     heading: "Have a challenge? Let's define the solution.",
     body: "From AI and digital platforms to engagement and automation, we help organizations move from requirement to execution.",
   },
-  proof: "60+ clients · 350+ projects",
+  proof: `${proof.clients.value} ${proof.clients.label} · ${proof.projects.value} ${proof.projects.label}`,
   formNote: "Tell us about your requirement.",
 } as const;
 
@@ -357,37 +310,6 @@ type Pillar = {
   tags: readonly string[];
 };
 
-export const industryPage = {
-  eyebrow: "Industries",
-
-  heading: "Deep industry expertise. Purpose-built solutions.",
-
-  intro:
-    "We bring together industry knowledge, strategic thinking and technology to create digital solutions tailored to the unique needs of the businesses we serve.",
-
-  industries: [
-    {
-      name: "Pharma",
-      slug: "pharma",
-      title: "Bridging Science, Strategy, and Scale",
-      description:
-        "Digital solutions designed for the pharmaceutical industry, helping brands strengthen awareness, engagement, diagnosis, brand choice and long-term patient adherence.",
-      image: "/industries/pharma.jpg",
-      href: "/industries/pharma",
-      status: "active",
-    },
-    {
-      name: "Banking & Enterprise",
-      slug: "banking-enterprise",
-      title: "Smarter Digital Experiences. Faster Business Execution.",
-      description:
-        "Scalable digital platforms, intelligent automation and enterprise solutions designed to simplify workflows, improve customer experiences and enable smarter decisions.",
-      image: "/industries/banking.jpg",
-      href: "/industries/banking-enterprise",
-      status: "coming-soon",
-    },
-  ],
-} as const;
 
 // export const industryPages: Record<string, IndustryPage> = {
 //   "healthcare-pharma": {

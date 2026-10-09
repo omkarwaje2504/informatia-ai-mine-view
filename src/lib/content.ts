@@ -1,3 +1,5 @@
+import { proof, proofLine } from "@/lib/site";
+
 /**
  * Homepage hero content — adapted from informatia.ai.
  * Informatia AI: a digital + AI solutions company delivering measurable
@@ -5,8 +7,8 @@
  */
 
 export const promo = {
-  eyebrow: "60+ global clients · 350+ successful deliveries",
-  text: "75+ global Clients. 500+ Successful projects.",
+  eyebrow: `${proof.clients.value} ${proof.clients.label} · ${proof.projects.value} ${proof.projects.label}`,
+  text: proofLine,
 };
 
 export const sceneOne = {
@@ -27,7 +29,7 @@ export const sceneTwo = {
   ],
   flow: ["Strategy", "Engagement", "Execution"],
   ctas: {
-    primary: { href: "/capabilities", label: "Explore Our Solutions" },
+    primary: { href: "/products", label: "Explore Our Solutions" },
     secondary: { href: "/connect", label: "Start a Conversation" },
   },
 } as const;
@@ -63,7 +65,7 @@ export const industries = {
   eyebrow: "Industries We Serve",
   heading: "Built for the industries we know best.",
   sub: "Trusted where Compliance, scale and measurable outcomes are mandatory.",
-  note: "60+ enterprises partner with Informatia AI.",
+  note: `${proof.clients.value} global clients partner with Informatia AI.`,
   ctas: {
     primary: { href: "/#industries", label: "Explore Industries" },
     secondary: { href: "/connect", label: "Start a Conversation" },
@@ -73,7 +75,7 @@ export const industries = {
       id: "healthcare",
       tab: "Healthcare & Pharma",
       title: "Healthcare & Pharma",
-      href: "/industries/healthcare-pharma",
+      href: "/industries",
       points: [
         "Connecting pharma, HCPs, field teams and patients through intelligent digital solutions Patient and HCP engagement.",
         "Field Force and commercial analytics tools.",
@@ -84,7 +86,7 @@ export const industries = {
       id: "bfsi",
       tab: "Banking & Financial Institutions",
       title: "Banking & Financial Institutions",
-      href: "/industries/banking-financial-institutions",
+      href: "/industries",
       points: [
         "Digital and AI solutions that strengthen customer engagement, sales enablement and execution.",
         "Digital banking portals, FinTech platform and cloud-ready architectures.",
@@ -96,7 +98,7 @@ export const industries = {
       id: "enterprise",
       tab: "Enterprises & Corporates",
       title: "Enterprises & Corporates",
-      href: "/industries/enterprises-corporates",
+      href: "/industries",
       points: [
         "Modern platforms and intelligent solutions that connect teams, customers and business operations.",
         "Legacy system re-architecting, API-first development, and cloud modernization.",
@@ -200,7 +202,7 @@ export const orchestration = {
   eyebrow: "What We Do",
   heading: "One connected approach to growth",
   body: "We connect your business, your teams and your solutions to the customers and stakeholders you ultimately need to reach.",
-  cta: { href: "/capabilities", label: "Explore our capabilities" },
+  cta: { href: "/products", label: "Explore our solutions" },
   points: [
     {
       title: "Bridge the customer gap",
@@ -299,15 +301,15 @@ export const impact = {
     { name: "D-Mart", logo: "/clients/dmart.png" },
   ],
   stats: [
-    { value: "75+", label: "Global Clients" },
-    { value: "500+", label: "Successful Projects" },
+    proof.clients,
+    proof.projects,
   ],
   questions: [
     { lead: "Built on", highlight: "Experience" },
     { lead: "Focused on", highlight: "What is Next" },
   ],
   heading: "Let's build the connection that drives growth.",
-  body: "Informatia AI combines strategy, digital innovation and AI to build stronger brands 500+ projects for 75+ clients worldwide, backed by enterprise-grade security and HIPAA, GDPR & DPDP compliance. ",
+  body: `Informatia AI combines strategy, digital innovation and AI to build stronger brands — ${proof.projects.value} projects for ${proof.clients.value} clients worldwide, backed by enterprise-grade security and HIPAA, GDPR & DPDP compliance.`,
   ctaHeading: "Let's Build the Connection That Drives Growth.",
   ctaBody:
     "Whether the goal is stronger customer engagement, a more empowered sales force or unified digital execution, Informatia AI can help take it from strategy to deployment.",
@@ -315,6 +317,6 @@ export const impact = {
     "Rohan Sakhale founded Informatia AI with a vision to turn emerging technology into practical solutions that create measurable business impact. Drawing on extensive digital-transformation experience across industries, he leads the company at the intersection of strategy, technology and execution.",
   ctas: {
     primary: { href: "/connect", label: "Start a Conversation" },
-    secondary: { href: "/capabilities", label: "Explore Our Solutions" },
+    secondary: { href: "/products", label: "Explore Our Solutions" },
   },
 } as const;

@@ -281,3 +281,32 @@ export const INDUSTRIES: Industry[] = [
 
 export const getIndustry = (slug: string) =>
   INDUSTRIES.find((i) => i.slug === slug);
+
+/** Product shots in /public/products, keyed by solution name. */
+const SOLUTION_IMAGES: Record<string, string> = {
+  "AI Avatar": "/products/ai-avatar.png",
+  "Patient Education Videos": "/products/patient-education-videos.png",
+  "Patient Education": "/products/patient-education-videos.png",
+  "QR Tools": "/products/qr.png",
+  BigViz: "/products/bigviz.png",
+  WhatsApp: "/products/whatsapp.png",
+  ORM: "/products/orm.png",
+  Webie: "/products/webie.png",
+  Insta360: "/products/insta-360.png",
+  Enkare: "/products/enkare.png",
+  "Google Reviews": "/products/google-review.png",
+  HScore: "/products/hscore.png",
+  "Cardio App": "/products/cardio-app.png",
+  KAMPET: "/products/kampet.png",
+  "Nexus Ring": "/products/nexus-ring.png",
+  RxPad: "/products/rxpad.png",
+  Prace: "/products/prace.png",
+  RxPert: "/products/rxpert.png",
+  Funzo: "/products/funzo.png",
+  PixPro: "/products/pixpro.png",
+  "Personalized Assets": "/products/brand-assets.png",
+  "Adherence App": "/products/adherence-solutions.png",
+};
+
+export const solutionImage = (name: string): string | undefined =>
+  SOLUTION_IMAGES[name];
