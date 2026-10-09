@@ -6,6 +6,7 @@ import { CursorLayer } from "@/components/motion/cursor-layer";
 import { SmoothScroll } from "@/components/motion/smooth-scroll";
 import { ScrollReveal } from "@/components/motion/scroll-reveal";
 import { Preloader } from "@/components/motion/preloader";
+import { PageTransition } from "@/components/motion/page-transition";
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -30,6 +31,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <SmoothScroll />
         <ScrollReveal />
         <Preloader />
+          <PageTransition />   {/* add this */}
         {children}
         <CursorLayer />
       </body>

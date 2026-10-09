@@ -7,10 +7,12 @@ import { IndustriesShowcase } from "@/components/sections/industries";
 import { DeliveryApproach } from "@/components/sections/delivery-approach";
 import { ImpactCta } from "@/components/sections/impact-cta";
 import { promo } from "@/lib/content";
+import ScrollToTop from "@/components/motion/ScrollToTop";
 
 export default function HomePage() {
   return (
     <>
+    <ScrollToTop/>
       <PromoBanner eyebrow={promo.eyebrow} text={promo.text} />
       <SiteHeader />
       <main className="flex-1">

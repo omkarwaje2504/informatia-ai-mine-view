@@ -1,0 +1,477 @@
+import { proof } from "@/lib/site";
+
+/**
+ * Content for the sub-pages — About, Careers, Connect and the
+ * three industry pages. Copy is taken from the client-supplied page docs.
+ */
+
+export const aboutPage = {
+  eyebrow: "About Informatia AI",
+  heading: "Your Strategic Brand Growth Partner",
+  intro:
+    "Informatia AI is a strategy-led, AI-driven and digital-first innovation company delivering business solutions across industries to help brands grow to new heights.",
+  heritage: {
+    eyebrow: "Our Heritage",
+    heading: "Proven experience. Built for what's next.",
+    summary:
+      "Built on a 40 year old legacy of Sai Ashirwad, Sai Ashirwad Informatia was established in 2014, evolving into Informatia AI in 2025, bringing decades of trust and expertise into the future of AI-driven innovation.",
+    journey: [
+      {
+        value: "40",
+        unit: "Years",
+        marker: "The Legacy",
+        title: "Sai Ashirwad Enterprises",
+        detail: "Four decades of trust and expertise that everything is built on.",
+      },
+      {
+        value: "14",
+        unit: "Years",
+        marker: "Est. 2014",
+        title: "Sai Ashirwad Informatia",
+        detail: "Carrying the legacy into technology and digital solutions.",
+      },
+      {
+        value: "1+",
+        unit: "Year",
+        marker: "Est. 2025",
+        title: "Informatia AI",
+        detail: "Bringing that expertise into the future of AI-driven innovation.",
+      },
+    ],
+  },
+  beliefs: {
+    eyebrow: "What We Believe",
+    items: [
+      {
+        title: "Strategy before technology",
+        detail: "Start with the business objective.",
+      },
+      {
+        title: "AI with purpose",
+        detail: "Apply intelligence where it creates real value.",
+      },
+      {
+        title: "Built to scale",
+        detail: "Design practical, adaptable digital solutions.",
+      },
+      {
+        title: "Execute with Precision",
+        detail: "Turn ideas into solutions that work.",
+      },
+    ],
+  },
+  leadership: {
+    eyebrow: "Leadership",
+    name: "Rohan Sakhale",
+    role: "Founder & CEO",
+    photo: "/team/rohan-sakhale.jpg",
+    bio: "Rohan Sakhale, Founder of Informatia AI, combines strategic vision and digital expertise to deliver practical, scalable, and impact-driven AI solutions across industries, including healthcare and pharma. His passion for harnessing technology to solve real-world business challenges inspires the Informatia AI team to innovate with purpose, execute with precision, and create meaningful business impact.",
+    quote:
+      "We start with your business challenge, then build the right solution.",
+    credentials: [
+      "14+ years in technology and business leadership",
+      "Built on the foundation of Sai Ashirwad Informatia",
+    ],
+    note: "This belief shapes every engagement we take on.",
+  },
+  team: {
+    eyebrow: "Our Team",
+    heading: ["The Strategic Minds", "Driving Your AI-Led Growth"],
+    body: "A multidisciplinary team of strategists, developers, designers and technology specialists focused on turning complex requirements into intuitive digital solutions.",
+    departments: [
+      {
+        name: "Sales",
+        members: [
+          {
+            name: "Annil Lad",
+            role: "Head",
+            avatarUrl: "/team/annil-lad.jpg",
+          },
+          {
+            name: "Prasad",
+            role: "Lead",
+            avatarUrl: "/team/prasad.jpg",
+          },
+        ],
+      },
+
+      {
+        name: "IT",
+        members: [
+          {
+            name: "Omkar",
+            role: "Tech Head",
+            avatarUrl: "/team/omkar.jpg",
+          },
+          {
+            name: "Wasim",
+
+            role: "Backend / App Lead",
+            avatarUrl: "/team/wasim.jpg",
+
+          },
+          {
+            name: "Vedant",
+            role: "Frontend Lead",
+            avatarUrl: "/team/vedant.jpg",
+          },
+          {
+            name: "Deepak",
+            role: "App Developer",
+            avatarUrl: "/team/deepak.jpg",
+          },
+          {
+            name: "Gaurav",
+            role: "Backend Developer",
+            avatarUrl: "/team/gaurav.jpg",
+          },
+          {
+            name: "Ashwin",
+            role: "Frontend Developer",
+            avatarUrl: "/team/ashwin.png",
+          },
+        ],
+      },
+
+      {
+        name: "Graphics",
+        members: [
+          {
+            name: "Sanjib",
+            role: "Lead",
+            avatarUrl: "/team/sanjib.jpg",
+          },
+          {
+            name: "Pooja",
+            role: "Designer",
+            avatarUrl: "/team/pooja.jpg",
+          },
+          {
+            name: "Vaishnavi",
+            role: "Designer",
+            avatarUrl: "/team/vaishnavi.jpg",
+          },
+        ],
+      },
+
+      {
+        name: "Video",
+        members: [
+          {
+            name: "Akash Mashke",
+            role: "",
+            avatarUrl: "/team/akash-mashke.jpg",
+          },
+          {
+            name: "Akash Sakpal",
+            role: "",
+            avatarUrl: "/team/akash-sakpal.jpg",
+          },
+          {
+            name: "Pratik",
+            role: "",
+            avatarUrl: "/team/pratik.jpg",
+          },
+          {
+            name: "Aniket",
+            role: "",
+            avatarUrl: "/team/aniket.jpg",
+          },
+        ],
+      },
+
+      {
+        name: "Sales Service",
+        members: [
+          {
+            name: "Kamlesh",
+            role: "Service Head",
+            avatarUrl: "/team/kamlesh.jpg",
+          },
+        ],
+      },
+
+      {
+        name: "Product",
+        members: [
+          {
+            name: "Sushant",
+            role: "Product Manager",
+            avatarUrl: "/team/sushant.jpg",
+          },
+          {
+            name: "Tina",
+            role: "Product Management",
+            avatarUrl: "/team/tina.jpg",
+          },
+        ],
+      },
+
+      {
+        name: "Content",
+        members: [
+          {
+            name: "Manjiri",
+            role: "Content Writer",
+            avatarUrl: "/team/manjiri.jpg",
+          },
+        ],
+      },
+
+      {
+        name: "Production",
+        members: [
+          {
+            name: "Ram Chandra",
+            role: "Production",
+            avatarUrl: "/team/ram-chandra.jpg",
+          },
+        ],
+      },
+
+      {
+        name: "Accounts",
+        members: [
+          {
+            name: "Akansha Raut",
+            role: "Accounts",
+            avatarUrl: "/team/akansha-raut.jpg",
+          },
+          {
+            name: "Swati",
+            role: "Accounts",
+            avatarUrl: "/team/swati.jpg",
+          },
+        ],
+      },
+    ],
+  },
+  cta: { href: "/connect", label: "Start a Conversation" },
+} as const;
+export const productPage = {
+  eyebrow: "Explore Our Solutions",
+  heading: "Technology built around real business needs.",
+  intro:
+    "Informatia AI delivers practical, scalable solutions across AI, personalized engagement, health assessments, analytics and digital platforms to create meaningful connections.",
+  cta: { href: "/connect", label: "Start a Conversation" },
+} as const;
+
+export const careersPage = {
+  eyebrow: "Grow With Us",
+  heading: "Build what's next with us.",
+  intro:
+    "Join a multidisciplinary team working across digital technology, enterprise solutions and practical AI innovation.",
+  reasonsLabel: "Why Informatia AI?",
+  reasons: [
+    {
+      title: "Meaningful work",
+      detail: "Solve real business challenges through technology.",
+    },
+    {
+      title: "Modern technology",
+      detail:
+        "Work across digital platforms, AI and contemporary technology stacks.",
+    },
+    {
+      title: "Learn across disciplines",
+      detail: "Gain exposure across strategy, design, technology and execution.",
+    },
+    {
+      title: "Agility + execution",
+      detail:
+        "Experience startup energy backed by enterprise delivery discipline.",
+    },
+  ],
+  apply: {
+    heading: "Explore opportunities",
+    body: "Ready to build what's next with us? Send your resume to careers@informatia.ai.",
+    email: "careers@informatia.ai",
+    cta: "Apply Now",
+  },
+} as const;
+
+export const connectPage = {
+  eyebrow: "Connect With Us",
+  heading: "Let's build the future.",
+  intro:
+    "Whether you're solving a business challenge or looking to build your career with us, start the conversation with Informatia AI.",
+  challenge: {
+    heading: "Have a challenge? Let's define the solution.",
+    body: "From AI and digital platforms to engagement and automation, we help organizations move from requirement to execution.",
+  },
+  proof: `${proof.clients.value} ${proof.clients.label} · ${proof.projects.value} ${proof.projects.label}`,
+  formNote: "Tell us about your requirement.",
+} as const;
+
+
+type Pillar = {
+  title: string;
+  detail: string;
+  tags: readonly string[];
+};
+
+
+// export const industryPages: Record<string, IndustryPage> = {
+//   "healthcare-pharma": {
+//     slug: "healthcare-pharma",
+//     name: "Healthcare & Pharma",
+//     heading: "Turn healthcare engagement into connected execution.",
+//     intro:
+//       "Informatia AI helps healthcare and pharma organizations connect brands with HCPs and patients, equip field teams with smarter digital tools, and bring engagement and execution together through technology and insight.",
+//     lever: {
+//       label: "One strategic lever. Built around the patient journey.",
+//       body: "Every program starts by identifying where greater impact is needed — then we shape the right combination of engagement, technology and field enablement around that priority.",
+//       flow: ["Awareness", "Diagnosis", "Treatment", "Adherence"],
+//     },
+//     pillarsLabel: "Three connected pillars",
+//     pillars: [
+//       {
+//         title: "Patient-first digital solutions",
+//         detail:
+//           "Create more meaningful patient touchpoints that support awareness, education and continued engagement.",
+//         tags: [
+//           "Health Assessments",
+//           "Patient Kiosks",
+//           "AI Doctor Avatar",
+//           "QR Journeys",
+//           "Localized Content",
+//         ],
+//       },
+//       {
+//         title: "HCP engagement",
+//         detail:
+//           "Help brands and field teams engage HCPs through useful, relevant digital experiences that extend beyond the physical interaction.",
+//         tags: [
+//           "HCP Websites",
+//           "Reputation Management",
+//           "Virtual Clinic Experiences",
+//           "Review Tools",
+//           "Personalized Communication",
+//         ],
+//       },
+//       {
+//         title: "Field force & commercial excellence",
+//         detail:
+//           "Give field teams the tools, content and intelligence they need to engage better and execute with greater visibility.",
+//         tags: [
+//           "Field Analytics",
+//           "HCP Engagement Apps",
+//           "Gamified Learning",
+//           "Dashboards & Tracking",
+//         ],
+//       },
+//     ],
+//     delivery: {
+//       label: "From conception to execution",
+//       flow: ["Strategize", "Create", "Build", "Deploy"],
+//       body: "We bring the campaign journey together — from the initial idea and audience experience to the technology, field rollout and ongoing visibility.",
+//     },
+//     close: "One partner. One connected healthcare journey.",
+//     cta: { href: "/connect", label: "Discuss Your Requirement" },
+//   },
+//   "banking-financial-institutions": {
+//     slug: "banking-financial-institutions",
+//     name: "Banking & Financial Institutions",
+//     heading: "Smarter digital experiences. Faster business execution.",
+//     intro:
+//       "Informatia AI helps banks, NBFCs, FinTechs and financial institutions create stronger customer connections, equip business teams with intelligent digital tools, and bring workflows and insights together for faster execution.",
+//     lever: {
+//       label: "Strategic lever: execution speed",
+//       body: "Turn customer needs and business requirements into digital experiences, streamlined workflows and clearer decisions — without adding unnecessary complexity.",
+//       flow: ["Understand", "Design", "Build", "Optimize"],
+//     },
+//     pillarsLabel: "How we enable it",
+//     pillars: [
+//       {
+//         title: "Create better customer connections",
+//         detail:
+//           "Build intuitive digital platforms that make interactions simpler, more consistent and easier to scale.",
+//         tags: [
+//           "Digital Platforms",
+//           "Web & Mobile",
+//           "UX/UI",
+//           "Enterprise Applications",
+//         ],
+//       },
+//       {
+//         title: "Enable teams to work smarter",
+//         detail:
+//           "Use AI and automation to reduce repetitive effort and support faster day-to-day execution.",
+//         tags: [
+//           "AI Workflows",
+//           "Process Automation",
+//           "Intelligent Data Processing",
+//           "Business Tools",
+//         ],
+//       },
+//       {
+//         title: "Bring workflows & insights together",
+//         detail:
+//           "Connect business information, operational activity and reporting so teams have a clearer view of what is happening and what needs attention.",
+//         tags: ["Dashboards", "Analytics", "Reporting", "Enterprise Integrations"],
+//       },
+//     ],
+//     delivery: {
+//       label: "From requirement to execution",
+//       flow: ["Understand", "Design", "Build", "Optimize"],
+//       body: "We translate business requirements into practical digital solutions designed for dependable, enterprise-scale use.",
+//     },
+//     close: "Build for a faster-moving financial world.",
+//     cta: { href: "/connect", label: "Discuss Your Requirement" },
+//   },
+//   "enterprises-corporates": {
+//     slug: "enterprises-corporates",
+//     name: "Enterprises & Corporates",
+//     heading: "Connect. Automate. Scale.",
+//     intro:
+//       "Informatia AI helps enterprises connect customers, teams and business systems, equip people with smarter digital tools, and bring workflows and insights together for more coordinated execution.",
+//     lever: {
+//       label: "Strategic lever: operational efficiency at scale",
+//       body: "When systems, teams and processes operate in isolation, execution slows down. We help bring them together through modern platforms, intelligent automation and clearer business visibility.",
+//       flow: ["Understand", "Design", "Build", "Optimize"],
+//     },
+//     pillarsLabel: "How we enable it",
+//     pillars: [
+//       {
+//         title: "Connect people, platforms & processes",
+//         detail:
+//           "Create modern digital environments that make it easier for customers, employees and stakeholders to interact with the business.",
+//         tags: [
+//           "Enterprise Applications",
+//           "Web & Mobile",
+//           "Digital Workspaces",
+//           "Integrations",
+//         ],
+//       },
+//       {
+//         title: "Give teams better tools",
+//         detail:
+//           "Use AI and automation to simplify repetitive work and help people move through everyday processes more efficiently.",
+//         tags: [
+//           "AI Assistants",
+//           "Workflow Automation",
+//           "Task Automation",
+//           "Intelligent Tools",
+//         ],
+//       },
+//       {
+//         title: "Bring execution into one view",
+//         detail:
+//           "Connect workflows, activity and business information so teams and leadership can operate with greater visibility and coordination.",
+//         tags: [
+//           "Enterprise Dashboards",
+//           "Analytics",
+//           "Reporting",
+//           "Workflow Integration",
+//         ],
+//       },
+//     ],
+//     delivery: {
+//       label: "From strategy to execution",
+//       flow: ["Understand", "Design", "Build", "Optimize"],
+//       body: "From platform modernization to AI-enabled workflows, we build practical digital solutions around the way the organization actually needs to operate.",
+//     },
+//     close: "Modernize today. Build for what's next.",
+//     cta: { href: "/connect", label: "Talk to Our Team" },
+//   },
+// };

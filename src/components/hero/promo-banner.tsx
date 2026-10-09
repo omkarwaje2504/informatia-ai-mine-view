@@ -16,7 +16,7 @@ export function PromoBanner({ eyebrow, text }: { eyebrow: string; text: string }
   const py = useTransform(y, (v) => v * 16);
 
   return (
-    <div className="relative overflow-hidden bg-night text-mist py-5">
+    <div className="relative overflow-hidden bg-night text-mist py-4">
       <motion.div style={reduce ? undefined : { x: px, y: py }} className="absolute inset-[-6%]">
         <Plexus variant="dark" density={1.3} className="opacity-75" />
       </motion.div>
@@ -28,21 +28,21 @@ export function PromoBanner({ eyebrow, text }: { eyebrow: string; text: string }
         }}
       />
 
-      <div className="container-x relative flex min-h-[8.5rem] flex-col items-center justify-center gap-2.5 py-8 text-center sm:min-h-[9.5rem]">
-        <motion.p
+      <div className="container-x relative flex min-h-[2rem] flex-col items-center justify-center gap-2 py-4 sm:py-6 text-center sm:min-h-[3rem]">
+        {/* <motion.p
           initial={reduce ? false : { opacity: 0, y: 8 }}
           animate={go ? { opacity: 1, y: 0 } : undefined}
           transition={{ duration: 0.5, ease: EASE }}
           className="eyebrow text-teal-light"
         >
           {eyebrow}
-        </motion.p>
+        </motion.p> */}
 
         <motion.p
           initial={reduce ? false : { opacity: 0, y: 12 }}
           animate={go ? { opacity: 1, y: 0 } : undefined}
           transition={{ duration: 0.7, ease: EASE, delay: 0.08 }}
-          className="max-w-2xl font-display text-base font-normal leading-snug tracking-tight sm:text-lg lg:text-[1.45rem]"
+          className="max-w-2xl font-text text-lg font-normal leading-snug tracking-tight sm:text-xl lg:text-[1.7rem]"
         >
           {text}
         </motion.p>

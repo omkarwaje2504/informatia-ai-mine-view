@@ -43,12 +43,12 @@ function SceneOneContent() {
   return (
     <div className="relative">
       <p
-        className="fade-in mb-8 max-w-sm text-md italic leading-relaxed text-ink-soft lg:absolute lg:right-0 lg:top-1.5 lg:mb-0 lg:max-w-[20rem] lg:text-right"
+        className="fade-in mb-8 max-w-sm text-md italic leading-relaxed text-ink-soft lg:absolute lg:right-0 lg:top-1.5 lg:mb-0 lg:max-w-[24rem] lg:text-right"
         style={{ animationDelay: "0.6s" }}
       >
         {sceneOne.body}
       </p>
-      <h1 className="font-display text-[1.8rem] font-semibold leading-[1.22] tracking-[-0.01em] text-ink sm:text-[2.15rem] lg:max-w-[52rem] lg:text-[2.35rem]">
+      <h1 className="font-display text-[1.8rem] font-semibold leading-[1.22] tracking-[-0.01em] text-ink sm:text-[2.15rem] lg:max-w-[48rem] lg:text-[2.35rem]">
         <Words text={sceneOne.heading} />
       </h1>
     </div>
@@ -136,12 +136,13 @@ function SceneTwoContent({
         </Link>
         <Link
           href={sceneTwo.ctas.secondary.href}
-          className="group inline-flex items-center gap-2 rounded-full border border-line-night bg-night/40 px-6 py-3 text-[0.9rem] font-medium text-mist backdrop-blur-sm transition-colors duration-300 hover:border-mist"
+          style={{ border: "0.1px solid gold" }}
+          className="group inline-flex items-center border-solid  gap-2 rounded-full bg-night/40 px-6 py-3 text-[0.9rem] font-medium text-mist backdrop-blur-sm transition-colors duration-300 hover:border-mist"
         >
           {sceneTwo.ctas.secondary.label}
           <span
             aria-hidden
-            className="transition-transform duration-300 ease-out-expo group-hover:translate-x-1"
+            className="transition-transform  duration-300 ease-out-expo group-hover:translate-x-1"
           >
             →
           </span>
@@ -237,8 +238,8 @@ export function Hero() {
             outer.current,
           );
           // per-card travel + drift → staggered parallax depth
-          const RISE = [72, 108, 86, 120];
-          const DRIFT = [-4, -9, -6, -12];
+          const RISE = [72, 108, 86, 200];
+          const DRIFT = [-6, -6, -6, -6];
 
           const tl = gsap.timeline({
             scrollTrigger: {
@@ -366,8 +367,8 @@ export function Hero() {
           transition={{ duration: 0.6, ease: EASE, delay: 1.1 }}
           className="pointer-events-none absolute bottom-[42%] left-1/2 z-20 hidden -translate-x-1/2 flex-col items-center gap-2 text-[0.62rem] uppercase tracking-[0.24em] text-ink-faint md:flex"
         >
-          
- 
+
+
         </motion.div>
 
         {/* MORPHING DARK PANEL */}
@@ -409,7 +410,7 @@ export function Hero() {
             className="relative z-10 hidden px-8 text-center md:absolute md:inset-0 md:grid md:place-items-center motion-reduce:md:hidden"
           >
             <h2 className="max-w-4xl font-display text-[clamp(1.6rem,3.4vw,2.9rem)] font-bold leading-[1.1] tracking-[-0.02em] text-mist">
-              What starts as an idea can<br/> become an experience.
+              What starts as an idea can<br /> become an experience.
             </h2>
           </div>
 

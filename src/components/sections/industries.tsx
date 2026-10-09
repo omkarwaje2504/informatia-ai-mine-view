@@ -96,7 +96,7 @@ export function IndustriesShowcase() {
                     <li key={p} className="flex gap-4">
                       <span
                         aria-hidden
-                        className="mt-0.5 font-display text-[0.9rem] font-semibold text-teal-light"
+                        className="mt-0.5 font-text text-[0.9rem] font-semibold text-teal-light"
                       >
                         {String(i + 1).padStart(2, "0")}
                       </span>

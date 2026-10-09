@@ -5,6 +5,7 @@ import { ContactForm } from "@/components/sections/contact-form";
 import { Plexus } from "@/components/hero/plexus";
 
 import { site } from "@/lib/site";
+import ScrollToTop from "@/components/motion/ScrollToTop";
 
 export const metadata: Metadata = {
   title: "Start a Conversation",
@@ -21,6 +22,7 @@ const expect = [
 export default function ContactPage() {
   return (
     <>
+    <ScrollToTop/>
       <SiteHeader />
       <main className="relative flex-1 overflow-hidden pt-32 sm:pt-40">
         <div className="pointer-events-none absolute inset-0 opacity-50">
