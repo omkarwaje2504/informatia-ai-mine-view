@@ -17,8 +17,14 @@ const DESKTOP = "(min-width: 1024px)";
 const SCENE_IMAGE = "/industries/diagnosis-hub.webp";
 const PLATE_IMAGE = "/industries/diagnosis-hub-plate.webp";
 const ROOM_IMAGE = "/industries/diagnosis-hub-room.webp";
-const W = 1536;
-const H = 1024;
+const W = 1672;
+const H = 941;
+
+/** the scene at its true shape, as large as the pinned frame allows (inline: Tailwind can't parse this min()) */
+const SCENE_BOX: CSSProperties = {
+  aspectRatio: `${W} / ${H}`,
+  width: `min(100%, calc((100vh - 77px) * ${W / H}))`,
+};
 
 /**
  * Where each solution lives in the scene, in reveal order. `box` is the
@@ -26,12 +32,12 @@ const H = 1024;
  * the scene.
  */
 const SCENE: { item: string; box: [number, number, number, number]; label: { left: number; top: number } }[] = [
-  { item: "Cardio App", box: [15, 200, 385, 795], label: { left: 2, top: 80 } }, // the phone
-  { item: "HScore", box: [365, 82, 692, 268], label: { left: 46, top: 6 } }, // the results card
-  { item: "Nexus Ring", box: [368, 275, 738, 575], label: { left: 46, top: 34 } }, // watch + sensor
-  { item: "Enkare", box: [585, 505, 948, 888], label: { left: 37, top: 88.5 } }, // clinic tablet
-  { item: "Thermal Reports", box: [945, 498, 1242, 880], label: { left: 58.5, top: 88.5 } }, // printer
-  { item: "KAMPET", box: [1132, 58, 1452, 805], label: { left: 79, top: 82 } }, // kiosk
+  { item: "Cardio App", box: [352, 228, 592, 645], label: { left: 25, top: 9 } }, // the ECG phone
+  { item: "HScore", box: [112, 212, 380, 660], label: { left: 2, top: 12.5 } }, // the score phone
+  { item: "Nexus Ring", box: [622, 468, 818, 662], label: { left: 34, top: 70.5 } }, // the ring
+  { item: "Enkare", box: [228, 655, 540, 865], label: { left: 33, top: 88 } }, // clinic terminal
+  { item: "Thermal Reports", box: [888, 458, 1228, 792], label: { left: 55, top: 86 } }, // printer
+  { item: "KAMPET", box: [1258, 68, 1598, 792], label: { left: 77, top: 86 } }, // kiosk
 ];
 
 const pad = (n: number) => String(n).padStart(2, "0");
@@ -157,7 +163,7 @@ function StaticScene({ stage, items }: { stage: IndustrySection; items: Industry
         </h2>
         <p className="mt-3 text-[1rem] leading-relaxed text-ink-soft">{stage.description}</p>
       </header>
-      <div className="relative mt-8 aspect-[3/2] overflow-hidden rounded-3xl ring-1 ring-ink/[0.08]">
+      <div className="relative mt-8 overflow-hidden rounded-3xl ring-1 ring-ink/[0.08]" style={{ aspectRatio: `${W} / ${H}` }}>
         <Image src={SCENE_IMAGE} alt="Connected diagnosis tools" fill unoptimized className="object-cover" />
       </div>
       <ul className="mt-8 grid gap-4 sm:grid-cols-2">
@@ -229,7 +235,7 @@ function ScrollStory({ stage, items }: { stage: IndustrySection; items: Industry
         <img src={ROOM_IMAGE} alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover" />
 
         {/* the scene at its true shape, so every device lines up with the plate */}
-        <div className="absolute left-1/2 top-1/2 aspect-[3/2] w-[min(100%,calc((100vh-77px)*1.5))] -translate-x-1/2 -translate-y-1/2">
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={SCENE_BOX}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={PLATE_IMAGE} alt="" aria-hidden className="absolute inset-0 h-full w-full" style={FEATHER} />
 
